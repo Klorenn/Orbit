@@ -261,22 +261,66 @@ export default function Home() {
       </section>
 
       {/* ===== CATEGORIES ===== */}
-      <section className="py-16 px-6 bg-white border-y border-gray-100">
-        <div className="max-w-[88rem] mx-auto text-center">
-          <h2 className="text-4xl font-semibold tracking-[-0.035em] text-gray-950">
-            Explore the forum
-          </h2>
-          <p className="mt-3 text-lg text-gray-500">
-            Seven spaces — every voice has a place.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mt-10">
+      <section className="py-24 px-6 bg-white border-y border-gray-100">
+        <div className="max-w-[88rem] mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-sm font-medium text-gray-400 tracking-tight">
+              Explore the forum
+            </span>
+            <h2 className="text-5xl font-semibold tracking-[-0.035em] text-gray-950 mt-3">
+              Seven spaces.
+              <br />
+              <span className="text-gray-400">Every voice has a place.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {categories.map((cat) => (
               <Link
                 key={cat.label}
                 href={cat.href}
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white ${cat.color} hover:opacity-90 transition-opacity`}
+                className="group bg-[#F5F5F5] border border-gray-200/60 rounded-[18px] p-6 flex flex-col gap-5 hover:-translate-y-1 hover:shadow-lg hover:border-gray-300 transition-all duration-300"
               >
-                {cat.label}
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`w-3 h-3 rounded-full ${cat.color} ring-4 ring-opacity-20 ${cat.color.replace("bg-", "ring-")}`}
+                  />
+                  <span className="w-8 h-8 rounded-full bg-white border border-gray-200 grid place-items-center text-gray-400 group-hover:text-gray-950 group-hover:border-gray-950 transition-colors duration-300">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-[22px] font-semibold tracking-[-0.02em] text-gray-950 group-hover:text-gray-600 transition-colors duration-300">
+                    {cat.label}
+                  </h3>
+                  <p className="text-sm text-gray-400 mt-1.5 leading-relaxed">
+                    {cat.label === "Reports" &&
+                      "Ambassador field reports and event recaps"}
+                    {cat.label === "Projects" &&
+                      "Propose and track community projects"}
+                    {cat.label === "Events" &&
+                      "Upcoming meetups, hackathons, and summits"}
+                    {cat.label === "Feedback" &&
+                      "Open discussion on the Filecoin ecosystem"}
+                    {cat.label === "Announcements" &&
+                      "Official updates from the core team"}
+                    {cat.label === "Get Started" &&
+                      "Onboarding guides for new ambassadors"}
+                    {cat.label === "Governance" &&
+                      "Meta-discussion about the forum itself"}
+                  </p>
+                </div>
               </Link>
             ))}
           </div>

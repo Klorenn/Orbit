@@ -49,9 +49,19 @@ export const filecoinCalibration = defineChain({
   testnet: true,
 });
 
-export const config = getDefaultConfig({
-  appName: "Orbit — Filecoin Governance Forum",
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "orbit-forum",
-  chains: [filecoin, filecoinCalibration],
-  ssr: true,
-});
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+
+export function hasWalletConnect() {
+  return !!projectId;
+}
+
+export function getWagmiConfig() {
+  if (!projectId) return null;
+
+  return getDefaultConfig({
+    appName: "Orbit — Filecoin Governance Forum",
+    projectId,
+    chains: [filecoin, filecoinCalibration],
+    ssr: true,
+  });
+}

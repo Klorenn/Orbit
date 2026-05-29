@@ -39,13 +39,13 @@ export function Navbar() {
               href="/forum"
               className="text-sm font-medium text-gray-500 hover:text-gray-950 transition-colors"
             >
-              Reports
+              Forum
             </Link>
             <Link
-              href="/forum/projects"
+              href="/proposals"
               className="text-sm font-medium text-gray-500 hover:text-gray-950 transition-colors"
             >
-              Projects
+              Proposals
             </Link>
             <Link
               href="/events"
