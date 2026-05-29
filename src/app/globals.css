@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f5f5f5;
+  --color-ink: #0a0a0a;
+  --color-plum: #2b2644;
+  --color-plum-2: #211d36;
+  --color-blue: #0090ff;
+  --color-line: rgba(10, 10, 10, 0.1);
+
+  --font-family-sans: "Hanken Grotesk", system-ui, sans-serif;
+
+  --max-width-maxw: 88rem;
+
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-3xl: 26px;
+  --radius-4xl: 34px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-family-sans);
+  }
+}
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
