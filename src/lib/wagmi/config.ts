@@ -1,23 +1,15 @@
-import { http, createConfig } from "wagmi";
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { http, createConfig, injected } from "wagmi";
 import { defineChain } from "viem";
 
 export const filecoin = defineChain({
   id: 314,
   name: "Filecoin",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Filecoin",
-    symbol: "FIL",
-  },
+  nativeCurrency: { decimals: 18, name: "Filecoin", symbol: "FIL" },
   rpcUrls: {
     default: { http: ["https://api.node.glif.io/rpc/v1"] },
   },
   blockExplorers: {
-    default: {
-      name: "Filfox",
-      url: "https://filfox.info/en",
-    },
+    default: { name: "Filfox", url: "https://filfox.info/en" },
   },
   contracts: {
     multicall3: {
@@ -30,15 +22,9 @@ export const filecoin = defineChain({
 export const filecoinCalibration = defineChain({
   id: 314159,
   name: "Filecoin Calibration",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Test Filecoin",
-    symbol: "tFIL",
-  },
+  nativeCurrency: { decimals: 18, name: "Test Filecoin", symbol: "tFIL" },
   rpcUrls: {
-    default: {
-      http: ["https://api.calibration.node.glif.io/rpc/v1"],
-    },
+    default: { http: ["https://api.calibration.node.glif.io/rpc/v1"] },
   },
   blockExplorers: {
     default: {
@@ -49,19 +35,12 @@ export const filecoinCalibration = defineChain({
   testnet: true,
 });
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
-
-export function hasWalletConnect() {
-  return !!projectId;
-}
-
-export function getWagmiConfig() {
-  if (!projectId) return null;
-
-  return getDefaultConfig({
-    appName: "Orbit — Filecoin Governance Forum",
-    projectId,
-    chains: [filecoin, filecoinCalibration],
-    ssr: true,
-  });
-}
+export const config = createConfig({
+  chains: [filecoin, filecoinCalibration],
+  transports: {
+    [filecoin.id]: http(),
+    [filecoinCalibration.id]: http(),
+  },
+  connectors: [injected()],
+  ssr: true,
+});

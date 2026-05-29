@@ -1,17 +1,21 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
-vi.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: {
-    Custom: ({ children }: any) => {
-      return children({
-        account: null,
-        chain: null,
-        openConnectModal: vi.fn(),
-        mounted: true,
-      });
-    },
-  },
+vi.mock("wagmi", () => ({
+  useConnect: () => ({
+    connect: vi.fn(),
+    connectors: [{ id: "injected", name: "Injected" }],
+  }),
+  useAccount: () => ({
+    address: null,
+    isConnected: false,
+  }),
+  useDisconnect: () => ({
+    disconnect: vi.fn(),
+  }),
+  http: vi.fn(),
+  createConfig: vi.fn(),
+  injected: vi.fn(),
 }));
 
 import { ConnectWalletButton } from "../ConnectWalletButton";

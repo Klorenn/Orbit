@@ -21,15 +21,18 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://orbit.community"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://orbit-forum.vercel.app"
   ),
   title: "Orbit — Filecoin Governance Forum",
   description:
     "The wallet-gated forum where Filecoin ambassadors publish reports, propose projects, and shape the future of decentralized storage — transparently, on-chain.",
   authors: [{ name: "Orbit" }],
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
@@ -45,12 +48,11 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    url: "https://orbit.community",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@Orbit",
+    site: "@kl0ren",
     title: "Orbit — Filecoin Governance Forum",
     description:
       "The wallet-gated forum where Filecoin ambassadors publish reports, propose projects, and shape the future of decentralized storage.",
