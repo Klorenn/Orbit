@@ -1,18 +1,15 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+
+const mockConnect = vi.fn();
 
 vi.mock("wagmi", () => ({
   useConnect: () => ({
-    connect: vi.fn(),
+    connect: mockConnect,
     connectors: [{ id: "injected", name: "Injected" }],
   }),
-  useAccount: () => ({
-    address: null,
-    isConnected: false,
-  }),
-  useDisconnect: () => ({
-    disconnect: vi.fn(),
-  }),
+  useAccount: () => ({ address: null, isConnected: false }),
+  useDisconnect: () => ({ disconnect: vi.fn() }),
   http: vi.fn(),
   createConfig: vi.fn(),
   injected: vi.fn(),
@@ -21,8 +18,13 @@ vi.mock("wagmi", () => ({
 import { ConnectWalletButton } from "../ConnectWalletButton";
 
 describe("ConnectWalletButton", () => {
-  it("renders Connect Wallet label when not connected", () => {
+  it("renders Connect Wallet and connects on click", () => {
     render(<ConnectWalletButton />);
-    expect(screen.getByText("Connect Wallet")).toBeInTheDocument();
+    const btn = screen.getByText("Connect Wallet");
+    expect(btn).toBeInTheDocument();
+    fireEvent.click(btn);
+    expect(mockConnect).toHaveBeenCalledWith({
+      connector: { id: "injected", name: "Injected" },
+    });
   });
 });
