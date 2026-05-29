@@ -15,7 +15,7 @@ const testimonials = [
   {
     quote: "Finally I can see what other ambassadors are building.",
     name: "Olga",
-    city: "Lima, Peru",
+    city: "Santiago, Chile",
     color: "#0090FF",
   },
   {
@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="bg-[#F5F5F5]">
       {/* ===== HERO ===== */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+      <section className="relative h-screen min-h-[640px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
@@ -48,46 +48,61 @@ export default function Home() {
           >
             <source src="/assets/hero.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0a0c1e]/70 via-[#0a0c1e]/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c1e]/55 to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(105deg, rgba(10,12,30,.72) 0%, rgba(10,12,30,.38) 42%, rgba(10,12,30,.12) 70%), linear-gradient(to top, rgba(10,12,30,.55), transparent 38%)",
+            }}
+          />
         </div>
 
-        <div className="relative z-10 max-w-[88rem] mx-auto px-6 py-24 w-full">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/20 backdrop-blur-md text-white text-sm font-medium mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0090FF] shadow-[0_0_8px_#0090FF]" />
-            The Filecoin ambassador forum
+        <div className="relative z-10 max-w-[88rem] mx-auto px-6 w-full pt-20 pb-10 flex flex-col justify-between h-full">
+          <div className="flex flex-col mt-auto mb-auto">
+            <div className="inline-flex items-center gap-[9px] px-4 py-2 rounded-full bg-white/[0.14] border border-white/20 backdrop-blur-[8px] text-[13px] font-medium tracking-[0.01em] text-white mb-4">
+              <span className="w-[6px] h-[6px] rounded-full bg-[#0090FF] shadow-[0_0_8px_#0090FF]" />
+              The Filecoin ambassador forum
+            </div>
+
+            <h1 className="text-[clamp(42px,6vw,74px)] font-semibold tracking-[-0.045em] leading-[1.0] text-white max-w-[16ch] mt-[22px]">
+              A constellation of voices, building Filecoin together.
+            </h1>
+
+            <p className="mt-5 max-w-[46ch] text-[clamp(16px,1.3vw,19px)] leading-[1.55] text-white/[0.82] font-normal">
+              The wallet-gated forum where Filecoin ambassadors publish reports,
+              propose projects, and shape the future of decentralized storage —
+              transparently, on-chain.
+            </p>
+
+            <Link
+              href="/connect"
+              className="mt-8 inline-flex items-center gap-3 bg-white text-gray-950 pl-[26px] pr-2 py-[7px] rounded-full font-medium text-base hover:bg-gray-100 transition-colors group"
+            >
+              Connect Wallet to Join
+              <span className="w-[38px] h-[38px] rounded-full bg-gray-950 text-white grid place-items-center group-hover:translate-x-[3px] transition-transform">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </Link>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-[-0.045em] leading-none text-white max-w-[16ch]">
-            A constellation of voices, building Filecoin together.
-          </h1>
-
-          <p className="mt-6 max-w-[46ch] text-lg text-white/80 leading-relaxed">
-            The wallet-gated forum where Filecoin ambassadors publish reports,
-            propose projects, and shape the future of decentralized storage —
-            transparently, on-chain.
-          </p>
-
-          <Link
-            href="/forum"
-            className="mt-8 inline-flex items-center gap-3 bg-white text-gray-950 pl-7 pr-2 py-2 rounded-full font-medium text-base hover:bg-gray-100 transition-colors"
-          >
-            Connect Wallet to Join
-            <span className="w-[38px] h-[38px] rounded-full bg-gray-950 text-white grid place-items-center group-hover:translate-x-1 transition-transform">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </span>
-          </Link>
+          <div className="mt-auto w-full overflow-hidden -mx-6 px-6" style={{ maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)" }}>
+            <div className="flex gap-[52px] animate-marquee w-max text-white/70 text-sm">
+              {["Protocol Labs", "IPFS", "Lotus", "FVM", "Lighthouse", "Boost", "web3.storage", "Singularity", "Protocol Labs", "IPFS", "Lotus", "FVM", "Lighthouse", "Boost", "web3.storage", "Singularity"].map((name, i) => (
+                <span key={i} className="whitespace-nowrap">{name}</span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -208,7 +223,7 @@ export default function Home() {
                 </span>
               </div>
               <Image
-                src="/assets/bluekey.png"
+                src="/assets/green.png"
                 alt=""
                 width={205}
                 height={205}
@@ -245,7 +260,7 @@ export default function Home() {
                 </span>
               </div>
               <Image
-                src="/assets/greenplanet.png"
+                src="/assets/red.png"
                 alt=""
                 width={185}
                 height={185}
@@ -369,35 +384,69 @@ export default function Home() {
       </section>
 
       {/* ===== JOIN CTA ===== */}
-      <section className="pb-16 px-6">
+      <section className="pb-20 px-6" id="join">
         <div className="max-w-[88rem] mx-auto">
-          <div className="relative aspect-[1946/1108] rounded-[34px] overflow-hidden bg-[#090820] shadow-[0_26px_80px_rgba(8,8,25,0.16)]">
-            <Image
-              src="/assets/orbit-cta-reference.png"
-              alt="Orbit CTA with REPORT, PROPOSE, RESEARCH, CONNECT, and DEBATE actions"
-              fill
-              className="object-cover"
-            />
-            <Link
-              href="/connect"
-              className="absolute z-10 top-[67.5%] left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-center gap-3 bg-white text-gray-950 pl-7 pr-2 py-2 rounded-full font-medium text-base shadow-[0_18px_44px_rgba(0,0,0,0.34)] hover:bg-gray-100 transition-colors"
+          <div className="relative bg-[#090820] rounded-[34px] overflow-hidden shadow-[0_26px_80px_rgba(8,8,25,0.16)] py-24 md:py-32">
+            {/* Constellation lines */}
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox="0 0 1200 460"
+              preserveAspectRatio="xMidYMid slice"
+              fill="none"
+              aria-hidden="true"
             >
-              Connect Wallet
-              <span className="w-[38px] h-[38px] rounded-full bg-gray-950 text-white grid place-items-center">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </span>
-            </Link>
+              <line x1="170" y1="120" x2="430" y2="250" stroke="#fff" strokeWidth="1.4" strokeDasharray="3 7" opacity="0.3" />
+              <line x1="430" y1="250" x2="720" y2="110" stroke="#fff" strokeWidth="1.4" strokeDasharray="3 7" opacity="0.3" />
+              <line x1="430" y1="250" x2="640" y2="380" stroke="#fff" strokeWidth="1.4" strokeDasharray="3 7" opacity="0.3" />
+              <line x1="720" y1="110" x2="1010" y2="220" stroke="#fff" strokeWidth="1.4" strokeDasharray="3 7" opacity="0.3" />
+              <line x1="640" y1="380" x2="1010" y2="220" stroke="#fff" strokeWidth="1.4" strokeDasharray="3 7" opacity="0.3" />
+              <circle cx="170" cy="120" r="5" fill="#FFD60A" />
+              <circle cx="430" cy="250" r="7" fill="#0090FF" />
+              <circle cx="720" cy="110" r="5" fill="#FF3B30" />
+              <circle cx="640" cy="380" r="5" fill="#A855F7" />
+              <circle cx="1010" cy="220" r="5" fill="#10B981" />
+            </svg>
+
+            {/* Glow blobs */}
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#0090FF] blur-[100px] opacity-20" />
+            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#A855F7] blur-[100px] opacity-20" />
+
+            {/* Content */}
+            <div className="relative z-10 text-center px-6">
+              <h2 className="text-4xl md:text-5xl font-semibold tracking-[-0.035em] text-white">
+                Ready to add your voice?
+              </h2>
+              <p className="mt-4 text-lg text-white/70 max-w-lg mx-auto leading-relaxed">
+                Connect your wallet. Read freely. Post if you hold the Orbit
+                Ambassador NFT.
+              </p>
+              <Link
+                href="/connect"
+                className="mt-8 inline-flex items-center gap-3 bg-white text-gray-950 pl-[26px] pr-2 py-[7px] rounded-full font-medium text-base hover:bg-gray-100 transition-colors group shadow-[0_18px_44px_rgba(0,0,0,0.34)]"
+              >
+                Connect Wallet
+                <span className="w-[38px] h-[38px] rounded-full bg-gray-950 text-white grid place-items-center group-hover:translate-x-[3px] transition-transform">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </span>
+              </Link>
+              <p className="mt-5 text-sm text-white/40">
+                Don&apos;t have the NFT yet?{" "}
+                <Link href="/docs" className="text-[#0090FF] hover:underline">
+                  Apply to the Orbit Program →
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </section>
