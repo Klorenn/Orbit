@@ -2,7 +2,7 @@
 import { SOCIALS } from '../data/constants'
 import { I } from './Icons'
 
-function socialIcon(key, props) {
+export function socialIcon(key, props) {
   return ({ github: I.gh, x: I.x, instagram: I.instagram, discord: I.discord, slack: I.slack, telegram: I.telegram, website: I.globe }[key] || I.globe)(props)
 }
 
