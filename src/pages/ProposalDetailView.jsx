@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
-import { PROPOSALS, PROP_STATUS, who } from '../data/constants'
+import { PROP_STATUS, who } from '../data/constants'
 import { I } from '../components/Icons'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
 import { CategoryBadge } from '../components/CategoryBadge'
 
 const FLOW = ['Draft', 'Discussion', 'Voting', 'Approved']
 
-export function ProposalDetailView({ id, posts }) {
+export function ProposalDetailView({ id, proposals = [], posts }) {
   useEffect(() => { window.scrollTo(0, 0) }, [id])
-  const pr = PROPOSALS.find(p => p.id === id)
+  const pr = proposals.find(p => p.id === id)
   if (!pr) return <div className="page-wrap"><p className="empty">Proposal not found. <a href="#/proposals">All proposals</a></p></div>
   const author = who(pr.author)
   const stageIdx = FLOW.indexOf(pr.status)

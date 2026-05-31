@@ -65,23 +65,152 @@ export const EVENTS = [
 ];
 
 export const DOCS = [
-  { id:'participate', title:'How to participate', body:[
-    'Reading Orbit is open to everyone. To post, comment, or vote you connect a wallet and hold the Orbit Ambassador NFT.',
-    'Start in Get started, introduce yourself in Feedback, then file your first report in Reports. Keep proposals in Projects and meta-governance in Governance.',
-  ]},
-  { id:'conduct', title:'Code of conduct', body:[
-    'Be generous and specific. Critique ideas, never people. Assume good faith — most disagreements are missing context, not bad intent.',
-    'No spam, no shilling, no doxxing. Announcements is signal-only. Stewards may remove posts that break these rules.',
-  ]},
-  { id:'template', title:'Report template', body:[
-    'Every report should answer: what happened, who showed up, what landed, what would you change, and what comes next.',
-    'Attach evidence — photos, slides, sign-up sheets, feedback. Everything is pinned to IPFS and persisted on Filecoin automatically.',
-  ]},
-  { id:'faq', title:'FAQ', body:[
-    'Do I need the NFT to read? No. Reading is fully open. The NFT only unlocks posting, commenting, and voting.',
-    'Where do my files live? On IPFS, with a Filecoin storage deal created automatically via Lighthouse.',
-    'Can I edit a post? Yes, until it has replies. After that, edits append a revision note for transparency.',
-  ]},
+  {
+    id: 'participate',
+    title: { es: 'Cómo participar', en: 'How to participate' },
+    body: {
+      es: [
+        'Leer Orbit es abierto para todos, sin necesidad de cuenta ni wallet. Para publicar, comentar o votar necesitás conectar tu wallet de Filecoin.',
+        'Comenzá presentándote en la categoría Feedback, luego publicá tu primer reporte en Reports. Las propuestas van en Projects y la meta-gobernanza en Governance.',
+        'Cada publicación se ancla automáticamente en IPFS y se persiste en Filecoin mediante Lighthouse. Tu contenido vive en la red, no en nuestros servidores.',
+        'El karma se acumula con votos positivos de otros embajadores. Un mayor karma refleja confianza y contribución al programa.',
+      ],
+      en: [
+        'Reading Orbit is open to everyone — no account or wallet needed. To post, comment, or vote you need to connect a Filecoin wallet.',
+        'Start by introducing yourself in the Feedback category, then file your first report in Reports. Proposals go in Projects and meta-governance in Governance.',
+        'Every post is automatically pinned to IPFS and persisted on Filecoin via Lighthouse. Your content lives on the network, not on our servers.',
+        'Karma accumulates through upvotes from other ambassadors. Higher karma reflects trust and contribution to the program.',
+      ],
+    },
+  },
+  {
+    id: 'conduct',
+    title: { es: 'Código de conducta', en: 'Code of conduct' },
+    body: {
+      es: [
+        'Sé generoso y específico. Criticá ideas, nunca personas. Asumí buena fe: la mayoría de los desacuerdos son contexto faltante, no mala intención.',
+        'Sin spam, sin shilling, sin doxxing. Announcements es solo señal — no usarlo para autopromoción. Los moderadores pueden eliminar publicaciones que rompan estas reglas.',
+        'Los reportes deben ser precisos y verificables. Adjuntá evidencia siempre que sea posible: fotos, listas de asistentes, capturas, feedback.',
+        'Las propuestas deben tener un autor claro, una motivación honesta y estar abiertas a debate constructivo antes de pasar a votación.',
+      ],
+      en: [
+        'Be generous and specific. Critique ideas, never people. Assume good faith — most disagreements are missing context, not bad intent.',
+        'No spam, no shilling, no doxxing. Announcements is signal-only — don\'t use it for self-promotion. Stewards may remove posts that break these rules.',
+        'Reports should be accurate and verifiable. Attach evidence whenever possible: photos, sign-up sheets, screenshots, feedback forms.',
+        'Proposals must have a clear author, an honest motivation, and be open to constructive debate before moving to a vote.',
+      ],
+    },
+  },
+  {
+    id: 'template',
+    title: { es: 'Plantilla de reporte', en: 'Report template' },
+    body: {
+      es: [
+        'Todo reporte debe responder: ¿qué pasó?, ¿quién participó?, ¿qué logros hubo?, ¿qué mejorarías?, ¿qué viene después?',
+        'Adjuntá evidencia: fotos del evento, planilla de asistentes, capturas de pantalla de feedback, métricas de alcance.',
+        'Mencioná la categoría exacta: meetup, workshop, campus tour, demo day, hack night, panel, etc. Ayuda a clasificar el impacto del programa.',
+        'Si hubo problemas logísticos, mencionarlos es valioso. Los reportes honestos generan más confianza y karma que los perfectos.',
+      ],
+      en: [
+        'Every report should answer: what happened, who showed up, what landed, what would you change, and what comes next.',
+        'Attach evidence: event photos, sign-up sheets, screenshots of feedback forms, and reach metrics.',
+        'Specify the event type: meetup, workshop, campus tour, demo day, hack night, panel, etc. It helps classify program impact.',
+        'If there were logistical issues, mentioning them is valuable. Honest reports generate more trust and karma than polished ones.',
+      ],
+    },
+  },
+  {
+    id: 'proposals',
+    title: { es: 'Proceso de propuestas', en: 'Proposal process' },
+    body: {
+      es: [
+        'Una propuesta pasa por cuatro estados: Borrador → Discusión → Votación → Aprobada. Los stewards mueven las propuestas entre estados.',
+        'Para iniciar una propuesta: publicá un hilo en la categoría Projects con el título, motivación, propuesta concreta y métricas de éxito.',
+        'El período de discusión dura al menos 7 días. Las propuestas con comentarios activos se priorizan para revisión.',
+        'La señalización on-chain en Voting requiere wallet. Los votos son públicos y permanentes. Una propuesta aprobada se puede llevar a Metropolis para ejecución formal.',
+      ],
+      en: [
+        'A proposal moves through four states: Draft → Discussion → Voting → Approved. Stewards advance proposals between states.',
+        'To start a proposal: create a thread in the Projects category with the title, motivation, concrete proposal, and success metrics.',
+        'The discussion period lasts at least 7 days. Proposals with active comments are prioritized for review.',
+        'On-chain signaling in Voting requires a wallet. Votes are public and permanent. An approved proposal can be taken to Metropolis for formal execution.',
+      ],
+    },
+  },
+  {
+    id: 'credential',
+    title: { es: 'Credencial Orbit Ambassador', en: 'Orbit Ambassador Credential' },
+    body: {
+      es: [
+        '🚀 Próximamente — La credencial Orbit Ambassador es un token soulbound (no transferible) en la red Filecoin que acredita tu membresía en el programa.',
+        'Una vez desplegado el contrato, los embajadores aprobados podrán claimearla desde esta misma página con un clic. El contrato verificará tu dirección contra la lista aprobada y minteará el token directamente en tu wallet.',
+        'La credencial desbloquea publicar, comentar, votar y organizar reuniones. Es prueba de membresía sin papeles, sin intermediarios.',
+        'Activá las notificaciones en tu perfil para que te avisemos cuando el claim esté disponible.',
+      ],
+      en: [
+        '🚀 Coming soon — The Orbit Ambassador credential is a soulbound (non-transferable) token on the Filecoin network that certifies your membership in the program.',
+        'Once the contract is deployed, approved ambassadors will be able to claim it from this page with a single click. The contract verifies your address against the approved list and mints the token directly to your wallet.',
+        'The credential unlocks posting, commenting, voting, and hosting meetings. It\'s proof of membership — no paperwork, no intermediaries.',
+        'Enable notifications on your profile and we\'ll alert you when claiming opens.',
+      ],
+    },
+  },
+  {
+    id: 'storage',
+    title: { es: 'Almacenamiento IPFS + Filecoin', en: 'IPFS + Filecoin storage' },
+    body: {
+      es: [
+        'Cada archivo que adjuntás a una publicación se sube automáticamente a IPFS mediante Lighthouse y se crea un deal de almacenamiento en Filecoin.',
+        'Tu contenido recibe un CID (Content Identifier) — un hash único que identifica el archivo en la red. Podés usarlo para verificar que el contenido no fue modificado.',
+        'Los deals de Filecoin tienen una duración mínima. Si el deal expira, el contenido sigue disponible en IPFS mientras haya nodos que lo pinen.',
+        'No dependemos de ningún servidor central. Si Orbit desaparece mañana, todos los archivos siguen accesibles por su CID en la red IPFS/Filecoin.',
+      ],
+      en: [
+        'Every file you attach to a post is automatically uploaded to IPFS via Lighthouse and a Filecoin storage deal is created.',
+        'Your content gets a CID (Content Identifier) — a unique hash that identifies the file on the network. You can use it to verify content hasn\'t been modified.',
+        'Filecoin deals have a minimum duration. If a deal expires, the content is still available on IPFS as long as nodes are pinning it.',
+        'We don\'t rely on any central server. If Orbit disappears tomorrow, all files remain accessible by their CID on the IPFS/Filecoin network.',
+      ],
+    },
+  },
+  {
+    id: 'faq',
+    title: { es: 'Preguntas frecuentes', en: 'FAQ' },
+    body: {
+      es: [
+        '¿Necesito wallet para leer? No. La lectura es completamente abierta. La wallet solo desbloquea publicar, comentar y votar.',
+        '¿Dónde viven mis archivos? En IPFS, con un deal de almacenamiento en Filecoin creado automáticamente mediante Lighthouse.',
+        '¿Puedo editar una publicación? Sí, hasta que tenga respuestas. Después, las ediciones agregan una nota de revisión para mantener la transparencia.',
+        '¿Qué pasa si pierdo acceso a mi wallet? Tus publicaciones y karma quedan vinculados a la dirección. Podés continuar con otra wallet, pero el historial permanece en la anterior.',
+        '¿Cómo se calcula el karma? Cada voto positivo en tus publicaciones y comentarios suma karma. Los votos negativos restan. El karma no se puede comprar ni transferir.',
+      ],
+      en: [
+        'Do I need a wallet to read? No. Reading is fully open. A wallet only unlocks posting, commenting, and voting.',
+        'Where do my files live? On IPFS, with a Filecoin storage deal created automatically via Lighthouse.',
+        'Can I edit a post? Yes, until it has replies. After that, edits append a revision note for transparency.',
+        'What if I lose access to my wallet? Your posts and karma are tied to that address. You can continue with a new wallet, but the history stays with the original address.',
+        'How is karma calculated? Each upvote on your posts and comments adds karma. Downvotes subtract. Karma cannot be bought or transferred.',
+      ],
+    },
+  },
+  {
+    id: 'governance',
+    title: { es: 'Gobernanza del foro', en: 'Forum governance' },
+    body: {
+      es: [
+        'Orbit es gobernado por sus embajadores. Los stewards (moderadores) son elegidos por rotación trimestral entre embajadores con alto karma.',
+        'Las decisiones sobre categorías, reglas y procesos se debaten en Governance antes de implementarse. Cualquier embajador puede iniciar un debate de gobernanza.',
+        'El equipo de Orbit Program (Protocol Labs) mantiene derechos de veto en situaciones de emergencia (spam masivo, exploits, contenido ilegal). Este veto es público y registrado.',
+        'Los cambios al código del foro se proponen en GitHub y se anuncian en Announcements. El roadmap es abierto y las contribuciones son bienvenidas.',
+      ],
+      en: [
+        'Orbit is governed by its ambassadors. Stewards (moderators) are chosen by quarterly rotation among high-karma ambassadors.',
+        'Decisions about categories, rules, and processes are debated in Governance before implementation. Any ambassador can start a governance discussion.',
+        'The Orbit Program team (Protocol Labs) retains veto rights in emergency situations (mass spam, exploits, illegal content). This veto is public and recorded.',
+        'Changes to the forum code are proposed on GitHub and announced in Announcements. The roadmap is open and contributions are welcome.',
+      ],
+    },
+  },
 ];
 
 export const TRENDING = ['#storage-deals', '#onboarding', '#FVM', '#regional-hubs', '#IPFS', '#stipends'];

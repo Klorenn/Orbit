@@ -1,14 +1,15 @@
-// src/components/WalletGate.jsx
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useT } from '../hooks/useT'
 
-export function WalletGate({ connected, onConnect, label = 'Connect to continue', children }) {
+export function WalletGate({ connected, onConnect, label, children }) {
+  const { t } = useT()
   if (connected) return <>{children}</>
   return (
     <div className="wallet-gate">
-      <p className="wg-label">{label}</p>
-      <ConnectButton label="Connect wallet" />
+      <p className="wg-label">{label || t('connect')}</p>
+      <ConnectButton label={t('connectWalletLabel')} />
       <div className="wg-sep"><span>or</span></div>
-      <button className="pill pill-line" onClick={onConnect}>Sign in with email</button>
+      <button className="pill pill-line" onClick={onConnect}>{t('signInWithEmail')}</button>
     </div>
   )
 }

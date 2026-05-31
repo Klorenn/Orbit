@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
 import { I } from '../../components/Icons'
 import { PostCard } from '../../components/PostCard'
+import { useT } from '../../hooks/useT'
 
 export function ProfileTabs({ active }) {
+  const { t } = useT()
   const tabs = [
-    ['overview', 'Overview', '#/profile/me'],
-    ['posts', 'Posts', '#/profile/me/posts'],
-    ['notifications', 'Notifications', '#/profile/me/notifications'],
-    ['settings', 'Settings', '#/profile/me/settings'],
+    ['overview', t('tabOverview'), '#/profile/me'],
+    ['posts', t('tabPosts'), '#/profile/me/posts'],
+    ['notifications', t('tabNotifications'), '#/profile/me/notifications'],
+    ['settings', t('tabSettings'), '#/profile/me/settings'],
   ]
   return (
     <div className="prof-tabs">
@@ -16,17 +18,18 @@ export function ProfileTabs({ active }) {
   )
 }
 
-export function MyPostsView({ posts, onVote }) {
+export function MyPostsView({ posts, onVote, identity }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
-  const mine = posts.filter(p => p.author === 'you.fil')
+  const { t } = useT()
+  const mine = posts.filter(p => identity ? p.author === identity : p.author === 'you.fil')
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/profile/me">{I.back()} My profile</a>
-      <h1 className="page-title">My posts</h1>
+      <a className="back-link" href="#/profile/me">{I.back()} {t('backToProfile')}</a>
+      <h1 className="page-title">{t('myPostsTitle')}</h1>
       <ProfileTabs active="posts" />
       <div className="feed" style={{ marginTop: 18 }}>
         {mine.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}
-        {mine.length === 0 && <p className="empty">You haven't published yet. <a href="#/forum/new">Write your first post →</a></p>}
+        {mine.length === 0 && <p className="empty">{t('noMyPosts')}<a href="#/forum/new">{t('writeFirstLink')}</a></p>}
       </div>
     </div>
   )

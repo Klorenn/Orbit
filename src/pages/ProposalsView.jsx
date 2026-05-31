@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react'
-import { PROPOSALS, PROP_STATUS, who } from '../data/constants'
+import { PROP_STATUS, who } from '../data/constants'
 import { I } from '../components/Icons'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
 import { CategoryBadge } from '../components/CategoryBadge'
+import { useT } from '../hooks/useT'
 
-export function ProposalsView() {
+export function ProposalsView({ proposals = [] }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
+  const { t } = useT()
   const [filter, setFilter] = useState('All')
   const statuses = ['All', 'Draft', 'Discussion', 'Voting', 'Approved']
-  const list = PROPOSALS.filter(p => filter === 'All' || p.status === filter)
+  const list = proposals.filter(p => filter === 'All' || p.status === filter)
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} Back to forum</a>
-      <h1 className="page-title">{I.gov({ width: 26, height: 26 })} Proposals</h1>
-      <p className="page-sub">Projects in debate, with live status. Rough consensus here can be promoted to Metropolis.</p>
+      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <h1 className="page-title">{I.gov({ width: 26, height: 26 })} {t('proposalsTitle')}</h1>
+      <p className="page-sub">{t('proposalsSub')}</p>
       <div className="sortbar" style={{ marginBottom: 20, width: 'fit-content' }}>
         {statuses.map(s => <button key={s} className={filter === s ? 'on' : ''} onClick={() => setFilter(s)}>{s}</button>)}
       </div>

@@ -3,6 +3,7 @@ import { I } from './Icons';
 import { who, AMBASSADORS } from '../data/constants';
 import { AmbassadorAvatar } from './AmbassadorAvatar';
 import { MentionInput } from './MentionInput';
+import { useT } from '../hooks/useT';
 
 const REACTIONS = ['👍', '🚀', '🔥', '❤️', '🎉', '👀', '🙌', '😄'];
 
@@ -18,13 +19,16 @@ function renderMentions(text) {
   });
 }
 
-export function Comment({ c, onReact, onReply, depth = 0 }) {
+export function Comment({ c, onReact, onReply, onDelete, identity, depth = 0 }) {
   const u = who(c.author);
+  const { t } = useT();
   const [picker, setPicker] = useState(false);
   const [replying, setReplying] = useState(false);
   const [draft, setDraft] = useState('');
   const reactions = c.reactions || {};
   const keys = Object.keys(reactions).filter((k) => reactions[k].count > 0);
+  const isAuthor = identity && c.author === identity;
+
   const submit = () => {
     if (draft.trim()) {
       onReply(c.id, draft.trim());
@@ -32,6 +36,12 @@ export function Comment({ c, onReact, onReply, depth = 0 }) {
       setReplying(false);
     }
   };
+
+  const handleDelete = () => {
+    if (!window.confirm(t('confirmDeleteComment'))) return;
+    onDelete && onDelete(c.id);
+  };
+
   return (
     <div className={'cmt' + (depth ? ' cmt-reply' : '')}>
       <AmbassadorAvatar user={c.author} size={depth ? 30 : 38} />
@@ -40,6 +50,11 @@ export function Comment({ c, onReact, onReply, depth = 0 }) {
           <span className="nm">{u.name}</span>
           {u.role && <span className="role">{u.role}</span>}
           <span className="tm">· {c.time} ago</span>
+          {isAuthor && (
+            <button className="icon-btn cmt-delete" onClick={handleDelete} title={t('deletePost')}>
+              {I.trash({ width: 12, height: 12 })}
+            </button>
+          )}
         </div>
         <p className="ctext">{renderMentions(c.text)}</p>
         {keys.length > 0 && (
@@ -67,7 +82,7 @@ export function Comment({ c, onReact, onReply, depth = 0 }) {
             )}
           </div>
           {depth === 0 && (
-            <button onClick={() => setReplying((r) => !r)}>{I.reply()} Reply</button>
+            <button onClick={() => setReplying((r) => !r)}>{I.reply()} {t('replyBtn')}</button>
           )}
         </div>
         {replying && (
@@ -76,19 +91,19 @@ export function Comment({ c, onReact, onReply, depth = 0 }) {
               autoFocus
               value={draft}
               onChange={setDraft}
-              placeholder={'Reply to ' + u.name + '… use @ to mention'}
+              placeholder={t('replyTo') + ' ' + u.name + t('replyMentionHint')}
               onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submit(); }}
             />
             <div className="rb-row">
-              <button className="pill pill-line" onClick={() => { setReplying(false); setDraft(''); }}>Cancel</button>
-              <button className="pill pill-blue" onClick={submit} style={{ opacity: draft.trim() ? 1 : 0.5 }}>Reply</button>
+              <button className="pill pill-line" onClick={() => { setReplying(false); setDraft(''); }}>{t('cancelBtn')}</button>
+              <button className="pill pill-blue" onClick={submit} style={{ opacity: draft.trim() ? 1 : 0.5 }}>{t('replyBtn')}</button>
             </div>
           </div>
         )}
         {c.replies && c.replies.length > 0 && (
           <div className="reply-thread">
             {c.replies.map((r) => (
-              <Comment key={r.id} c={r} onReact={onReact} onReply={onReply} depth={depth + 1} />
+              <Comment key={r.id} c={r} onReact={onReact} onReply={onReply} onDelete={onDelete} identity={identity} depth={depth + 1} />
             ))}
           </div>
         )}

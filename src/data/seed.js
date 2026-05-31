@@ -81,7 +81,7 @@ export const SEED_POSTS = [
     excerpt: 'Welcome to the constellation. Here is everything you need to go from connecting your wallet to publishing your first report.',
     body: [
       'Welcome! Orbit is the wallet-gated forum for Filecoin Orbit ambassadors. Reading is open to everyone — you only need to connect a wallet to post, comment, or vote.',
-      'Step one: connect your wallet (top right). Step two: hold the Orbit Ambassador NFT to unlock posting. Step three: introduce yourself in Feedback, then file your first report in Reports.',
+      'Step one: connect your wallet (top right). Step two: hold the Orbit Ambassador to unlock posting. Step three: introduce yourself in Feedback, then file your first report in Reports.',
       'Every post and attachment you publish is pinned to IPFS and persisted on Filecoin — your work outlives any single server.',
     ],
     author: 'orbit-team.fil', time: '1w', upvotes: 134, upvoted: false, cidStr: 'bafyg3s8w…q07',

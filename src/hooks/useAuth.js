@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { supabase } from '../lib/supabase'
 
 export function useAuth() {
@@ -16,6 +16,7 @@ export function useAuth() {
     return () => subscription.unsubscribe()
   }, [])
 
+  const { disconnectAsync } = useDisconnect()
   const connected = isConnected || !!emailSession
 
   const identity = isConnected
@@ -25,6 +26,7 @@ export function useAuth() {
       : 'you.fil'
 
   const signOut = async () => {
+    if (isConnected) await disconnectAsync()
     if (emailSession) await supabase.auth.signOut()
   }
 

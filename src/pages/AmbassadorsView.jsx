@@ -2,20 +2,27 @@ import { useState, useEffect } from 'react'
 import { AMBASSADORS } from '../data/constants'
 import { I } from '../components/Icons'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
+import { useT } from '../hooks/useT'
 
 const postCountFor = (posts, name) => posts.filter(p => p.author === name).length
 
-export function AmbassadorsView({ posts }) {
+export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
+  const { t } = useT()
   const [q, setQ] = useState('')
-  const all = Object.values(AMBASSADORS).filter(u => u.role !== 'Core' && u.name !== 'you.fil')
-  const list = all.filter(u => (u.name + u.city).toLowerCase().includes(q.toLowerCase()))
+
+  const all = propAmbassadors && propAmbassadors.length > 0
+    ? propAmbassadors
+    : Object.values(AMBASSADORS).filter(u => u.role !== 'Core' && u.name !== 'you.fil')
+
+  const list = all.filter(u => (u.name + (u.city || '')).toLowerCase().includes(q.toLowerCase()))
+
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} Back to forum</a>
-      <h1 className="page-title">Ambassadors</h1>
-      <p className="page-sub">{all.length} verified ambassadors across the constellation. Every one holds the Orbit Ambassador NFT.</p>
-      <div className="amb-search">{I.search()}<input placeholder="Search by name or city…" value={q} onChange={e => setQ(e.target.value)} /></div>
+      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <h1 className="page-title">{t('ambassadorsTitle')}</h1>
+      <p className="page-sub">{all.length} {t('ambassadorsSubCount')}</p>
+      <div className="amb-search">{I.search()}<input placeholder={t('searchByNameCity')} value={q} onChange={e => setQ(e.target.value)} /></div>
       <div className="amb-grid">
         {list.map(u => (
           <a key={u.name} className="amb-card" href={'#/profile/' + u.name}>
@@ -26,15 +33,15 @@ export function AmbassadorsView({ posts }) {
             </div>
             <p className="amb-bio">{u.bio}</p>
             <div className="amb-stats">
-              <span><strong>{u.karma}</strong> karma</span>
+              <span><strong>{u.karma || 0}</strong> {t('karma')}</span>
               <span className="dotsep"></span>
-              <span><strong>{postCountFor(posts, u.name)}</strong> posts</span>
+              <span><strong>{postCountFor(posts, u.name)}</strong> {t('postsLabel')}</span>
               <span className="dotsep"></span>
-              <span><strong>{u.events || 0}</strong> events</span>
+              <span><strong>{u.events || 0}</strong> {t('eventsLabel')}</span>
             </div>
           </a>
         ))}
-        {list.length === 0 && <p className="empty">No ambassadors match "{q}".</p>}
+        {list.length === 0 && <p className="empty">{t('noAmbassadorsMatch')} "{q}".</p>}
       </div>
     </div>
   )

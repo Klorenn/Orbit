@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { AV } from '../data/constants'
 
 const heroBrands = [
   ['Protocol Labs', 'font-family:Georgia,serif;font-weight:700;letter-spacing:-.02em;font-size:15px'],
@@ -26,7 +27,126 @@ function makeMarqueeHTML(list) {
   return html + html
 }
 
-export function LandingView() {
+const L = {
+  es: {
+    forum: 'Entrar al foro', disconnect: 'Desconectar', cta: 'Entrar al foro', ctaGuest: 'Conectar wallet',
+    connectWallet: 'Conectar wallet',
+    heroEyebrow: 'El foro de embajadores Filecoin',
+    heroH1: 'Una constelación de voces, construyendo Filecoin juntos.',
+    heroP: 'El foro con wallet-gate donde los embajadores de Filecoin publican reports, proponen proyectos y dan forma al futuro del almacenamiento descentralizado — de forma transparente, on-chain.',
+    meetH2: 'Conocé Orbit.',
+    discoverIt: 'Descubrilo',
+    meetLede: 'Orbit es el foro con wallet-gate donde los embajadores de Filecoin publican su trabajo en abierto — reports, propuestas y debate, todos anclados a identidad real on-chain.',
+    visibleWorkTitle: 'Trabajo visible, por fin',
+    visibleWorkBody: 'Cada report de evento y propuesta vive en un foro público — legible por cualquiera, atribuido a una identidad real on-chain. Sin más trabajo atrapado en Airtable, Slack o Drive.',
+    identityTitle: 'Identidad sin papeles',
+    identityBody: 'Iniciá sesión con tu wallet. Sin emails, sin contraseñas, sin intermediarios — tu wallet es tu identidad.',
+    storedTitle: 'Almacenado en Filecoin',
+    storedBody: 'Los reports y la evidencia están anclados en IPFS y persistidos a través de storage deals de Filecoin. Comemos nuestra propia comida.',
+    backerLabel: 'Alineado con el Programa Constellation — y las personas que modernizan la gobernanza de Filecoin.',
+    howEyebrow: 'Orbit en la práctica',
+    howH2: 'Cómo funciona',
+    howDesc: 'Tres pasos, sin fricciones. Conectate una vez, y tu identidad, tus posts y tus votos viajan con tu wallet.',
+    step1H: 'Conectá tu wallet',
+    step1P: 'Iniciá sesión con Ethereum. Sin emails, sin contraseñas — tu wallet es tu identidad.',
+    step2H: 'Verificado por credencial',
+    step2P: 'Tenés el Orbit Ambassador credential para publicar reports y propuestas. Cualquiera puede leer; los miembros dan forma al registro.',
+    step3H: 'Gobernás de forma transparente',
+    step3P: 'Las propuestas, la señalización y los resultados están todos on-chain — anclados en IPFS, persistidos en Filecoin.',
+    mcH3: 'Conectate. Publicá. Goberná.',
+    mcP: 'Desde un evento en Santiago hasta una propuesta de protocolo — todo el arco del trabajo de un embajador ocurre en un lugar, en abierto, propiedad de la comunidad que lo creó.',
+    readDocs: 'Leer los docs',
+    voicesEyebrow: 'De los embajadores',
+    voicesH2: 'Voces de la constelación.',
+    voicesLede: 'Cientos de embajadores en decenas de ciudades — compartiendo por fin un registro del trabajo.',
+    quote1: '"Por fin puedo ver qué están construyendo los demás embajadores."',
+    quote2: '"El wallet-gate significa identidad real sin los papeles."',
+    quote3: '"Nuestros reports viven en Filecoin ahora. Como debe ser."',
+    joinCta: 'Conectar wallet',
+    notAmbassador: '¿No sos embajador aún?',
+    applyLink: 'Aplicá al Programa Orbit →',
+    footerTag: 'Una constelación de voces.',
+    product: 'Producto', community: 'Comunidad', governance: 'Gobernanza', legal: 'Legal',
+    footerBottom: 'Construido en Filecoin · Almacenado en IPFS · © 2026 Orbit',
+  },
+  en: {
+    forum: 'Go to forum', disconnect: 'Sign out', cta: 'Go to forum', ctaGuest: 'Connect Wallet to Join',
+    connectWallet: 'Connect Wallet',
+    heroEyebrow: 'The Filecoin ambassador forum',
+    heroH1: 'A constellation of voices, building Filecoin together.',
+    heroP: 'The wallet-gated forum where Filecoin ambassadors publish reports, propose projects, and shape the future of decentralized storage — transparently, on-chain.',
+    meetH2: 'Meet Orbit.',
+    discoverIt: 'Discover it',
+    meetLede: 'Orbit is the wallet-gated forum where Filecoin ambassadors publish their work in the open — reports, proposals, and debate, all anchored to real on-chain identity.',
+    visibleWorkTitle: 'Visible work, finally',
+    visibleWorkBody: 'Every event report and proposal lives in one public forum — readable by anyone, attributed to a real on-chain identity. No more work trapped in Airtable, Slack, or Drive.',
+    identityTitle: 'Identity without paperwork',
+    identityBody: 'Sign in with your wallet. No emails, no passwords, no central gatekeeper — your wallet is your key.',
+    storedTitle: 'Stored on Filecoin',
+    storedBody: 'Reports and evidence are pinned to IPFS and persisted through Filecoin storage deals. We eat our own dog food.',
+    backerLabel: 'Aligned with the Constellation Program — and the people modernizing Filecoin governance.',
+    howEyebrow: 'Orbit in practice',
+    howH2: 'How it works',
+    howDesc: 'Three steps, no friction. Connect once, and your identity, your posts, and your votes all travel with your wallet.',
+    step1H: 'Connect your wallet',
+    step1P: 'Sign-in with Ethereum. No emails, no passwords — your wallet is your identity.',
+    step2H: 'Verified by credential',
+    step2P: 'Hold the Orbit Ambassador credential to post reports and proposals. Anyone can read; members shape the record.',
+    step3H: 'Govern transparently',
+    step3P: 'Proposals, signaling, and outcomes are all on-chain — pinned to IPFS, persisted on Filecoin.',
+    mcH3: 'Connect. Post. Govern.',
+    mcP: 'From a field event in Santiago to a protocol proposal — the whole arc of an ambassador\'s work happens in one place, in the open, owned by the community that made it.',
+    readDocs: 'Read the docs',
+    voicesEyebrow: 'From the ambassadors',
+    voicesH2: 'Voices from the constellation.',
+    voicesLede: 'Hundreds of ambassadors across dozens of cities — finally sharing one record of the work.',
+    quote1: '"Finally I can see what other ambassadors are building."',
+    quote2: '"Wallet-gating means real identity without the paperwork."',
+    quote3: '"Our reports live on Filecoin now. As they should."',
+    joinCta: 'Connect Wallet',
+    notAmbassador: 'Not an ambassador yet?',
+    applyLink: 'Apply to the Orbit Program →',
+    footerTag: 'A constellation of voices.',
+    product: 'Product', community: 'Community', governance: 'Governance', legal: 'Legal',
+    footerBottom: 'Built on Filecoin · Stored on IPFS · © 2026 Orbit',
+  },
+}
+const CHIP_T = L
+
+function LandingChip({ identity, myAvatar, onSignOut, lang }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', close)
+    return () => document.removeEventListener('mousedown', close)
+  }, [])
+  const t = CHIP_T[lang] || CHIP_T.en
+  return (
+    <div className="ln-chip-wrap" ref={ref}>
+      <button className="ln-chip" onClick={() => setOpen(o => !o)}>
+        <img className="ln-av" src={AV[myAvatar] || AV.blue} alt="" />
+        <span className="ln-name">{identity || 'you.fil'}</span>
+        <svg className="ln-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      {open && (
+        <div className="ln-menu">
+          <a className="ln-item" href="#/forum" onClick={() => setOpen(false)}>{t.forum} →</a>
+          <button className="ln-item ln-disconnect" onClick={() => { setOpen(false); onSignOut() }}>{t.disconnect}</button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function LandingView({ connected, identity, myAvatar, onSignOut }) {
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'en')
+  useEffect(() => {
+    const handler = (e) => setLang(e.detail)
+    window.addEventListener('orbit-lang', handler)
+    return () => window.removeEventListener('orbit-lang', handler)
+  }, [])
+
   // Inject orbit.css only while landing is mounted — avoids conflicts with forum.css
   useEffect(() => {
     const link = document.createElement('link')
@@ -102,13 +222,15 @@ export function LandingView() {
     }
   }, [])
 
+  const tl = L[lang] || L.en
+
   return (
     <div className="page">
       {/* NAV + HERO WRAPPER */}
       <div className="hero-wrap">
         <nav className="nav">
           <div className="inner nav-row">
-            <a className="brand" href="#top" aria-label="Orbit home">
+            <a className="brand" href="#/forum" aria-label="Orbit — enter forum">
               <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true">
                 <ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" />
                 <circle cx="128" cy="128" r="33" fill="currentColor" />
@@ -123,13 +245,17 @@ export function LandingView() {
               <a href="#backed">Docs</a>
               <a href="#join">News</a>
             </div>
-            <button className="nav-pill" type="button" onClick={() => { window.location.hash = '#/forum' }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="2.5" y="6" width="19" height="13" rx="3" stroke="currentColor" strokeWidth="2" />
-                <path d="M2.5 10h19" stroke="currentColor" strokeWidth="2" /><circle cx="17" cy="14.5" r="1.4" fill="currentColor" />
-              </svg>
-              <span className="lbl">Connect Wallet</span>
-            </button>
+            {connected ? (
+              <LandingChip identity={identity} myAvatar={myAvatar} onSignOut={onSignOut} lang={lang} />
+            ) : (
+              <button className="nav-pill" type="button" onClick={() => { window.location.hash = '#/forum' }}>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="2.5" y="6" width="19" height="13" rx="3" stroke="currentColor" strokeWidth="2" />
+                  <path d="M2.5 10h19" stroke="currentColor" strokeWidth="2" /><circle cx="17" cy="14.5" r="1.4" fill="currentColor" />
+                </svg>
+                <span className="lbl">{tl.connectWallet}</span>
+              </button>
+            )}
           </div>
         </nav>
 
@@ -141,11 +267,11 @@ export function LandingView() {
             </video>
             <div className="hero-scrim"></div>
             <div className="inner hero-content">
-              <span className="hero-eyebrow reveal"><span className="dot"></span>The Filecoin ambassador forum</span>
-              <h1 className="display reveal" data-delay="1">A constellation of voices, building Filecoin together.</h1>
-              <p className="sub reveal" data-delay="2">The wallet-gated forum where Filecoin ambassadors publish reports, propose projects, and shape the future of decentralized storage — transparently, on-chain.</p>
+              <span className="hero-eyebrow reveal"><span className="dot"></span>{tl.heroEyebrow}</span>
+              <h1 className="display reveal" data-delay="1">{tl.heroH1}</h1>
+              <p className="sub reveal" data-delay="2">{tl.heroP}</p>
               <a className="btn btn-arrow on-light reveal" data-delay="3" href="#/forum">
-                Connect Wallet to Join
+                {connected ? tl.cta : tl.ctaGuest}
                 <span className="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
               </a>
               <div className="hero-bottom reveal" data-delay="3">
@@ -153,6 +279,9 @@ export function LandingView() {
                   <div className="marquee-track" id="heroMarquee"></div>
                 </div>
               </div>
+              <a className="scroll-hint" href="#meet" aria-label="Scroll down">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </a>
             </div>
           </div>
         </header>
@@ -163,14 +292,14 @@ export function LandingView() {
         <div className="inner">
           <div className="intro-row has-astros">
             <div className="intro-left">
-              <h2 className="h2 reveal">Meet Orbit.</h2>
+              <h2 className="h2 reveal">{tl.meetH2}</h2>
               <a className="btn btn-arrow on-dark reveal" data-delay="1" href="#how">
-                Discover it
+                {tl.discoverIt}
                 <span className="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
               </a>
             </div>
             <div className="intro-astro reveal" data-delay="1"><img className="astro-mid" style={{ '--rot': '-3deg' }} src="/assets/blue.png" alt="Orbit astronaut" /></div>
-            <p className="lede reveal" data-delay="1">Orbit is the wallet-gated forum where Filecoin ambassadors publish their work in the open — reports, proposals, and debate, all anchored to real on-chain identity.</p>
+            <p className="lede reveal" data-delay="1">{tl.meetLede}</p>
           </div>
 
           <div className="bento">
@@ -187,27 +316,27 @@ export function LandingView() {
               <img className="scene-astro a-purple" style={{ '--rot': '4deg' }} src="/assets/purple.png" alt="" />
               <span className="badge scene-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg></span>
               <div className="scene-text">
-                <h3 className="card-title">Visible work, finally</h3>
-                <p className="c-body">Every event report and proposal lives in one public forum — readable by anyone, attributed to a real on-chain identity. No more work trapped in Airtable, Slack, or Drive.</p>
+                <h3 className="card-title">{tl.visibleWorkTitle}</h3>
+                <p className="c-body">{tl.visibleWorkBody}</p>
               </div>
             </div>
 
             <div className="cell dark has-astro reveal" data-delay="1">
               <div className="c-top">
-                <span className="card-title">Identity without paperwork</span>
+                <span className="card-title">{tl.identityTitle}</span>
                 <span className="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="14" rx="3" /><path d="M2 10h20" /><circle cx="17.5" cy="14.5" r="1.3" fill="currentColor" stroke="none" /></svg></span>
               </div>
               <img className="cell-astro" style={{ '--rot': '3deg' }} src="/assets/green.png" alt="" />
-              <p className="c-body">Sign in with your wallet. No emails, no passwords, no central gatekeeper — your wallet is your key.</p>
+              <p className="c-body">{tl.identityBody}</p>
             </div>
 
             <div className="cell light has-astro reveal" data-delay="2">
               <div className="c-top">
-                <span className="card-title">Stored on Filecoin</span>
+                <span className="card-title">{tl.storedTitle}</span>
                 <span className="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5" /><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" /></svg></span>
               </div>
               <img className="cell-astro" style={{ '--rot': '-3deg' }} src="/assets/red.png" alt="" />
-              <p className="c-body">Reports and evidence are pinned to IPFS and persisted through Filecoin storage deals. We eat our own dog food.</p>
+              <p className="c-body">{tl.storedBody}</p>
             </div>
           </div>
         </div>
@@ -216,7 +345,7 @@ export function LandingView() {
       {/* BACKED BY */}
       <section className="section tight" id="backed" data-screen-label="Backed by">
         <div className="inner backed">
-          <p className="label reveal">Aligned with the Constellation Program — and the people modernizing Filecoin governance.</p>
+          <p className="label reveal">{tl.backerLabel}</p>
           <div className="marquee backers-marquee reveal" data-delay="1">
             <div className="marquee-track" id="backersMarquee"></div>
           </div>
@@ -227,13 +356,13 @@ export function LandingView() {
       <section className="section" id="how" data-screen-label="How it works">
         <div className="inner modes">
           <div className="modes-left">
-            <span className="eyebrow reveal">Orbit in practice</span>
-            <h2 className="h2 reveal" data-delay="1">How it works</h2>
-            <p className="desc reveal" data-delay="1">Three steps, no friction. Connect once, and your identity, your posts, and your votes all travel with your wallet.</p>
+            <span className="eyebrow reveal">{tl.howEyebrow}</span>
+            <h2 className="h2 reveal" data-delay="1">{tl.howH2}</h2>
+            <p className="desc reveal" data-delay="1">{tl.howDesc}</p>
             <ol className="steps">
-              <li className="reveal" data-delay="1"><span className="n">01</span><div><h4>Connect your wallet</h4><p>Sign-in with Ethereum. No emails, no passwords — your wallet is your identity.</p></div></li>
-              <li className="reveal" data-delay="2"><span className="n">02</span><div><h4>Verified by NFT</h4><p>Hold the Orbit Ambassador NFT to post reports and proposals. Anyone can read; members shape the record.</p></div></li>
-              <li className="reveal" data-delay="3"><span className="n">03</span><div><h4>Govern transparently</h4><p>Proposals, signaling, and outcomes are all on-chain — pinned to IPFS, persisted on Filecoin.</p></div></li>
+              <li className="reveal" data-delay="1"><span className="n">01</span><div><h4>{tl.step1H}</h4><p>{tl.step1P}</p></div></li>
+              <li className="reveal" data-delay="2"><span className="n">02</span><div><h4>{tl.step2H}</h4><p>{tl.step2P}</p></div></li>
+              <li className="reveal" data-delay="3"><span className="n">03</span><div><h4>{tl.step3H}</h4><p>{tl.step3P}</p></div></li>
             </ol>
           </div>
 
@@ -243,11 +372,11 @@ export function LandingView() {
             </video>
             <div className="scrim"></div>
             <div className="mc-content">
-              <h3 className="h3">Connect. Post. Govern.</h3>
-              <p>From a field event in Santiago to a protocol proposal — the whole arc of an ambassador's work happens in one place, in the open, owned by the community that made it.</p>
+              <h3 className="h3">{tl.mcH3}</h3>
+              <p>{tl.mcP}</p>
               <a className="link-arrow" href="#join">
                 <span className="circle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
-                Read the docs
+                {tl.readDocs}
               </a>
             </div>
           </div>
@@ -259,22 +388,22 @@ export function LandingView() {
         <div className="inner">
           <div className="intro-row" style={{ marginBottom: 0 }}>
             <div className="intro-left">
-              <span className="eyebrow reveal">From the ambassadors</span>
-              <h2 className="h2 reveal" data-delay="1" style={{ marginTop: 8 }}>Voices from the constellation.</h2>
+              <span className="eyebrow reveal">{tl.voicesEyebrow}</span>
+              <h2 className="h2 reveal" data-delay="1" style={{ marginTop: 8 }}>{tl.voicesH2}</h2>
             </div>
-            <p className="lede reveal" data-delay="1">Hundreds of ambassadors across dozens of cities — finally sharing one record of the work.</p>
+            <p className="lede reveal" data-delay="1">{tl.voicesLede}</p>
           </div>
           <div className="voices-grid">
             <figure className="voice reveal">
-              <blockquote className="quote">"Finally I can see what other ambassadors are building."</blockquote>
+              <blockquote className="quote">{tl.quote1}</blockquote>
               <figcaption className="by"><span className="av" style={{ background: '#0090FF' }}></span><span><span className="name">Olga</span><br /><span className="city">Santiago, Chile</span></span></figcaption>
             </figure>
             <figure className="voice reveal" data-delay="1">
-              <blockquote className="quote">"Wallet-gating means real identity without the paperwork."</blockquote>
+              <blockquote className="quote">{tl.quote2}</blockquote>
               <figcaption className="by"><span className="av" style={{ background: '#FFD60A' }}></span><span><span className="name">Kwame</span><br /><span className="city">Accra, Ghana</span></span></figcaption>
             </figure>
             <figure className="voice reveal" data-delay="2">
-              <blockquote className="quote">"Our reports live on Filecoin now. As they should."</blockquote>
+              <blockquote className="quote">{tl.quote3}</blockquote>
               <figcaption className="by"><span className="av" style={{ background: '#A855F7' }}></span><span><span className="name">Mira</span><br /><span className="city">Lisbon, Portugal</span></span></figcaption>
             </figure>
           </div>
@@ -287,11 +416,11 @@ export function LandingView() {
           <div className="join-card reveal">
             <img className="join-art" src="/assets/ready-voice-v3.png" alt="Ready to add your voice? Report, propose, debate, research and connect — all through Orbit." />
             <a className="btn btn-arrow on-light join-cta" href="#/forum">
-              Connect Wallet
+              {tl.joinCta}
               <span className="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
             </a>
           </div>
-          <p className="fine">Don't have the NFT yet? <a href="#">Apply to the Orbit Program →</a></p>
+          <p className="fine">{tl.notAmbassador} <a href="#">{tl.applyLink}</a></p>
         </div>
       </section>
 
@@ -307,15 +436,15 @@ export function LandingView() {
                 </svg>
                 <span className="word">Orbit</span>
               </a>
-              <p className="tag">A constellation of voices.</p>
+              <p className="tag">{tl.footerTag}</p>
             </div>
-            <div className="footer-col"><h5>Product</h5><a href="#">Forum</a><a href="#">Reports</a><a href="#">Projects</a></div>
-            <div className="footer-col"><h5>Community</h5><a href="#">Discord</a><a href="#">GitHub</a><a href="#">X</a></div>
-            <div className="footer-col"><h5>Governance</h5><a href="#">FIPs</a><a href="#">Metropolis</a><a href="#">Constellation</a></div>
-            <div className="footer-col"><h5>Legal</h5><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Conduct</a></div>
+            <div className="footer-col"><h5>{tl.product}</h5><a href="#">Forum</a><a href="#">Reports</a><a href="#">Projects</a></div>
+            <div className="footer-col"><h5>{tl.community}</h5><a href="#">Discord</a><a href="#">GitHub</a><a href="#">X</a></div>
+            <div className="footer-col"><h5>{tl.governance}</h5><a href="#">FIPs</a><a href="#">Metropolis</a><a href="#">Constellation</a></div>
+            <div className="footer-col"><h5>{tl.legal}</h5><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Conduct</a></div>
           </div>
           <div className="footer-bottom">
-            <span>Built on Filecoin · Stored on IPFS · © 2026 Orbit</span>
+            <span>{tl.footerBottom}</span>
             <div className="socials">
               <a href="#" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg></a>
               <a href="#" aria-label="GitHub"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12.01 12.01 0 0024 12.5C24 5.87 18.63.5 12 .5z" /></svg></a>

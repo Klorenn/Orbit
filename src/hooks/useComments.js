@@ -11,5 +11,10 @@ export function useComments() {
     return data
   }
 
-  return { addComment }
+  const deleteComment = async (commentId) => {
+    const { error } = await supabase.from('comments').delete().eq('id', commentId)
+    if (error) throw new Error(error.message)
+  }
+
+  return { addComment, deleteComment }
 }
