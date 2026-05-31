@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
-import { SEED_POSTS } from '../data/seed'
 
 function timeAgo(ts) {
   const s = Math.floor((Date.now() - new Date(ts)) / 1000)
@@ -51,17 +50,8 @@ export function usePosts(identity) {
     if (append) setLoadingMore(false)
     else setLoading(false)
 
-    if (postsErr) {
-      setError(postsErr.message)
-      if (!append) setPosts(SEED_POSTS)
-      setHasMore(false)
-      return
-    }
-    if (!postsData || postsData.length === 0) {
-      if (!append) setPosts(SEED_POSTS)
-      setHasMore(false)
-      return
-    }
+    if (postsErr) { setError(postsErr.message); setHasMore(false); return }
+    if (!postsData || postsData.length === 0) { setHasMore(false); return }
 
     setHasMore(postsData.length === PAGE_SIZE)
     offsetRef.current = offset + postsData.length

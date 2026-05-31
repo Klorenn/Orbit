@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { EVENTS as SEED_EVENTS } from '../data/constants'
 
 function transformEvent(row) {
   const d = new Date(row.when_date + 'T12:00:00')
@@ -24,11 +23,7 @@ export function useEvents(identity) {
         .from('events')
         .select('*')
         .order('when_date', { ascending: true })
-      if (!error && data && data.length > 0) {
-        setEvents(data.map(transformEvent))
-      } else {
-        setEvents(SEED_EVENTS)
-      }
+      if (!error && data && data.length > 0) setEvents(data.map(transformEvent))
     }
     fetchEvents()
   }, [])
