@@ -150,3 +150,63 @@ export function who(name) {
 export function navTo(hash) {
   window.location.hash = hash;
 }
+
+export const MEETINGS = [
+  { id:'m1', title:'Weekly ambassador sync', host:'orbit-team.fil', kind:'Community', status:'live',
+    when:'Now · started 12 min ago', durationMin:60, capacity:50,
+    desc:'Open weekly call for all ambassadors. Share what you shipped, blockers, and what is coming. Drop in any time.',
+    attendees:['olga.fil','mira.fil','devi.fil','kwame.fil','tunde.fil'], speaking:'olga.fil' },
+  { id:'m2', title:'Proposal review — Regional hub budget', host:'tunde.fil', kind:'Proposal', status:'live',
+    when:'Now · started 4 min ago', durationMin:45, capacity:30,
+    desc:'Live walkthrough of the West Africa / South Asia / LatAm hub budget before it goes to Voting. Bring questions.',
+    attendees:['tunde.fil','devi.fil','mira.fil'], speaking:'tunde.fil' },
+  { id:'m3', title:'New ambassador onboarding circle', host:'devi.fil', kind:'Workshop', status:'upcoming',
+    when:'Today, 18:00 UTC', durationMin:45, capacity:25,
+    desc:'A friendly intro session for newcomers: wallet setup, the NFT, and posting your first report. No question too small.',
+    attendees:['devi.fil','kwame.fil'], speaking:null },
+  { id:'m4', title:'Storage-deal office hours', host:'mira.fil', kind:'Workshop', status:'upcoming',
+    when:'Tomorrow, 15:00 UTC', durationMin:60, capacity:40,
+    desc:'Bring your CID and we will make a Filecoin deal live. Hands-on help with Lighthouse and IPFS pinning.',
+    attendees:['mira.fil','olga.fil'], speaking:null },
+  { id:'m5', title:'Governance roundtable — steward rotation', host:'orbit-team.fil', kind:'Admin', status:'upcoming',
+    when:'Fri, 16:00 UTC', durationMin:50, capacity:30,
+    desc:'Admin-hosted discussion on the 3-steward rotation for Announcements ahead of the formal vote.',
+    attendees:['orbit-team.fil','mira.fil','olga.fil','devi.fil'], speaking:null },
+  { id:'m6', title:'LatAm hub kickoff', host:'olga.fil', kind:'Community', status:'ended',
+    when:'Yesterday', durationMin:55, capacity:50,
+    desc:'First call of the LatAm regional hub. Recording and notes pinned to the thread.',
+    attendees:['olga.fil','tunde.fil','devi.fil','kwame.fil','mira.fil','orbit-team.fil'], speaking:null },
+]
+
+export const MEETING_KIND = { Community:'#0090FF', Proposal:'#A855F7', Workshop:'#10B981', Admin:'#FF9500' }
+
+export const BADGES = [
+  { id:'first-report', icon:'📡', label:'First Report', desc:'Published your first ambassador report', tone:'#0090FF' },
+  { id:'host', icon:'🎙️', label:'Meeting Host', desc:'Hosted a live Orbit meeting', tone:'#A855F7' },
+  { id:'organizer', icon:'🌍', label:'Event Organizer', desc:'Ran 3+ community events', tone:'#10B981' },
+  { id:'proposer', icon:'🗳️', label:'Proposer', desc:'Authored a governance proposal', tone:'#FF9500' },
+  { id:'storage', icon:'🛰️', label:'Storage Pro', desc:'Pinned 50+ files to Filecoin', tone:'#2AABEE' },
+  { id:'streak', icon:'🔥', label:'On a Streak', desc:'Active 8 weeks in a row', tone:'#FF3B30' },
+  { id:'mentor', icon:'🤝', label:'Mentor', desc:'Onboarded a new ambassador', tone:'#FFD60A' },
+  { id:'constellation', icon:'⭐', label:'Constellation', desc:'1,000+ karma earned', tone:'#7C5CFF' },
+]
+
+export const USER_BADGES = {
+  'olga.fil':['first-report','host','organizer','proposer','constellation','streak'],
+  'mira.fil':['first-report','host','proposer','storage','constellation'],
+  'tunde.fil':['first-report','organizer','host','mentor'],
+  'devi.fil':['first-report','organizer','mentor','constellation','storage'],
+  'kwame.fil':['first-report','mentor'],
+  'orbit-team.fil':['host','constellation','storage'],
+  'you.fil':['first-report','storage','mentor'],
+}
+
+export const karmaBreakdown = (u) => {
+  const total = u.karma || 0
+  return [
+    { label:'Reports & posts', pct:42, tone:'#0090FF' },
+    { label:'Helpful comments', pct:24, tone:'#10B981' },
+    { label:'Events hosted', pct:18, tone:'#FFD60A' },
+    { label:'Proposals & votes', pct:16, tone:'#A855F7' },
+  ].map(s => ({ ...s, value: Math.round(total * s.pct / 100) }))
+}

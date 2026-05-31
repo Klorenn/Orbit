@@ -40,6 +40,10 @@ import { MyPostsView, ProfileTabs } from './pages/account/MyPostsView'
 import { NotificationsView } from './pages/account/NotificationsView'
 import { SettingsView } from './pages/account/SettingsView'
 import { AdminView } from './pages/account/AdminView'
+import { MeetingsView, MeetingRoomView, ProposeMeetingView, OnboardingView } from './pages/MeetingsView'
+import { SavedView } from './pages/SavedView'
+import { LandingView } from './pages/LandingView'
+import { MEETINGS, MEETING_KIND, BADGES, USER_BADGES, karmaBreakdown } from './data/constants'
 import './styles/forum.css'
 import './styles/orbit.css'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -81,6 +85,14 @@ function parseHash() {
   if (seg[0] === 'about') return { view: 'about' };
   if (seg[0] === 'docs') return { view: 'docs' };
   if (seg[0] === 'connect') return { view: 'connect' };
+  if (seg[0] === 'meetings') {
+    if (seg[1] === 'new') return { view: 'meeting-new' };
+    if (seg[1]) return { view: 'meeting-room', id: seg[1] };
+    return { view: 'meetings' };
+  }
+  if (seg[0] === 'onboarding') return { view: 'onboarding' };
+  if (seg[0] === 'saved') return { view: 'saved' };
+  if (seg[0] === 'landing') return { view: 'landing' };
   return { view: 'notfound' };
 }
 
@@ -96,6 +108,7 @@ export default function App() {
     try { return JSON.parse(localStorage.getItem('orbit-profile') || '{}'); } catch (e) { return {}; }
   })
   const toastTimer = useRef(null)
+  const [meetings, setMeetings] = useState(MEETINGS)
 
   // Sync identity into ME and AMBASSADORS
   ME.name = identity
@@ -132,6 +145,21 @@ export default function App() {
     setToast(msg)
     clearTimeout(toastTimer.current)
     toastTimer.current = setTimeout(() => setToast(''), 2600)
+  }
+
+  useEffect(() => {
+    const h = (e) => flash(e.detail)
+    window.addEventListener('orbit-toast', h)
+    return () => window.removeEventListener('orbit-toast', h)
+  }, [])
+
+  const joinMeeting = (id) => {
+    if (!connected) { flash('Connect to join meetings'); return }
+    setMeetings(ms => ms.map(m => m.id !== id ? m : { ...m, attendees: m.attendees.includes(identity) ? m.attendees : [...m.attendees, identity] }))
+    navTo('#/meetings/' + id)
+  }
+  const leaveMeeting = (id) => {
+    setMeetings(ms => ms.map(m => m.id !== id ? m : { ...m, attendees: m.attendees.filter(a => a !== identity) }))
   }
 
   const connect = () => navTo('#/connect')
@@ -277,6 +305,24 @@ export default function App() {
       break
     case 'connect':
       view = <ConnectView />
+      break
+    case 'meetings':
+      view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />
+      break
+    case 'meeting-room':
+      view = <MeetingRoomView id={route.id} meetings={meetings} onJoin={joinMeeting} onLeave={leaveMeeting} />
+      break
+    case 'meeting-new':
+      view = <ProposeMeetingView connected={connected} onConnect={() => navTo('#/connect')} onPublish={(m) => { setMeetings(ms => [m, ...ms]); navTo('#/meetings') }} />
+      break
+    case 'onboarding':
+      view = <OnboardingView />
+      break
+    case 'saved':
+      view = <SavedView posts={posts} onVote={vote} />
+      break
+    case 'landing':
+      view = <LandingView />
       break
     case 'error500':
       view = <Error500View />

@@ -14,6 +14,7 @@ export function Navbar({ route, connected, onCompose, onConnect, onWallet, onSig
         <a href="#/proposals" className={route.view === 'proposals' ? 'on' : ''}>Proposals</a>
         <a href="#/events" className={route.view === 'events' ? 'on' : ''}>Events</a>
         <a href="#/ambassadors" className={route.view === 'ambassadors' ? 'on' : ''}>Ambassadors</a>
+        <a href="#/meetings" className={route.view?.startsWith('meeting') ? 'on' : ''}>Meetings</a>
       </div>
       <div className="nav-right">
         <a href="#/search" className="nav-icon">{I.search()}</a>
