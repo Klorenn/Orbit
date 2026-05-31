@@ -27,7 +27,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         .from('public_profiles')
         .select('*')
         .eq('identity', target)
-        .single()
+        .maybeSingle()
       if (data) setFetchedProfile(data)
     }
     loadProfile()

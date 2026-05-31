@@ -28,7 +28,7 @@ export function useProfile(identity) {
         .from('public_profiles')
         .select('*')
         .eq('identity', identity)
-        .single()
+        .maybeSingle()
       if (!data) return
       const { avatar: remoteAvatar, karma: _k, identity: _i, created_at: _c, updated_at: _d, ...rest } = data
       const merged = { ...rest }
