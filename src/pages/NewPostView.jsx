@@ -3,6 +3,7 @@ import { CATEGORIES, ME, cid } from '../data/constants'
 import { I } from '../components/Icons'
 import { WalletGate } from '../components/WalletGate'
 import { MarkdownEditor, renderRich } from '../components/MarkdownEditor'
+import { useLighthouse } from '../hooks/useLighthouse'
 
 const TYPES = [ {t:'Report',cat:'reports'},{t:'Proposal',cat:'projects'},{t:'Event',cat:'events'},{t:'Feedback',cat:'feedback'},{t:'Discussion',cat:'governance'} ];
 
@@ -17,16 +18,34 @@ export function NewPostView({ connected, onConnect, onPublish, preset }) {
   const [body, setBody] = useState('');
   const [files, setFiles] = useState([]);
   const [phase, setPhase] = useState('edit');
+  const { uploadFiles } = useLighthouse()
+  const [fileObjects, setFileObjects] = useState([]) // actual File objects
   const [tab, setTab] = useState('write');
   useEffect(()=>{ window.scrollTo(0,0); }, []);
   const canPost = title.trim() && body.trim();
   const pickType = (t) => { setType(t); setCat(t.cat); };
-  const publish = () => {
-    if(!canPost || phase==='pinning') return;
-    setPhase('pinning');
-    setTimeout(()=>{ onPublish({ type:type.t, cat, title:title.trim(), body:body.trim().split(/\n{2,}/).filter(Boolean),
-      evidence: files.map(f=>({ name:f, size:'bafy…'+Math.random().toString(36).slice(2,5) })) }); }, 1500);
-  };
+  const publish = async () => {
+    if (!canPost || phase === 'pinning') return
+    setPhase('pinning')
+    try {
+      let evidence = []
+      let cidStr = undefined
+      if (fileObjects.length > 0) {
+        const hash = await uploadFiles(fileObjects)
+        cidStr = hash
+        evidence = fileObjects.map(f => ({ name: f.name, size: hash }))
+      }
+      onPublish({
+        type: type.t, cat, title: title.trim(),
+        body: body.trim().split(/\n{2,}/).filter(Boolean),
+        evidence,
+        cidStr,
+      })
+    } catch (e) {
+      setPhase('edit')
+      alert('Upload failed: ' + e.message)
+    }
+  }
   return (
     <div className="page-wrap compose">
       <a className="back-link" href="#/forum">{I.back()} Back to forum</a>
@@ -59,11 +78,21 @@ export function NewPostView({ connected, onConnect, onPublish, preset }) {
             : <div className="prose preview-box">{body.trim() ? renderRich(body) : <p className="empty" style={{textAlign:'left'}}>Nothing to preview yet — write something first.</p>}</div>}
         </div>
         <div className="field">
-          <label>Evidence — drag &amp; drop, pinned to IPFS via Lighthouse</label>
-          <div className="ipfs-drop" onClick={()=>setFiles(f=>[...f, ['recap.pdf','data.csv','notes.md','slides.pdf','photos.zip'][f.length%5]])}>
+          <label>Evidence — pinned to IPFS via Lighthouse</label>
+          <div className="ipfs-drop" onClick={() => document.getElementById('evidence-input').click()}>
             <span className="ic">{I.pin()}</span>
-            <div><strong>Drop files to pin</strong><span>{files.length? files.join(' · ') : 'Images, PDFs, datasets — persisted on Filecoin'}</span></div>
+            <div>
+              <strong>Drop files to pin</strong>
+              <span>{fileObjects.length ? fileObjects.map(f => f.name).join(' · ') : 'Images, PDFs, datasets — persisted on Filecoin'}</span>
+            </div>
           </div>
+          <input
+            id="evidence-input"
+            type="file"
+            multiple
+            style={{ display: 'none' }}
+            onChange={e => setFileObjects(Array.from(e.target.files))}
+          />
         </div>
         <div className="compose-foot">
           <span className="note">{I.shield()} Signed by {ME.name} · stored on Filecoin</span>
