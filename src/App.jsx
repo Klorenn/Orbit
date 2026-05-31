@@ -4,7 +4,9 @@ import {
   CATEGORIES, PROPOSALS, BANNERS, NOTIFICATIONS, ME, AMBASSADORS, EVENTS, DOCS, TRENDING,
   cid, catOf, who, navTo, PROP_STATUS
 } from './data/constants'
-import { SEED_POSTS } from './data/seed'
+import { usePosts } from './hooks/usePosts'
+import { useVotes } from './hooks/useVotes'
+import { useComments } from './hooks/useComments'
 import { I } from './components/Icons'
 import { Stars } from './components/Stars'
 import { Vote } from './components/Vote'
@@ -84,7 +86,9 @@ function parseHash() {
 
 export default function App() {
   const { connected, identity, signOut: authSignOut } = useAuth()
-  const [posts, setPosts] = useState(SEED_POSTS)
+  const { posts, setPosts, createPost } = usePosts()
+  const { toggleVote } = useVotes()
+  const { addComment: addCommentDB } = useComments()
   const [route, setRoute] = useState(parseHash())
   const [toast, setToast] = useState('')
   const [myAvatar, setMyAvatarState] = useState(() => localStorage.getItem('orbit-avatar') || ME.color)
@@ -132,9 +136,18 @@ export default function App() {
 
   const connect = () => navTo('#/connect')
 
-  const vote = (id) => {
-    if (!connected) { flash('Connect your wallet to vote'); return; }
-    setPosts(ps => ps.map(p => p.id === id ? { ...p, upvoted: !p.upvoted, upvotes: p.upvotes + (p.upvoted ? -1 : 1) } : p))
+  const vote = async (id) => {
+    if (!connected) { flash('Connect your wallet to vote'); return }
+    const post = posts.find(p => p.id === id)
+    if (!post) return
+    try {
+      await toggleVote({ postId: id, voter: identity, currentlyVoted: post.upvoted })
+      setPosts(ps => ps.map(p => p.id === id
+        ? { ...p, upvoted: !p.upvoted, upvotes: p.upvotes + (p.upvoted ? -1 : 1) }
+        : p))
+    } catch (e) {
+      flash('Vote failed: ' + e.message)
+    }
   }
 
   const reactPost = (pid, emoji) => {
@@ -173,34 +186,29 @@ export default function App() {
     flash('Reply published on-chain')
   }
 
-  const addComment = (pid, text) => {
-    setPosts(ps => ps.map(p => p.id !== pid ? p : {
-      ...p,
-      comments: [...p.comments, { id: 'c' + Date.now(), author: 'you.fil', time: 'now', text, reactions: {}, replies: [] }]
-    }))
-    flash('Comment published on-chain')
+  const addComment = async (pid, text) => {
+    try {
+      const comment = await addCommentDB({ postId: pid, author: identity, text })
+      setPosts(ps => ps.map(p => p.id !== pid ? p
+        : { ...p, comments: [...(p.comments || []), { ...comment, reactions: {}, replies: [] }] }))
+      flash('Comment published on-chain')
+    } catch (e) {
+      flash('Comment failed: ' + e.message)
+    }
   }
 
-  const publish = (data) => {
-    const np = {
-      id: 'p' + Date.now(),
-      cat: data.cat,
-      type: data.type,
-      title: data.title,
-      excerpt: data.body[0].replace(/[#*_>-]/g, '').slice(0, 150) + (data.body[0].length > 150 ? '…' : ''),
-      body: data.body,
-      author: 'you.fil',
-      time: 'now',
-      upvotes: 1,
-      upvoted: true,
-      cidStr: cid(),
-      reactions: {},
-      evidence: data.evidence,
-      comments: []
+  const publish = async (data) => {
+    try {
+      const post = await createPost({
+        cat: data.cat, type: data.type, title: data.title,
+        body: data.body, evidence: data.evidence,
+        author: identity, cidStr: data.cidStr || cid(),
+      })
+      flash('Published · pinned to IPFS + Filecoin')
+      navTo('#/forum/' + data.cat + '/' + post.id)
+    } catch (e) {
+      flash('Publish failed: ' + e.message)
     }
-    setPosts(ps => [np, ...ps])
-    flash('Published · pinned to IPFS + Filecoin')
-    navTo('#/forum/' + data.cat + '/' + np.id)
   }
 
   const signOut = async () => {
