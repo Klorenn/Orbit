@@ -13,10 +13,31 @@ dist
 .DS_Store
 .vscode/settings.json
 *.swp
+.thumbnail
 
-# local MCP config (may contain project refs)
+# local MCP / AI config
 .mcp.json
+.atl/
+CLAUDE.md
+docs/superpowers/
 
 # logs
 *.log
 npm-debug.log*
+
+# local uploads / working images
+uploads/
+
+# legacy reference files (old monolithic prototype)
+forum-account.jsx
+forum-app.jsx
+forum-data.js
+forum-pages.jsx
+forum-ui.jsx
+forum.css
+forum.html
+orbit.css
+styles.css
+Orbit.html
+"Filecoin Governance Forum.html"
+"Screenshot 2026-05-30 at 11.30.26 AM.png"

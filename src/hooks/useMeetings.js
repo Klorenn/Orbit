@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { MEETINGS as SEED_MEETINGS } from '../data/constants'
 
 function normalizeMeeting(row) {
   return {
@@ -20,7 +21,11 @@ export function useMeetings(identity) {
         .from('meetings')
         .select('*, meeting_attendees(attendee)')
         .order('created_at', { ascending: false })
-      if (!error && data && data.length > 0) setMeetings(data.map(normalizeMeeting))
+      if (!error && data && data.length > 0) {
+        setMeetings(data.map(normalizeMeeting))
+      } else {
+        setMeetings(SEED_MEETINGS)
+      }
     }
     fetchMeetings()
   }, [])
