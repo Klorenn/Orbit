@@ -45,7 +45,6 @@ import { SavedView } from './pages/SavedView'
 import { LandingView } from './pages/LandingView'
 import { MEETINGS, MEETING_KIND, BADGES, USER_BADGES, karmaBreakdown } from './data/constants'
 import './styles/forum.css'
-import './styles/orbit.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
 /* ---------- hash router ---------- */
@@ -53,7 +52,7 @@ function parseHash() {
   if (window.location.hash.includes('access_token=')) return { view: 'forum-home' };
   let h = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
   const seg = h.split('/').filter(Boolean);
-  if (seg.length === 0) return { view: 'forum-home' };
+  if (seg.length === 0) return { view: 'landing' };
   if (seg[0] === 'forum') {
     if (seg.length === 1) return { view: 'forum-home' };
     if (seg[1] === 'new') return { view: 'forum-new' };
@@ -338,7 +337,7 @@ export default function App() {
   }
 
   const unread = (NOTIFICATIONS || []).filter(n => n.unread).length
-  const maximized = route.view === 'maintenance'
+  const maximized = route.view === 'maintenance' || route.view === 'landing'
 
   return (
     <>

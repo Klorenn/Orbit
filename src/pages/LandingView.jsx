@@ -27,6 +27,16 @@ function makeMarqueeHTML(list) {
 }
 
 export function LandingView() {
+  // Inject orbit.css only while landing is mounted — avoids conflicts with forum.css
+  useEffect(() => {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = '/orbit.css'
+    link.id = 'orbit-landing-css'
+    document.head.appendChild(link)
+    return () => { document.getElementById('orbit-landing-css')?.remove() }
+  }, [])
+
   useEffect(() => {
     const heroMarqueeEl = document.getElementById('heroMarquee')
     if (heroMarqueeEl) heroMarqueeEl.innerHTML = makeMarqueeHTML(heroBrands)
