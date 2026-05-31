@@ -16,7 +16,7 @@ export function EventsView() {
           <div className="ev-meta">{e.city} · hosted by <a href={'#/profile/' + h.name}>{h.name}</a></div>
           <div className="ev-spots">{e.spots}</div>
         </div>
-        <a className="pill pill-line" href="#/forum/events">{e.status === 'upcoming' ? 'Details' : 'Recap'}</a>
+        <a className="pill pill-line" href={'#/events/' + e.id}>{e.status === 'upcoming' ? 'Details' : 'Recap'}</a>
       </div>
     )
   }
