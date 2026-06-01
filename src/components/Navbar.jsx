@@ -33,7 +33,7 @@ function isActive(view, href) {
   return false
 }
 
-function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unread }) {
+function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unread, isAdmin }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-theme') === 'dark')
@@ -127,11 +127,14 @@ function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unre
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
             {lang === 'es' ? 'English' : 'Español'}
           </button>
+          {isAdmin && <>
+            <div className="pd-sep" />
+            <a className="pd-item" href="#/admin" onClick={() => setOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
+              {(T[lang] || T.es).adminPanel}
+            </a>
+          </>}
           <div className="pd-sep" />
-          <a className="pd-item" href="#/admin" onClick={() => setOpen(false)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
-            {(T[lang] || T.es).adminPanel}
-          </a>
           <button className="pd-item pd-danger" onClick={() => { setOpen(false); onSignOut() }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
             {(T[lang] || T.es).signOut}
@@ -198,7 +201,7 @@ function PrefsButton() {
   )
 }
 
-export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, onCompose, onConnect, onWallet, onSignOut, unread }) {
+export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, isAdmin, onCompose, onConnect, onWallet, onSignOut, unread }) {
   const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
 
   useEffect(() => {
@@ -238,7 +241,7 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
                 {unread > 0 && <span className="notif-badge">{unread}</span>}
               </a>
               <button className="pill pill-blue" onClick={onCompose}>{I.plus()} {newPostLabel}</button>
-              <ProfileChip identity={identity} address={address} fullAddress={fullAddress} myAvatar={myAvatar} onSignOut={onSignOut} unread={unread} />
+              <ProfileChip identity={identity} address={address} fullAddress={fullAddress} myAvatar={myAvatar} isAdmin={isAdmin} onSignOut={onSignOut} unread={unread} />
             </>
           ) : (
             <>

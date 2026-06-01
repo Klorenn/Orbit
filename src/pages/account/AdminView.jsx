@@ -96,29 +96,44 @@ function AdminReports() {
   )
 }
 
+const ROLES = ['Member', 'Ambassador', 'Admin']
+
 function AdminUsers() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    supabase.from('public_profiles').select('identity, handle, karma, created_at').order('karma', { ascending: false })
-      .then(({ data }) => { if (data) setUsers(data.map(u => ({ ...u, suspended: false }))); setLoading(false) })
+    supabase.from('public_profiles').select('identity, handle, karma, role, created_at').order('karma', { ascending: false })
+      .then(({ data }) => { if (data) setUsers(data); setLoading(false) })
   }, [])
-  const toggle = (identity) => setUsers(us => us.map(u => u.identity === identity ? { ...u, suspended: !u.suspended } : u))
+
+  const setRole = async (identity, role) => {
+    const { error } = await supabase.from('public_profiles').update({ role }).eq('identity', identity)
+    if (!error) setUsers(us => us.map(u => u.identity === identity ? { ...u, role } : u))
+  }
+
   return (
     <>
       <h1 className="admin-title">Users &amp; roles</h1>
-      <p className="admin-sub">Profiles registered on the forum. Karma is computed from post upvotes.</p>
+      <p className="admin-sub">Profiles registered on the forum. Admins can change any user's role.</p>
       {loading && <p className="empty">Loading profiles…</p>}
       {!loading && users.length === 0 && <p className="empty">No profiles yet.</p>}
       {!loading && users.length > 0 && (
         <div className="admin-table users">
-          <div className="at-head"><span>User</span><span>Handle</span><span>Karma</span><span>Actions</span></div>
+          <div className="at-head"><span>User</span><span>Handle</span><span>Karma</span><span>Role</span></div>
           {users.map(u => (
             <div className="at-row" key={u.identity}>
               <span className="at-user"><AmbassadorAvatar user={u.identity} size={30} link={false} /><b className="at-mono" style={{ fontSize: 12 }}>{u.identity.length > 16 ? u.identity.slice(0, 8) + '…' + u.identity.slice(-4) : u.identity}</b></span>
               <span>{u.handle || <span style={{ opacity: .4 }}>—</span>}</span>
               <span style={{ fontVariantNumeric: 'tabular-nums' }}>{u.karma}</span>
-              <span><button className={'pill ' + (u.suspended ? 'pill-line' : 'pill-danger')} onClick={() => toggle(u.identity)}>{u.suspended ? 'Reinstate' : 'Suspend'}</button></span>
+              <span>
+                <select
+                  className="at-role-select"
+                  value={u.role || 'Member'}
+                  onChange={e => setRole(u.identity, e.target.value)}
+                >
+                  {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </span>
             </div>
           ))}
         </div>

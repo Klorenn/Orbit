@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useT } from './hooks/useT'
 import {
-  CATEGORIES, ME, AMBASSADORS,
+  CATEGORIES, ME, AMBASSADORS, SUPER_ADMIN,
   cid, who, navTo,
 } from './data/constants'
 import { usePosts } from './hooks/usePosts'
@@ -102,6 +102,10 @@ export default function App() {
   const { addComment: addCommentDB, deleteComment: deleteCommentDB } = useComments()
   const { profile: myProfile, avatar: myAvatar, saveProfile, saveAvatar } = useProfile(identity)
   const displayName = myProfile?.handle?.trim() || displayAddr
+  const isAdmin = !!(identity && (
+    identity.toLowerCase() === SUPER_ADMIN ||
+    myProfile?.role === 'Admin'
+  ))
   const { events, myRsvps, rsvp, cancelRsvp } = useEvents(identity)
   const { proposals } = useProposals(posts)
   const { meetings, joinMeeting: _joinMeeting, leaveMeeting, proposeMeeting } = useMeetings(identity)
@@ -360,7 +364,9 @@ export default function App() {
       else view = <Error404View />
       break
     case 'admin':
-      view = <AdminView section={route.section} posts={posts} ambassadors={ambassadors} />
+      view = isAdmin
+        ? <AdminView section={route.section} posts={posts} ambassadors={ambassadors} />
+        : <Error404View />
       break
     case 'events':
       view = <EventsView events={events} myRsvps={myRsvps} connected={connected} onRsvp={async (id) => { const e = await rsvp(id); if (e) flash('RSVP failed: ' + e.message) }} onCancel={async (id) => { const e = await cancelRsvp(id); if (e) flash('Cancel failed: ' + e.message) }} />
@@ -442,6 +448,7 @@ export default function App() {
           address={displayAddr}
           fullAddress={address}
           myAvatar={myAvatar}
+          isAdmin={isAdmin}
           onCompose={goCompose}
           onConnect={() => navTo('#/connect')}
           onWallet={() => navTo('#/profile/me')}

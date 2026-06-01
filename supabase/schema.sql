@@ -64,14 +64,28 @@ create table if not exists public_profiles (
   banner     text not null default 'green',
   socials    jsonb not null default '{}',
   karma      integer not null default 0,
+  role       text not null default 'Member',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
+-- Returns true when the calling JWT belongs to the super-admin or any Admin role
+create or replace function is_admin() returns boolean
+  language sql security definer stable as $$
+    select
+      lower(coalesce(auth.jwt()->>'sub', '')) = lower('0x5c84eb03e22f370051a3612090ff5a3328111367')
+      or exists (
+        select 1 from public_profiles
+        where lower(identity) = lower(coalesce(auth.jwt()->>'sub', ''))
+          and role = 'Admin'
+      )
+  $$;
+
 alter table public_profiles enable row level security;
-create policy "profiles are public"      on public_profiles for select using (true);
-create policy "anyone can create profile" on public_profiles for insert with check (true);
-create policy "owner can update profile" on public_profiles for update using (auth.jwt()->>'sub' = identity or auth.email() = identity);
+create policy "profiles are public"        on public_profiles for select using (true);
+create policy "anyone can create profile"  on public_profiles for insert with check (true);
+create policy "owner can update profile"   on public_profiles for update using (auth.jwt()->>'sub' = identity or auth.email() = identity);
+create policy "admins can update any profile" on public_profiles for update using (is_admin()) with check (is_admin());
 
 -- Karma auto-sync: recalculates when post upvotes change
 create or replace function update_author_karma()

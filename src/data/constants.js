@@ -2,6 +2,8 @@
    ORBIT FORUM — shared constants and helpers (ES module)
    ============================================================ */
 
+export const SUPER_ADMIN = '0x5c84eb03e22f370051a3612090ff5a3328111367'
+
 export const AV = {
   blue: '/assets/avatar-blue.png',
   red: '/assets/avatar-red.png',

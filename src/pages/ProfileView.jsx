@@ -88,6 +88,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         banner: fetchedProfile.banner || staticU.banner,
         color: fetchedProfile.avatar || staticU.color || 'blue',
         karma: fetchedProfile.karma ?? 0,
+        role: fetchedProfile.role || staticU.role || 'Member',
       }
     : staticU
 
@@ -104,7 +105,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         <div className="ph-row">
           <AmbassadorAvatar user={isMe ? 'you.fil' : whoId} size={88} link={false} nft />
           <div className="ph-info">
-            <div className="ph-name">{u.name} {u.role && <span className="role">{u.role}</span>}</div>
+            <div className="ph-name">{u.name} {u.role && u.role !== 'Member' && <span className="role" data-role={u.role}>{u.role}</span>}</div>
             {resolvedIdentity?.startsWith('0x') && (
               <button className="ph-addr-copy" onClick={copyAddr}>
                 {copied ? '✓ Copiado' : longTruncAddr(resolvedIdentity)}
