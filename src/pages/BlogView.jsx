@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useFilecoinBlog } from '../hooks/useFilecoinBlog'
 import { useT } from '../hooks/useT'
 import { I } from '../components/Icons'
+
+const BLOG_TAGS = ['All', 'Events', 'Interviews', 'Awards', 'Updates']
 
 function ArticleSkeleton() {
   return (
@@ -54,13 +56,28 @@ function ArticleCard({ article, t }) {
 export function BlogView() {
   const { articles, loading, error } = useFilecoinBlog()
   const { t } = useT()
+  const [activeTag, setActiveTag] = useState('All')
   useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  const filtered = activeTag === 'All'
+    ? articles
+    : articles.filter(a => a.categories?.some(c => c.toLowerCase() === activeTag.toLowerCase()))
 
   return (
     <div className="page-wrap blog">
       <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('blogTitle')}</h1>
       <p className="page-sub">{t('blogSub')}</p>
+
+      <div className="blog-tags">
+        {BLOG_TAGS.map(tag => (
+          <button
+            key={tag}
+            className={'blog-tag' + (activeTag === tag ? ' on' : '')}
+            onClick={() => setActiveTag(tag)}
+          >{tag}</button>
+        ))}
+      </div>
 
       {error && (
         <div className="blog-error">
@@ -74,7 +91,7 @@ export function BlogView() {
       <div className="blog-grid">
         {loading
           ? Array.from({ length: 6 }).map((_, i) => <ArticleSkeleton key={i} />)
-          : articles.map((a, i) => <ArticleCard key={a.url || i} article={a} t={t} />)
+          : filtered.map((a, i) => <ArticleCard key={a.url || i} article={a} t={t} />)
         }
       </div>
 

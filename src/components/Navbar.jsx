@@ -206,12 +206,21 @@ function PrefsButton() {
 
 export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, isAdmin, onCompose, onConnect, onWallet, onSignOut, unread }) {
   const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     const handler = (e) => setLang(e.detail)
     window.addEventListener('orbit-lang', handler)
     return () => window.removeEventListener('orbit-lang', handler)
   }, [])
+
+  useEffect(() => {
+    if (mobileOpen) {
+      const close = () => setMobileOpen(false)
+      window.addEventListener('hashchange', close)
+      return () => window.removeEventListener('hashchange', close)
+    }
+  }, [mobileOpen])
 
   const links = NAV[lang] || NAV.es
   const newPostLabel = lang === 'es' ? 'Nueva entrada' : 'New post'
@@ -234,7 +243,20 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
           ))}
         </div>
 
+        {mobileOpen && (
+          <div className="mobile-nav-overlay" onClick={() => setMobileOpen(false)}>
+            <div className="mobile-nav-panel" onClick={e => e.stopPropagation()}>
+              {links.map(([label, href]) => (
+                <a key={href} href={href} className={isActive(route.view, href) ? 'on' : ''} onClick={() => setMobileOpen(false)}>{label}</a>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="topbar-right">
+          <button className="nav-burger" onClick={() => setMobileOpen(o => !o)} aria-label="Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+          </button>
           <a href="#/search" className="nav-icon">{I.search()}</a>
 
           {connected ? (
