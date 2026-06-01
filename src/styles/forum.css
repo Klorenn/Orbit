@@ -1460,3 +1460,29 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 }
 .blog-error a,
 .blog-empty a { color: var(--blue); }
+
+.blog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+.blog-pg-btn {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: rgba(var(--ink-rgb),.7);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.blog-pg-btn:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+.blog-pg-btn.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+.blog-pg-btn:disabled { opacity: .35; cursor: default; }
+.blog-pg-ellipsis { color: rgba(var(--ink-rgb),.4); font-size: 14px; line-height: 38px; padding: 0 2px; }

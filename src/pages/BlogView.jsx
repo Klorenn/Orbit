@@ -4,6 +4,37 @@ import { useT } from '../hooks/useT'
 import { I } from '../components/Icons'
 
 const BLOG_TAGS = ['All', 'Events', 'Interviews', 'Awards', 'Updates']
+const PER_PAGE = 6
+
+function paginationRange(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const pool = new Set([1, total, current, current - 1, current + 1].filter(p => p >= 1 && p <= total))
+  const sorted = [...pool].sort((a, b) => a - b)
+  const result = []
+  let prev = 0
+  for (const p of sorted) {
+    if (p - prev > 1) result.push('...')
+    result.push(p)
+    prev = p
+  }
+  return result
+}
+
+function Pagination({ page, total, onChange }) {
+  if (total <= 1) return null
+  const pages = paginationRange(page, total)
+  return (
+    <div className="blog-pagination">
+      <button className="blog-pg-btn" disabled={page === 1} onClick={() => onChange(page - 1)}>← Prev</button>
+      {pages.map((p, i) =>
+        p === '...'
+          ? <span key={`el-${i}`} className="blog-pg-ellipsis">…</span>
+          : <button key={p} className={'blog-pg-btn' + (p === page ? ' on' : '')} onClick={() => onChange(p)}>{p}</button>
+      )}
+      <button className="blog-pg-btn" disabled={page === total} onClick={() => onChange(page + 1)}>Next →</button>
+    </div>
+  )
+}
 
 function ArticleSkeleton() {
   return (
@@ -57,11 +88,18 @@ export function BlogView() {
   const { articles, loading, error } = useFilecoinBlog()
   const { t } = useT()
   const [activeTag, setActiveTag] = useState('All')
+  const [page, setPage] = useState(1)
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   const filtered = activeTag === 'All'
     ? articles
     : articles.filter(a => a.categories?.some(c => c.toLowerCase() === activeTag.toLowerCase()))
+
+  const totalPages = Math.ceil(filtered.length / PER_PAGE)
+  const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+
+  const handleTag = (tag) => { setActiveTag(tag); setPage(1) }
+  const handlePage = (p) => { setPage(p); window.scrollTo(0, 0) }
 
   return (
     <div className="page-wrap blog">
@@ -74,7 +112,7 @@ export function BlogView() {
           <button
             key={tag}
             className={'blog-tag' + (activeTag === tag ? ' on' : '')}
-            onClick={() => setActiveTag(tag)}
+            onClick={() => handleTag(tag)}
           >{tag}</button>
         ))}
       </div>
@@ -91,9 +129,13 @@ export function BlogView() {
       <div className="blog-grid">
         {loading
           ? Array.from({ length: 6 }).map((_, i) => <ArticleSkeleton key={i} />)
-          : filtered.map((a, i) => <ArticleCard key={a.url || i} article={a} t={t} />)
+          : paginated.map((a, i) => <ArticleCard key={a.url || i} article={a} t={t} />)
         }
       </div>
+
+      {!loading && filtered.length > 0 && (
+        <Pagination page={page} total={totalPages} onChange={handlePage} />
+      )}
 
       {!loading && articles.length === 0 && !error && (
         <div className="blog-empty">
