@@ -152,6 +152,13 @@ export const T = {
 
     // ── DOCS ─────────────────────────────────────────────
     docsTitle: 'Documentación',
+    // ── BLOG ─────────────────────────────────────────────
+    blogTitle: 'Blog de Filecoin',
+    blogSub: 'Novedades oficiales de la Filecoin Foundation.',
+    blogReadMore: 'Leer más →',
+    blogEmpty: 'No hay artículos en caché aún.',
+    blogReadOnFilecoin: 'Leer en filecoin.io →',
+    blogCouldNotLoad: 'No se pudieron cargar los artículos.',
 
     // ── CONNECT ──────────────────────────────────────────
     connectTitle: 'Conectate a Orbit',
@@ -602,6 +609,13 @@ export const T = {
 
     // ── DOCS ─────────────────────────────────────────────
     docsTitle: 'Documentation',
+    // ── BLOG ─────────────────────────────────────────────
+    blogTitle: 'Filecoin Blog',
+    blogSub: 'Official updates from the Filecoin Foundation.',
+    blogReadMore: 'Read more →',
+    blogEmpty: 'No articles cached yet.',
+    blogReadOnFilecoin: 'Read on filecoin.io →',
+    blogCouldNotLoad: 'Could not load articles.',
 
     // ── CONNECT ──────────────────────────────────────────
     connectTitle: 'Connect to Orbit',
