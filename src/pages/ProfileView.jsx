@@ -9,9 +9,10 @@ import { SocialLinks } from '../components/SocialLinks'
 import { useT } from '../hooks/useT'
 import { ProfileTabs } from './account/MyPostsView'
 
-export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], onToggleFollow }) {
+export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], onToggleFollow, myAvatar, onSetMyAvatar }) {
   const isMe = whoId === 'me' || whoId === 'you.fil'
   const [fetchedProfile, setFetchedProfile] = useState(null)
+  const [profileLoading, setProfileLoading] = useState(true)
   const [eventsCount, setEventsCount] = useState(0)
   const [followersCount, setFollowersCount] = useState(0)
   const [followingCount, setFollowingCount] = useState(0)
@@ -20,15 +21,18 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   useEffect(() => { window.scrollTo(0, 0) }, [whoId])
 
   useEffect(() => {
+    setProfileLoading(true)
+    setFetchedProfile(null)
     async function loadProfile() {
       const target = isMe ? myIdentity : whoId
-      if (!target) return
+      if (!target) { setProfileLoading(false); return }
       const { data } = await supabase
         .from('public_profiles')
         .select('*')
         .eq('identity', target)
         .maybeSingle()
       if (data) setFetchedProfile(data)
+      setProfileLoading(false)
     }
     loadProfile()
   }, [whoId, isMe, myIdentity])
@@ -60,17 +64,21 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
     loadFollowCounts()
   }, [whoId, isMe, myIdentity])
 
-  const staticU = isMe ? who('you.fil') : (AMBASSADORS[whoId] || { name: whoId, color: 'blue' })
+  const truncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 6) + '...' + addr.slice(-4) : addr
+  const resolvedIdentity = isMe ? myIdentity : whoId
+  const staticU = isMe
+    ? { ...who('you.fil'), name: truncAddr(myIdentity) || 'you.fil', karma: 0, bio: '', city: '', socials: {} }
+    : (AMBASSADORS[whoId] || { name: truncAddr(whoId) || whoId, color: 'blue', karma: 0 })
   const u = fetchedProfile
     ? {
         ...staticU,
-        name: fetchedProfile.handle || whoId,
-        bio: fetchedProfile.bio || staticU.bio || '',
-        city: fetchedProfile.city || staticU.city || '',
-        socials: typeof fetchedProfile.socials === 'object' ? fetchedProfile.socials : (staticU.socials || {}),
+        name: fetchedProfile.handle || truncAddr(resolvedIdentity) || resolvedIdentity || staticU.name,
+        bio: fetchedProfile.bio || '',
+        city: fetchedProfile.city || '',
+        socials: typeof fetchedProfile.socials === 'object' ? fetchedProfile.socials : {},
         banner: fetchedProfile.banner || staticU.banner,
         color: fetchedProfile.avatar || staticU.color || 'blue',
-        karma: fetchedProfile.karma || staticU.karma || 0,
+        karma: fetchedProfile.karma ?? 0,
       }
     : staticU
 

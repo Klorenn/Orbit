@@ -199,8 +199,10 @@ const SLASH_FLAT = SLASH_GROUPS.flatMap((g) => g.items.map((it) => ({ ...it, gro
 export function MarkdownEditor({ value, onChange, placeholder }) {
   const ref = useRef(null);
   const fileRef = useRef(null);
+  const embedInputRef = useRef(null);
   const [slash, setSlash] = useState(null);
   const [active, setActive] = useState(0);
+  const [embedPrompt, setEmbedPrompt] = useState(null); // { head, tail, ph }
   const pendingPos = useRef(null);
 
   const setVal = (next, caret) => {
@@ -282,16 +284,7 @@ export function MarkdownEditor({ value, onChange, placeholder }) {
       setSlash(null);
       fileRef.current && fileRef.current.click();
     } else if (it.kind === 'embed') {
-      const url = window.prompt(it.ph + ':');
-      const next0 = head + tail;
-      if (url && url.trim()) {
-        const sep1 = head && !head.endsWith('\n\n') ? (head.endsWith('\n') ? '\n' : '\n\n') : '';
-        const ins = sep1 + url.trim() + '\n\n';
-        const next = head + ins + tail;
-        setVal(next, (head + ins).length);
-      } else {
-        setVal(next0, head.length);
-      }
+      setEmbedPrompt({ head, tail, ph: it.ph || 'Paste any link' });
       setSlash(null);
     }
   };
@@ -344,6 +337,19 @@ export function MarkdownEditor({ value, onChange, placeholder }) {
       pendingPos.current = value.length;
       onFile({ target: { files: [f], value: '' } });
     }
+  };
+
+  const confirmEmbed = (url) => {
+    const { head, tail } = embedPrompt;
+    if (url && url.trim()) {
+      const sep = head && !head.endsWith('\n\n') ? (head.endsWith('\n') ? '\n' : '\n\n') : '';
+      const ins = sep + url.trim() + '\n\n';
+      setVal(head + ins + tail, (head + ins).length);
+    } else {
+      setVal(head + tail, head.length);
+    }
+    setEmbedPrompt(null);
+    setTimeout(() => ref.current && ref.current.focus(), 0);
   };
 
   const groups = [];
@@ -415,6 +421,23 @@ export function MarkdownEditor({ value, onChange, placeholder }) {
                 })}
               </div>
             ))}
+          </div>
+        )}
+        {embedPrompt && (
+          <div className="embed-inline-prompt">
+            <input
+              ref={embedInputRef}
+              autoFocus
+              type="url"
+              placeholder={embedPrompt.ph + '…'}
+              className="embed-url-input"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') { e.preventDefault(); confirmEmbed(e.target.value); }
+                if (e.key === 'Escape') { setEmbedPrompt(null); ref.current && ref.current.focus(); }
+              }}
+            />
+            <button type="button" className="pill pill-blue embed-ok" onClick={() => confirmEmbed(embedInputRef.current?.value || '')}>OK</button>
+            <button type="button" className="embed-cancel" onClick={() => { setEmbedPrompt(null); ref.current && ref.current.focus(); }}>✕</button>
           </div>
         )}
       </div>

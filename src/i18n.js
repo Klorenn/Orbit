@@ -102,6 +102,7 @@ export const T = {
     // ── PROPOSALS ────────────────────────────────────────
     proposalsTitle: 'Propuestas',
     proposalsSub: 'Señalización on-chain sobre el futuro del programa de embajadores Filecoin.',
+    statusAll: 'Todos',
     statusDiscussion: 'Discusión',
     statusVoting: 'Votación',
     statusApproved: 'Aprobada',
@@ -150,7 +151,10 @@ export const T = {
     // ── CONNECT ──────────────────────────────────────────
     connectTitle: 'Conectate a Orbit',
     connectSub: 'Elegí cómo querés identificarte en el foro.',
+    filecoinAmbassadorTag: 'El foro de los embajadores del programa Filecoin Orbit',
+    browseAsGuest: 'Continuar sin conectarme →',
     connectWalletLabel: 'Conectar wallet',
+    identityBody: 'Recomendado · sin contraseñas. Tu wallet es tu identidad.',
     connectEmailLabel: 'Continuar con email',
     connectEmailDesc: 'Para acceder sin wallet. Las publicaciones quedan vinculadas a tu email.',
     connectNote: 'Cualquiera puede leer el foro. Conectarte desbloquea publicar, comentar y votar.',
@@ -543,6 +547,7 @@ export const T = {
     // ── PROPOSALS ────────────────────────────────────────
     proposalsTitle: 'Proposals',
     proposalsSub: 'On-chain signaling on the future of the Filecoin ambassador program.',
+    statusAll: 'All',
     statusDiscussion: 'Discussion',
     statusVoting: 'Voting',
     statusApproved: 'Approved',
@@ -591,7 +596,10 @@ export const T = {
     // ── CONNECT ──────────────────────────────────────────
     connectTitle: 'Connect to Orbit',
     connectSub: 'Choose how you want to identify on the forum.',
+    filecoinAmbassadorTag: 'The forum for Filecoin Orbit program ambassadors',
+    browseAsGuest: 'Continue without signing in →',
     connectWalletLabel: 'Connect wallet',
+    identityBody: 'Recommended · no passwords. Your wallet is your identity.',
     connectEmailLabel: 'Continue with email',
     connectEmailDesc: 'For access without a wallet. Posts are attributed to your email.',
     connectNote: 'Anyone can read the forum. Connecting unlocks posting, commenting, and voting.',

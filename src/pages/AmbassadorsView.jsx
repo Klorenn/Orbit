@@ -4,7 +4,7 @@ import { I } from '../components/Icons'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
 import { useT } from '../hooks/useT'
 
-const postCountFor = (posts, name) => posts.filter(p => p.author === name).length
+const postCountFor = (posts, identity) => posts.filter(p => p.author === identity).length
 
 export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -24,23 +24,26 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
       <p className="page-sub">{all.length} {t('ambassadorsSubCount')}</p>
       <div className="amb-search">{I.search()}<input placeholder={t('searchByNameCity')} value={q} onChange={e => setQ(e.target.value)} /></div>
       <div className="amb-grid">
-        {list.map(u => (
-          <a key={u.name} className="amb-card" href={'#/profile/' + u.name}>
-            <AmbassadorAvatar user={u.name} size={56} link={false} nft />
-            <div className="amb-info">
-              <div className="amb-name">{u.name}</div>
-              <div className="amb-city">{u.city}</div>
-            </div>
-            <p className="amb-bio">{u.bio}</p>
-            <div className="amb-stats">
-              <span><strong>{u.karma || 0}</strong> {t('karma')}</span>
-              <span className="dotsep"></span>
-              <span><strong>{postCountFor(posts, u.name)}</strong> {t('postsLabel')}</span>
-              <span className="dotsep"></span>
-              <span><strong>{u.events || 0}</strong> {t('eventsLabel')}</span>
-            </div>
-          </a>
-        ))}
+        {list.map(u => {
+          const key = u.identity || u.name
+          return (
+            <a key={key} className="amb-card" href={'#/profile/' + encodeURIComponent(key)}>
+              <AmbassadorAvatar user={key} size={56} link={false} nft />
+              <div className="amb-info">
+                <div className="amb-name">{u.name}</div>
+                <div className="amb-city">{u.city}</div>
+              </div>
+              <p className="amb-bio">{u.bio}</p>
+              <div className="amb-stats">
+                <span><strong>{u.karma || 0}</strong> {t('karma')}</span>
+                <span className="dotsep"></span>
+                <span><strong>{postCountFor(posts, key)}</strong> {t('postsLabel')}</span>
+                <span className="dotsep"></span>
+                <span><strong>{u.events || 0}</strong> {t('eventsLabel')}</span>
+              </div>
+            </a>
+          )
+        })}
         {list.length === 0 && <p className="empty">{t('noAmbassadorsMatch')} "{q}".</p>}
       </div>
     </div>

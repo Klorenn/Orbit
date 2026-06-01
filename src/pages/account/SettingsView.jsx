@@ -46,6 +46,19 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
                 <img src={AV[col]} alt={col} />{myAvatar === col && <span className="ap-check">{I.check()}</span>}
               </button>
             ))}
+            <label className={'ap-opt ap-custom' + (myAvatar?.startsWith('#') ? ' on' : '')} title="Custom color">
+              <input
+                type="color"
+                value={myAvatar?.startsWith('#') ? myAvatar : '#0090ff'}
+                onChange={e => setMyAvatar(e.target.value)}
+                className="ap-color-input"
+              />
+              {myAvatar?.startsWith('#')
+                ? <div className="ap-color-swatch" style={{ background: myAvatar }} />
+                : <span className="ap-custom-plus">+</span>
+              }
+              {myAvatar?.startsWith('#') && <span className="ap-check">{I.check()}</span>}
+            </label>
           </div>
         </section>
 

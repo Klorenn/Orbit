@@ -10,6 +10,7 @@ export function ProposalsView({ proposals = [] }) {
   const { t } = useT()
   const [filter, setFilter] = useState('All')
   const statuses = ['All', 'Draft', 'Discussion', 'Voting', 'Approved']
+  const STATUS_TK = { All: 'statusAll', Draft: 'statusDraft', Discussion: 'statusDiscussion', Voting: 'statusVoting', Approved: 'statusApproved' }
   const list = proposals.filter(p => filter === 'All' || p.status === filter)
   return (
     <div className="page-wrap">
@@ -17,7 +18,7 @@ export function ProposalsView({ proposals = [] }) {
       <h1 className="page-title">{I.gov({ width: 26, height: 26 })} {t('proposalsTitle')}</h1>
       <p className="page-sub">{t('proposalsSub')}</p>
       <div className="sortbar" style={{ marginBottom: 20, width: 'fit-content' }}>
-        {statuses.map(s => <button key={s} className={filter === s ? 'on' : ''} onClick={() => setFilter(s)}>{s}</button>)}
+        {statuses.map(s => <button key={s} className={filter === s ? 'on' : ''} onClick={() => setFilter(s)}>{t(STATUS_TK[s])}</button>)}
       </div>
       <div className="prop-list">
         {list.map(p => {
@@ -25,7 +26,7 @@ export function ProposalsView({ proposals = [] }) {
           const inner = (
             <>
               <div className="pl-top">
-                <span className="status-pill" style={{ background: PROP_STATUS[p.status] + '22', color: PROP_STATUS[p.status] }}>● {p.status}</span>
+                <span className="status-pill" style={{ background: PROP_STATUS[p.status] + '22', color: PROP_STATUS[p.status] }}>● {t(STATUS_TK[p.status] || p.status)}</span>
                 <CategoryBadge cat={p.cat} soft />
               </div>
               <div className="pl-title">{p.title}</div>

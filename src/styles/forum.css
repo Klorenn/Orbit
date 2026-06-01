@@ -197,8 +197,8 @@ h1,h2,h3,h4 { font-weight: 600; letter-spacing: -.025em; line-height: 1.1; }
    RIGHT RAIL
    ============================================================ */
 .rail { display: flex; flex-direction: column; gap: 16px; }
-.profile-card { background: var(--space); color: #fff; border-radius: 18px; padding: 20px; position: relative; overflow: hidden; }
-.profile-card.has-banner { background-size: cover; background-position: center; }
+.profile-card { background: var(--space); color: #fff; border-radius: 18px; padding: 20px; position: relative; overflow: visible; }
+.profile-card.has-banner { background-size: cover; background-position: center; overflow: hidden; }
 .profile-card .pc-scrim { position: absolute; inset: 0;
   background: linear-gradient(to bottom, rgba(10,14,39,.5) 0%, rgba(10,14,39,.78) 55%, rgba(10,14,39,.92) 100%); }
 .profile-card .pc-stars { position: absolute; inset: 0; opacity: .5; }
@@ -220,11 +220,11 @@ h1,h2,h3,h4 { font-weight: 600; letter-spacing: -.025em; line-height: 1.1; }
 .profile-card .pc-grid .l { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 1px; }
 
 /* Ambassador badge tooltip */
-.nft-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+.nft-tip { position: absolute; bottom: calc(100% + 10px); left: 0; right: auto;
   width: 220px; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-  padding: 14px 16px; box-shadow: 0 8px 32px rgba(0,0,0,.22); z-index: 50;
+  padding: 14px 16px; box-shadow: 0 8px 32px rgba(0,0,0,.22); z-index: 200;
   color: var(--ink); text-align: left; pointer-events: auto; }
-.nft-tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+.nft-tip::after { content: ''; position: absolute; top: 100%; left: 20px; right: auto;
   border: 6px solid transparent; border-top-color: var(--line); }
 .nft-tip-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
 .nft-tip-body { font-size: 12.5px; line-height: 1.55; color: rgba(var(--ink-rgb),.65); }
@@ -512,6 +512,11 @@ a.prop { text-decoration: none; }
 .ap-opt.on { border-color: var(--blue); background: rgba(0,144,255,.08); }
 .ap-check { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; background: var(--blue);
   color: #fff; display: grid; place-items: center; border: 2px solid #fff; }
+.ap-custom { cursor: pointer; }
+.ap-color-input { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
+.ap-color-swatch { width: 54px; height: 54px; border-radius: 14px; }
+.ap-custom-plus { font-size: 28px; color: var(--muted); line-height: 1; }
+.ap-custom:hover .ap-custom-plus { color: var(--ink); }
 
 /* banner picker */
 .banner-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
@@ -573,9 +578,13 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
    CONNECT PAGE
    ============================================================ */
 /* Full-page dark layout */
-.connect-page-full { position: relative; min-height: 100vh; background: var(--space); color: #fff;
-  display: grid; place-items: center; padding: 60px 20px 80px; overflow: hidden; }
-.connect-page-full .pc-stars { position: absolute; inset: 0; }
+.connect-page-full {
+  position: fixed; inset: 0; color: #fff;
+  display: grid; place-items: center; padding: 60px 20px 80px; overflow: hidden;
+  background: url('/assets/connect-bg.png') center center / cover no-repeat, #07091c;
+  z-index: 10;
+}
+.connect-page-full .pc-stars { display: none; }
 .connect-shell { position: relative; width: min(520px, 100%); text-align: center; }
 .cn-brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none;
   font-size: 19px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 36px; }
@@ -610,8 +619,13 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
   border: 1px solid rgba(16,185,129,.35); color: #10B981;
   padding: 8px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; }
 .cn-sent-hint { font-size: 14px; color: rgba(255,255,255,.55); margin: 12px 0 0; }
+.cn-filecoin-tag { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); margin: -20px 0 28px; }
 .cn-note { margin-top: 24px; font-size: 13px; color: rgba(255,255,255,.35);
   display: flex; align-items: center; justify-content: center; gap: 7px; }
+.cn-guest { display: block; margin-top: 14px; font-size: 13px; color: rgba(255,255,255,.4);
+  text-align: center; transition: color .15s; }
+.cn-guest:hover { color: rgba(255,255,255,.7); }
 
 /* ============================================================
    ABOUT / AMBASSADORS / SEARCH / LEADERBOARD / DETAILS
@@ -813,6 +827,12 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 
 /* slash command menu */
 .md-area { position: relative; }
+.embed-inline-prompt { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--line); border-radius: 0 0 12px 12px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; z-index: 20; }
+.embed-url-input { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 14px; background: var(--bg); color: var(--ink); outline: none; }
+.embed-url-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,144,255,.12); }
+.embed-ok { padding: 8px 18px; font-size: 13px; }
+.embed-cancel { color: var(--muted); cursor: pointer; font-size: 18px; background: none; border: none; line-height: 1; padding: 4px; transition: color .15s; }
+.embed-cancel:hover { color: var(--ink); }
 .md-toolbar kbd { background: rgba(var(--ink-rgb),.08); border-radius: 5px; padding: 1px 6px; font-size: 11px; font-family: inherit; font-weight: 600; }
 .slash-menu { position: absolute; z-index: 60; width: 340px; max-height: 300px; overflow-y: auto;
   background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 60px -18px rgba(10,14,39,.4);
@@ -861,6 +881,12 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .sc-website { background: var(--blue); }
 .sl-val { font-variant-numeric: tabular-nums; color: var(--ink); }
 .ph-socials { margin-top: 14px; }
+.ph-av-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ph-av-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.ph-av-sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.15); padding: 0; cursor: pointer; transition: border-color .15s, transform .15s, box-shadow .15s; display: flex; align-items: center; justify-content: center; }
+.ph-av-sw:hover { transform: scale(1.2); border-color: rgba(255,255,255,.7); }
+.ph-av-sw.on { border-color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.5); }
+.ph-av-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; display: block; }
 
 /* profile chip + dropdown */
 .profile-chip-wrap { position: relative; }
@@ -888,6 +914,11 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .pd-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-weight: 700;
   min-width: 18px; height: 18px; border-radius: 999px; display: grid; place-items: center; padding: 0 4px; }
 .pd-toggle { margin-left: auto; font-size: 11.5px; color: rgba(var(--ink-rgb),.4); font-weight: 500; }
+.pd-addr-hint { margin-left: auto; font-size: 11px; color: rgba(var(--ink-rgb),.4); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.pd-header { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 4px; }
+.pd-h-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.pd-h-addr { all: unset; cursor: pointer; font-size: 11.5px; color: rgba(var(--ink-rgb),.45); font-variant-numeric: tabular-nums; letter-spacing: .04em; transition: color .15s; }
+.pd-h-addr:hover { color: var(--blue); }
 
 /* nav popovers + bell + user menu */
 .nav-pop-wrap { position: relative; }

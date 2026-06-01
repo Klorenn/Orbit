@@ -121,6 +121,11 @@ export default function App() {
   ME.color = myAvatar
   AMBASSADORS['you.fil'].color = myAvatar
 
+  // Map wallet address → display info so PostCard shows handle + correct avatar
+  if (identity) {
+    AMBASSADORS[identity] = { ...(AMBASSADORS[identity] || {}), name: displayName, color: myAvatar }
+  }
+
   // apply profile edits (bio, city, socials) to you.fil
   const meRef = AMBASSADORS['you.fil']
   if (myProfile.bio != null) meRef.bio = myProfile.bio
@@ -159,7 +164,7 @@ export default function App() {
     if (hasProfile) { localStorage.setItem('orbit-onboarded', 'true'); return }
     const safe = ['onboarding', 'connect', 'landing', 'maintenance']
     if (!safe.includes(route.view)) navTo('#/onboarding')
-  }, [connected])
+  }, [connected, route.view])
 
   const joinMeeting = (id) => {
     if (!connected) { flash(t('flashConnectToJoin')); return }
@@ -346,7 +351,7 @@ export default function App() {
       view = <NewPostView connected={connected} onConnect={connect} onPublish={publish} preset={route.preset} />
       break
     case 'profile':
-      view = <ProfileView whoId={route.whoId} myIdentity={identity} posts={posts} onVote={vote} following={following} onToggleFollow={followUser} />
+      view = <ProfileView whoId={route.whoId} myIdentity={identity} posts={posts} onVote={vote} following={following} onToggleFollow={followUser} myAvatar={myAvatar} onSetMyAvatar={setMyAvatar} />
       break
     case 'profile-sub':
       if (route.sub === 'posts') view = <MyPostsView posts={posts} onVote={vote} identity={identity} />
@@ -385,7 +390,7 @@ export default function App() {
       view = <DocsView />
       break
     case 'connect':
-      view = <ConnectView />
+      view = <ConnectView connected={connected} />
       break
     case 'meetings':
       view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />
@@ -435,6 +440,7 @@ export default function App() {
           connected={connected}
           identity={displayName}
           address={displayAddr}
+          fullAddress={address}
           myAvatar={myAvatar}
           onCompose={goCompose}
           onConnect={() => navTo('#/connect')}

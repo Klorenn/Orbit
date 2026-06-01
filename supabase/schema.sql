@@ -19,10 +19,10 @@ create table if not exists posts (
 );
 
 alter table posts enable row level security;
-create policy "posts are public"       on posts for select using (true);
-create policy "authed users can post"  on posts for insert with check (auth.role() = 'authenticated');
-create policy "author can update"      on posts for update using (auth.jwt()->>'sub' = author or auth.email() = author);
-create policy "author can delete post" on posts for delete using (auth.jwt()->>'sub' = author or auth.email() = author);
+create policy "posts are public"   on posts for select using (true);
+create policy "anyone can post"    on posts for insert with check (true);
+create policy "author can update"  on posts for update using (auth.jwt()->>'sub' = author or auth.email() = author);
+create policy "anyone can delete post" on posts for delete using (true);
 
 -- Votes (one per user per post)
 create table if not exists votes (
@@ -33,9 +33,9 @@ create table if not exists votes (
 );
 
 alter table votes enable row level security;
-create policy "votes are public"      on votes for select using (true);
-create policy "authed users can vote" on votes for insert with check (auth.role() = 'authenticated');
-create policy "author can unvote"     on votes for delete using (auth.jwt()->>'sub' = voter or auth.email() = voter);
+create policy "votes are public"  on votes for select using (true);
+create policy "anyone can vote"   on votes for insert with check (true);
+create policy "anyone can unvote" on votes for delete using (true);
 
 -- Comments
 create table if not exists comments (
@@ -51,8 +51,8 @@ create table if not exists comments (
 
 alter table comments enable row level security;
 create policy "comments are public"       on comments for select using (true);
-create policy "authed users can comment"  on comments for insert with check (auth.role() = 'authenticated');
-create policy "author can delete comment" on comments for delete using (auth.jwt()->>'sub' = author or auth.email() = author);
+create policy "anyone can comment"        on comments for insert with check (true);
+create policy "anyone can delete comment" on comments for delete using (true);
 
 -- Public profiles (one per identity — wallet address or email prefix)
 create table if not exists public_profiles (
@@ -69,9 +69,9 @@ create table if not exists public_profiles (
 );
 
 alter table public_profiles enable row level security;
-create policy "profiles are public"       on public_profiles for select using (true);
-create policy "authed users can upsert"   on public_profiles for insert with check (auth.role() = 'authenticated');
-create policy "owner can update profile"  on public_profiles for update using (auth.jwt()->>'sub' = identity or auth.email() = identity);
+create policy "profiles are public"      on public_profiles for select using (true);
+create policy "anyone can create profile" on public_profiles for insert with check (true);
+create policy "owner can update profile" on public_profiles for update using (auth.jwt()->>'sub' = identity or auth.email() = identity);
 
 -- Karma auto-sync: recalculates when post upvotes change
 create or replace function update_author_karma()
@@ -124,8 +124,8 @@ create table if not exists events (
 );
 
 alter table events enable row level security;
-create policy "events are public"      on events for select using (true);
-create policy "authed users can post events" on events for insert with check (auth.role() = 'authenticated');
+create policy "events are public"    on events for select using (true);
+create policy "anyone can post events" on events for insert with check (true);
 
 -- RSVPs
 create table if not exists rsvps (
@@ -136,9 +136,9 @@ create table if not exists rsvps (
 );
 
 alter table rsvps enable row level security;
-create policy "rsvps are public"        on rsvps for select using (true);
-create policy "authed users can rsvp"   on rsvps for insert with check (auth.role() = 'authenticated');
-create policy "attendee can cancel"     on rsvps for delete using (auth.jwt()->>'sub' = attendee or auth.email() = attendee);
+create policy "rsvps are public"       on rsvps for select using (true);
+create policy "anyone can rsvp"        on rsvps for insert with check (true);
+create policy "anyone can cancel rsvp" on rsvps for delete using (true);
 
 -- Meetings
 create table if not exists meetings (
@@ -156,9 +156,9 @@ create table if not exists meetings (
 );
 
 alter table meetings enable row level security;
-create policy "meetings are public"         on meetings for select using (true);
-create policy "authed users can propose"    on meetings for insert with check (auth.role() = 'authenticated');
-create policy "host can update meeting"     on meetings for update using (auth.jwt()->>'sub' = host or auth.email() = host);
+create policy "meetings are public"        on meetings for select using (true);
+create policy "anyone can propose meeting" on meetings for insert with check (true);
+create policy "host can update meeting"    on meetings for update using (auth.jwt()->>'sub' = host or auth.email() = host);
 
 -- Meeting attendees
 create table if not exists meeting_attendees (
@@ -169,9 +169,9 @@ create table if not exists meeting_attendees (
 );
 
 alter table meeting_attendees enable row level security;
-create policy "attendees are public"        on meeting_attendees for select using (true);
-create policy "authed users can join"       on meeting_attendees for insert with check (auth.role() = 'authenticated');
-create policy "attendee can leave"          on meeting_attendees for delete using (auth.jwt()->>'sub' = attendee or auth.email() = attendee);
+create policy "attendees are public"         on meeting_attendees for select using (true);
+create policy "anyone can join meeting"      on meeting_attendees for insert with check (true);
+create policy "anyone can leave meeting"     on meeting_attendees for delete using (true);
 
 -- Bookmarks
 create table if not exists bookmarks (
@@ -195,6 +195,6 @@ create table if not exists follows (
 );
 
 alter table follows enable row level security;
-create policy "follows are public"        on follows for select using (true);
-create policy "authed users can follow"   on follows for insert with check (auth.role() = 'authenticated');
-create policy "follower can unfollow"     on follows for delete using (auth.jwt()->>'sub' = follower or auth.email() = follower);
+create policy "follows are public"  on follows for select using (true);
+create policy "anyone can follow"   on follows for insert with check (true);
+create policy "anyone can unfollow" on follows for delete using (true);

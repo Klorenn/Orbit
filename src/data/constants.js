@@ -277,7 +277,11 @@ export function who(name) {
 }
 
 export function navTo(hash) {
-  window.location.hash = hash;
+  if (window.location.pathname !== '/') {
+    window.location.href = '/' + hash;
+  } else {
+    window.location.hash = hash;
+  }
 }
 
 export const MEETINGS = [

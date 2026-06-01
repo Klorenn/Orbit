@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+
 import { I } from './Icons'
 import { AV } from '../data/constants'
 import { T } from '../i18n'
@@ -33,11 +33,21 @@ function isActive(view, href) {
   return false
 }
 
-function ProfileChip({ identity, address, myAvatar, onSignOut, unread }) {
+function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unread }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-theme') === 'dark')
   const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [copied, setCopied] = useState(false)
+
+  const copyAddress = () => {
+    const toCopy = fullAddress || address
+    if (!toCopy) return
+    navigator.clipboard.writeText(toCopy).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    })
+  }
 
   useEffect(() => {
     const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
@@ -74,6 +84,18 @@ function ProfileChip({ identity, address, myAvatar, onSignOut, unread }) {
 
       {open && (
         <div className="profile-dropdown">
+          {(fullAddress || address) && (
+            <div className="pd-header">
+              <span className="pd-h-name">{identity}</span>
+              <button className="pd-h-addr" onClick={copyAddress} title={lang === 'es' ? 'Copiar dirección' : 'Copy address'}>
+                {copied
+                  ? (lang === 'es' ? '✓ Copiado' : '✓ Copied')
+                  : <>…{(fullAddress || address || '').slice(-4)}</>
+                }
+              </button>
+            </div>
+          )}
+          <div className="pd-sep" />
           <a className="pd-item" href="#/profile/me" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>
             {(T[lang] || T.es).myProfile}
@@ -120,7 +142,7 @@ function ProfileChip({ identity, address, myAvatar, onSignOut, unread }) {
   )
 }
 
-export function Navbar({ route, connected, identity, address, myAvatar, onCompose, onConnect, onWallet, onSignOut, unread }) {
+export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, onCompose, onConnect, onWallet, onSignOut, unread }) {
   const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
 
   useEffect(() => {
@@ -160,13 +182,10 @@ export function Navbar({ route, connected, identity, address, myAvatar, onCompos
                 {unread > 0 && <span className="notif-badge">{unread}</span>}
               </a>
               <button className="pill pill-blue" onClick={onCompose}>{I.plus()} {newPostLabel}</button>
-              <ProfileChip identity={identity} address={address} myAvatar={myAvatar} onSignOut={onSignOut} unread={unread} />
+              <ProfileChip identity={identity} address={address} fullAddress={fullAddress} myAvatar={myAvatar} onSignOut={onSignOut} unread={unread} />
             </>
           ) : (
-            <>
-              <button className="pill pill-line" onClick={onConnect}>{(T[lang] || T.es).signIn}</button>
-              <ConnectButton showBalance={false} chainStatus="none" />
-            </>
+            <button className="pill pill-line" onClick={onConnect}>{(T[lang] || T.es).signIn}</button>
           )}
         </div>
       </div>

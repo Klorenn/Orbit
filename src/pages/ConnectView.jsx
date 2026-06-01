@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { Stars } from '../components/Stars'
 import { I } from '../components/Icons'
 import { supabase } from '../lib/supabase'
 import { useT } from '../hooks/useT'
+import { navTo } from '../data/constants'
 
-export function ConnectView() {
+export function ConnectView({ connected }) {
   const [email, setEmail] = useState('')
   const [phase, setPhase] = useState('idle')
   const [errMsg, setErrMsg] = useState('')
   const { t } = useT()
 
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    if (connected) navTo('#/forum')
+  }, [connected])
 
   const send = async () => {
     if (!email.trim() || phase === 'sending') return
     setPhase('sending')
     setErrMsg('')
-    const redirectTo = window.location.href.split('#')[0]
+    const redirectTo = window.location.origin + '/'
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: redirectTo },
@@ -28,7 +30,6 @@ export function ConnectView() {
 
   return (
     <div className="connect-page-full">
-      <Stars n={22} />
       <div className="connect-shell">
         <a className="cn-brand" href="#/forum">
           <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true">
@@ -40,6 +41,7 @@ export function ConnectView() {
         </a>
 
         <h1 className="cn-title">{t('joinConstellationTitle')}</h1>
+        <p className="cn-filecoin-tag">{t('filecoinAmbassadorTag')}</p>
         <p className="cn-sub">{t('readingOpenAll')}</p>
 
         <div className="cn-options">
@@ -95,6 +97,7 @@ export function ConnectView() {
         </div>
 
         <p className="cn-note">{I.shield()} {t('connectNote')}</p>
+        <a className="cn-guest" href="#/forum">{t('browseAsGuest')}</a>
       </div>
     </div>
   )

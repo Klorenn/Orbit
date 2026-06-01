@@ -39,6 +39,9 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
   const { t } = useT()
   const [tipOpen, setTipOpen] = useState(false)
   const tipRef = useRef(null)
+  const tipTimer = useRef(null)
+  const openTip = () => { clearTimeout(tipTimer.current); setTipOpen(true) }
+  const closeTip = () => { tipTimer.current = setTimeout(() => setTipOpen(false), 120) }
   const banner = connected ? BANNERS.find(b=>b.id===who('you.fil').banner) : null
   return (
     <aside className="rail sticky">
@@ -52,12 +55,12 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
             ref={tipRef}
             className="pc-nft"
             style={{cursor:'help',position:'relative'}}
-            onMouseEnter={()=>setTipOpen(true)}
-            onMouseLeave={()=>setTipOpen(false)}
+            onMouseEnter={openTip}
+            onMouseLeave={closeTip}
           >
             {I.check()} {t('ambassadorBadge')}
             {tipOpen && (
-              <div className="nft-tip">
+              <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
                 <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
                 <div className="nft-tip-body">{t('ambassadorTipBody')}</div>
                 <a className="nft-tip-link" href="#/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>

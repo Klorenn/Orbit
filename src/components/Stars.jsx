@@ -1,9 +1,12 @@
-// src/components/Stars.jsx
-export function Stars({ n = 14 }) {
-  const pts = [[30,30],[90,60],[150,25],[220,50],[270,35],[60,120],[130,150],[200,130],[260,160],[40,170],[110,90],[180,75],[240,110],[290,140]]
+export function Stars({ n = 14, seed = 1 }) {
+  const pts = Array.from({ length: n }, (_, i) => {
+    const s = Math.sin(i * 127.1 + seed) * 43758.5453
+    const t = Math.sin(i * 311.7 + seed) * 43758.5453
+    return [((s - Math.floor(s)) * 300), ((t - Math.floor(t)) * 200)]
+  })
   return (
     <svg className="pc-stars" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      {pts.slice(0, n).map((s, i) => <circle key={i} cx={s[0]} cy={s[1]} r={i % 3 === 0 ? 1.4 : 0.9} fill="#fff" opacity={0.45 + i % 3 * 0.16} />)}
+      {pts.map((s, i) => <circle key={i} cx={s[0]} cy={s[1]} r={i % 4 === 0 ? 1.5 : i % 3 === 0 ? 1.1 : 0.7} fill="#fff" opacity={0.3 + (i % 5) * 0.12} />)}
     </svg>
   )
 }

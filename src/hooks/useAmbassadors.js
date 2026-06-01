@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { AMBASSADORS } from '../data/constants'
 
+const truncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 6) + '...' + addr.slice(-4) : addr
+
 export function useAmbassadors() {
   const [profiles, setProfiles] = useState([])
 
@@ -15,7 +17,7 @@ export function useAmbassadors() {
       data.forEach(p => {
         AMBASSADORS[p.identity] = {
           ...(AMBASSADORS[p.identity] || {}),
-          name: p.handle || p.identity,
+          name: p.handle || truncAddr(p.identity) || p.identity,
           color: p.avatar || 'blue',
           bio: p.bio || '',
           city: p.city || '',
@@ -35,7 +37,8 @@ export function useAmbassadors() {
   const merged = profiles
     .filter(p => p.identity !== 'you.fil')
     .map(p => ({
-      name: p.handle || p.identity,
+      identity: p.identity,
+      name: p.handle || truncAddr(p.identity) || p.identity,
       color: p.avatar || 'blue',
       bio: p.bio || '',
       city: p.city || '',
