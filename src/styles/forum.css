@@ -1335,3 +1335,101 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
   .onb-main { padding: 28px 22px; }
   .onb-banners { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── BLOG ─────────────────────────────────────────── */
+.blog .page-sub { color: var(--muted); margin-bottom: 2rem; }
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.blog-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+.blog-card-img {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface-alt);
+}
+.blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.blog-card-img-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--accent-dim, #1a2a3a) 0%, var(--surface-alt) 100%);
+}
+
+.blog-card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+.blog-card-date { font-size: 0.75rem; color: var(--muted); }
+.blog-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+.blog-card-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  flex: 1;
+}
+.blog-card-cta {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-top: auto;
+}
+
+/* skeleton */
+.blog-card--skeleton { pointer-events: none; }
+.skeleton-box {
+  background: var(--surface-alt);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+.skeleton-line {
+  height: 0.75rem;
+  border-radius: 4px;
+  background: var(--surface-alt);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+.skeleton-line--date { width: 30%; }
+.skeleton-line--title { height: 1rem; width: 85%; }
+.skeleton-line--short { width: 45%; }
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.blog-error,
+.blog-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+}
+.blog-error a,
+.blog-empty a { color: var(--accent); }
+}
