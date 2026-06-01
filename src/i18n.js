@@ -61,6 +61,11 @@ export const T = {
     karma_stat: 'Karma',
     events_stat: 'Eventos',
     joined: 'miembro desde',
+    tip_karma: 'Reputación acumulada por votos recibidos en tus entradas.',
+    tip_posts: 'Total de entradas publicadas en el foro.',
+    tip_events: 'Eventos de gobernanza en los que participaste.',
+    tip_followers: 'Personas que siguen tu actividad en Orbit.',
+    tip_following: 'Personas cuya actividad seguís en Orbit.',
 
     // ── HOME / FEED ──────────────────────────────────────
     recentActivity: 'Actividad reciente',
@@ -506,6 +511,11 @@ export const T = {
     karma_stat: 'Karma',
     events_stat: 'Events',
     joined: 'joined',
+    tip_karma: 'Reputation earned from upvotes on your posts.',
+    tip_posts: 'Total posts published in the forum.',
+    tip_events: 'Governance events you attended.',
+    tip_followers: 'People following your activity on Orbit.',
+    tip_following: 'People whose activity you follow on Orbit.',
 
     // ── HOME / FEED ──────────────────────────────────────
     recentActivity: 'Recent activity',

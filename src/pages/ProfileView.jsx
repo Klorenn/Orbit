@@ -65,7 +65,16 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   }, [whoId, isMe, myIdentity])
 
   const truncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 6) + '...' + addr.slice(-4) : addr
+  const longTruncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 9) + '…' + addr.slice(-4) : addr
   const resolvedIdentity = isMe ? myIdentity : whoId
+  const [copied, setCopied] = useState(false)
+  const copyAddr = () => {
+    if (!resolvedIdentity) return
+    navigator.clipboard.writeText(resolvedIdentity).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    })
+  }
   const staticU = isMe
     ? { ...who('you.fil'), name: truncAddr(myIdentity) || 'you.fil', karma: 0, bio: '', city: '', socials: {} }
     : (AMBASSADORS[whoId] || { name: truncAddr(whoId) || whoId, color: 'blue', karma: 0 })
@@ -96,6 +105,11 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
           <AmbassadorAvatar user={isMe ? 'you.fil' : whoId} size={88} link={false} nft />
           <div className="ph-info">
             <div className="ph-name">{u.name} {u.role && <span className="role">{u.role}</span>}</div>
+            {resolvedIdentity?.startsWith('0x') && (
+              <button className="ph-addr-copy" onClick={copyAddr}>
+                {copied ? '✓ Copiado' : longTruncAddr(resolvedIdentity)}
+              </button>
+            )}
             <div className="ph-meta">{u.city}{u.city && u.joined ? ' · ' : ''}{u.joined ? 'joined ' + u.joined : ''}</div>
             <p className="ph-bio">{u.bio}</p>
             <div className="ph-socials"><SocialLinks socials={u.socials} /></div>
@@ -110,11 +124,19 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
               </button>}
         </div>
         <div className="ph-stats">
-          <div><div className="v">{u.karma || 0}</div><div className="l">{t('karma_stat')}</div></div>
-          <div><div className="v">{theirPosts.length}</div><div className="l">{t('posts_stat')}</div></div>
-          <div><div className="v">{eventsCount}</div><div className="l">{t('events_stat')}</div></div>
-          <div><div className="v">{followersCount}</div><div className="l">{t('followers_stat')}</div></div>
-          <div><div className="v">{followingCount}</div><div className="l">{t('following_stat')}</div></div>
+          {[
+            [u.karma || 0, t('karma_stat'), t('tip_karma')],
+            [theirPosts.length, t('posts_stat'), t('tip_posts')],
+            [eventsCount, t('events_stat'), t('tip_events')],
+            [followersCount, t('followers_stat'), t('tip_followers')],
+            [followingCount, t('following_stat'), t('tip_following')],
+          ].map(([val, label, tip]) => (
+            <div key={label} className="ph-stat" title={tip}>
+              <div className="v">{val}</div>
+              <div className="l">{label}</div>
+              <div className="ph-stat-tip">{tip}</div>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -142,6 +142,62 @@ function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unre
   )
 }
 
+function PrefsButton() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-theme') === 'dark')
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+
+  useEffect(() => {
+    const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', close)
+    return () => document.removeEventListener('mousedown', close)
+  }, [])
+
+  useEffect(() => {
+    const handler = (e) => setLang(e.detail)
+    window.addEventListener('orbit-lang', handler)
+    return () => window.removeEventListener('orbit-lang', handler)
+  }, [])
+
+  const toggleDark = () => {
+    const next = !dark
+    setDark(next)
+    document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
+    localStorage.setItem('orbit-theme', next ? 'dark' : 'light')
+  }
+
+  const toggleLang = () => {
+    const next = lang === 'es' ? 'en' : 'es'
+    setLang(next)
+    localStorage.setItem('orbit-lang', next)
+    window.dispatchEvent(new CustomEvent('orbit-lang', { detail: next }))
+  }
+
+  return (
+    <div className="prefs-wrap" ref={ref}>
+      <button className="nav-icon" onClick={() => setOpen(o => !o)} title={lang === 'es' ? 'Preferencias' : 'Preferences'}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>
+      </button>
+      {open && (
+        <div className="prefs-dropdown">
+          <button className="pd-item" onClick={toggleDark}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" /></svg>
+            {(T[lang] || T.es).darkMode}
+            <span className="pd-toggle">{dark ? 'On' : 'Off'}</span>
+          </button>
+          <button className="pd-item" onClick={toggleLang}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
+            {lang === 'es' ? 'English' : 'Español'}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, onCompose, onConnect, onWallet, onSignOut, unread }) {
   const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
 
@@ -185,7 +241,10 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
               <ProfileChip identity={identity} address={address} fullAddress={fullAddress} myAvatar={myAvatar} onSignOut={onSignOut} unread={unread} />
             </>
           ) : (
-            <button className="pill pill-line" onClick={onConnect}>{(T[lang] || T.es).signIn}</button>
+            <>
+              <PrefsButton />
+              <button className="pill pill-line" onClick={onConnect}>{(T[lang] || T.es).signIn}</button>
+            </>
           )}
         </div>
       </div>
