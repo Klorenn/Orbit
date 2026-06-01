@@ -12,6 +12,7 @@ const NAV = {
     ['Propuestas', '#/proposals'],
     ['Embajadores', '#/ambassadors'],
     ['Docs', '#/docs'],
+    ['Blog', '#/blog'],
   ],
   en: [
     ['Forum', '#/forum'],
@@ -20,6 +21,7 @@ const NAV = {
     ['Proposals', '#/proposals'],
     ['Ambassadors', '#/ambassadors'],
     ['Docs', '#/docs'],
+    ['Blog', '#/blog'],
   ],
 }
 
@@ -30,6 +32,7 @@ function isActive(view, href) {
   if (href === '#/proposals') return view === 'proposals' || view === 'proposal-detail'
   if (href === '#/ambassadors') return view === 'ambassadors'
   if (href === '#/docs') return view === 'docs'
+  if (href === '#/blog') return view === 'blog'
   return false
 }
 

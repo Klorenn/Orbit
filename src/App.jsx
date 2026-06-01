@@ -42,6 +42,7 @@ import { AdminView } from './pages/account/AdminView'
 import { MeetingsView, MeetingRoomView, ProposeMeetingView, OnboardingView } from './pages/MeetingsView'
 import { SavedView } from './pages/SavedView'
 import { LandingView } from './pages/LandingView'
+import { BlogView } from './pages/BlogView'
 import './styles/forum.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -80,7 +81,8 @@ function parseHash() {
   if (seg[0] === 'leaderboard') return { view: 'leaderboard' };
   if (seg[0] === 'search') return { view: 'search', q: decodeURIComponent(seg[1] || '') };
   if (seg[0] === 'about') return { view: 'about' };
-  if (seg[0] === 'docs') return { view: 'docs' };
+  if (seg[0] === 'docs') return { view: 'docs' }
+  if (seg[0] === 'blog') return { view: 'blog' };
   if (seg[0] === 'connect') return { view: 'connect' };
   if (seg[0] === 'meetings') {
     if (seg[1] === 'new') return { view: 'meeting-new' };
@@ -394,6 +396,9 @@ export default function App() {
       break
     case 'docs':
       view = <DocsView />
+      break
+    case 'blog':
+      view = <BlogView />
       break
     case 'connect':
       view = <ConnectView connected={connected} />
