@@ -1432,4 +1432,3 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 }
 .blog-error a,
 .blog-empty a { color: var(--accent); }
-}
