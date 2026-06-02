@@ -28,6 +28,26 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'").trim()
 }
 
+const TAG_RULES: Array<[string, RegExp]> = [
+  ['FVM', /\bfvm\b|filecoin virtual machine|smart contract/i],
+  ['IPFS', /\bipfs\b/i],
+  ['Storage', /\bstorage provider|storage deal|data storage|retrieval|sealing\b/i],
+  ['Network', /\bnetwork upgrade|nv\d+|mainnet|calibration|testnet|consensus\b/i],
+  ['Governance', /\bgovernance|proposal|vote|fip\b/i],
+  ['Ecosystem', /\becosystem|grant|developer|hackathon|builder/i],
+  ['Research', /\bresearch|paper|study|analysis|report\b/i],
+  ['Foundation', /\bfilecoin foundation\b/i],
+  ['DeFi', /\bdefi\b|decentralized finance|lending|liquidity/i],
+  ['NFT', /\bnft\b|non-fungible/i],
+  ['Security', /\bsecurity|audit|vulnerability|bug bounty/i],
+  ['Partnership', /\bpartner|collaboration|integration|joins\b/i],
+]
+
+function deriveTags(title: string, description: string): string[] {
+  const text = `${title} ${description}`
+  return TAG_RULES.filter(([, re]) => re.test(text)).map(([tag]) => tag)
+}
+
 function parseCategories(item: string): string[] {
   const cats: string[] = []
   const re = /<category[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/category>/gi
@@ -123,13 +143,16 @@ Deno.serve(async (req) => {
   const articles = await Promise.all(rawArticles.map(async (a) => {
     const needsImage = !a.image
     const needsTags = a.categories.length === 0
-    if (!needsImage && !needsTags) return a
-    const meta = await fetchArticleMeta(a.url)
-    return {
-      ...a,
-      image: a.image || meta.image,
-      categories: a.categories.length > 0 ? a.categories : meta.categories,
+    let image = a.image
+    let categories = a.categories
+    if (needsImage || needsTags) {
+      const meta = await fetchArticleMeta(a.url)
+      image = a.image || meta.image
+      categories = a.categories.length > 0 ? a.categories : meta.categories
     }
+    // Derive tags from title/description as final fallback
+    if (categories.length === 0) categories = deriveTags(a.title, a.description)
+    return { ...a, image, categories }
   }))
 
   const { error } = await supabase
