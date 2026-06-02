@@ -41,7 +41,7 @@ function parseCategories(item: string): string[] {
 
 function parseRSS(xml: string) {
   const items: string[] = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || []
-  return items.slice(0, 30).map(item => {
+  return items.slice(0, 60).map(item => {
     const title = stripHtml(extractTag(item, 'title'))
     const url = stripHtml(extractTag(item, 'link')) || extractAttr(item, 'link', 'href')
     const description = stripHtml(extractTag(item, 'description')).slice(0, 200)
@@ -73,20 +73,29 @@ async function fetchRSS(): Promise<string | null> {
   return null
 }
 
-async function fetchOGImage(url: string): Promise<string | null> {
+async function fetchArticleMeta(url: string): Promise<{ image: string | null; categories: string[] }> {
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': 'Orbit-Forum/1.0' },
       signal: AbortSignal.timeout(4000),
     })
-    if (!res.ok) return null
+    if (!res.ok) return { image: null, categories: [] }
     const html = await res.text()
+
     const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
       || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)
       || html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
-    return ogMatch ? ogMatch[1] : null
+
+    const categories: string[] = []
+    const tagRe = /<meta[^>]+property=["']article:tag["'][^>]+content=["']([^"']+)["'][^>]*>/gi
+    const tagRe2 = /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']article:tag["'][^>]*>/gi
+    let m
+    while ((m = tagRe.exec(html)) !== null) if (m[1]) categories.push(m[1])
+    while ((m = tagRe2.exec(html)) !== null) if (m[1] && !categories.includes(m[1])) categories.push(m[1])
+
+    return { image: ogMatch ? ogMatch[1] : null, categories }
   } catch {
-    return null
+    return { image: null, categories: [] }
   }
 }
 
@@ -110,11 +119,17 @@ Deno.serve(async (req) => {
 
   const rawArticles = parseRSS(xml)
 
-  // Fetch OG images in parallel for articles missing one
+  // Fetch OG image + article:tag meta for articles missing image or categories
   const articles = await Promise.all(rawArticles.map(async (a) => {
-    if (a.image) return a
-    const image = await fetchOGImage(a.url)
-    return { ...a, image }
+    const needsImage = !a.image
+    const needsTags = a.categories.length === 0
+    if (!needsImage && !needsTags) return a
+    const meta = await fetchArticleMeta(a.url)
+    return {
+      ...a,
+      image: a.image || meta.image,
+      categories: a.categories.length > 0 ? a.categories : meta.categories,
+    }
   }))
 
   const { error } = await supabase

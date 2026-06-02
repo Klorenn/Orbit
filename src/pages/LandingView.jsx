@@ -231,7 +231,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
         <nav className="nav">
           <div className="inner nav-row">
             <a className="brand" href="#/forum" aria-label="Orbit — enter forum">
-              <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true">
+              <svg className="logo" width="38" height="38" viewBox="0 0 256 256" fill="none" aria-hidden="true">
                 <ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" />
                 <circle cx="128" cy="128" r="33" fill="currentColor" />
                 <circle cx="173" cy="69" r="17" fill="currentColor" />
@@ -430,7 +430,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
           <div className="footer-top">
             <div className="brand-block">
               <a className="brand" href="#top">
-                <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true">
+                <svg className="logo" width="38" height="38" viewBox="0 0 256 256" fill="none" aria-hidden="true">
                   <ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" />
                   <circle cx="128" cy="128" r="33" fill="currentColor" /><circle cx="173" cy="69" r="17" fill="currentColor" />
                 </svg>

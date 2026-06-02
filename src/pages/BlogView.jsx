@@ -11,7 +11,7 @@ function computeTags(articles) {
     const key = c.trim()
     if (key) freq[key] = (freq[key] || 0) + 1
   }))
-  const top = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k]) => k)
+  const top = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 15).map(([k]) => k)
   return ['All', ...top]
 }
 
