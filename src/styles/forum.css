@@ -1223,7 +1223,7 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 /* ============================================================
    ONBOARDING
    ============================================================ */
-.onb { position: fixed; inset: 0; background: var(--space); color: #fff; overflow-y: auto; display: grid; place-items: center; padding: 24px; }
+.onb { position: fixed; inset: 0; background: url('/assets/connect-bg.png') center center / cover no-repeat, #07091c; color: #fff; overflow-y: auto; display: grid; place-items: center; padding: 24px; }
 .onb-stars { position: absolute; inset: 0; opacity: .5; }
 .onb-stars .pc-stars { position: absolute; inset: 0; }
 .onb-shell { position: relative; width: min(960px,100%); min-height: 580px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
