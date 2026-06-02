@@ -82,9 +82,19 @@ export function NewPostView({ connected, onConnect, onPublish, preset }) {
               <button type="button" className={tab==='preview'?'on':''} onClick={()=>setTab('preview')}>{t('previewTab')}</button>
             </div>
           </div>
-          {tab==='write'
-            ? <MarkdownEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} />
-            : <div className="prose preview-box">{body.trim() ? renderRich(body) : <p className="empty" style={{textAlign:'left'}}>{t('nothingToPreview')}</p>}</div>}
+          {tab==='write' ? (
+            <>
+              <MarkdownEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} />
+              {body.trim() && (
+                <div className="live-preview-box">
+                  <span className="live-preview-label">Vista previa</span>
+                  <div className="prose">{renderRich(body)}</div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="prose preview-box">{body.trim() ? renderRich(body) : <p className="empty" style={{textAlign:'left'}}>{t('nothingToPreview')}</p>}</div>
+          )}
         </div>
         {type.t === 'Event' && (
           <div className="field event-meta-fields">

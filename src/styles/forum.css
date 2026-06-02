@@ -872,6 +872,8 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .wp-tabs button { padding: 6px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: rgba(var(--ink-rgb),.55); transition: background .15s, color .15s; }
 .wp-tabs button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 4px rgba(var(--ink-rgb),.1); }
 .preview-box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; min-height: 380px; }
+.live-preview-box { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: rgba(var(--ink-rgb),.02); }
+.live-preview-label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(var(--ink-rgb),.35); margin-bottom: 12px; }
 .md-div { width: 1px; height: 20px; background: var(--line); margin: 0 4px; }
 .md-embed { display: inline-flex; align-items: center; gap: 6px; width: auto !important; padding: 0 12px !important;
   border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--blue) !important; height: 32px; }
@@ -1466,6 +1468,10 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 }
 .blog-error a,
 .blog-empty a { color: var(--blue); }
+
+.blog-card-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.blog-card-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+  background: rgba(var(--ink-rgb),.06); color: rgba(var(--ink-rgb),.55); letter-spacing: .01em; }
 
 .blog-pagination {
   display: flex;

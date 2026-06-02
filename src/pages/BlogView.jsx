@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useFilecoinBlog } from '../hooks/useFilecoinBlog'
 import { useT } from '../hooks/useT'
 import { I } from '../components/Icons'
 
-const BLOG_TAGS = ['All', 'Events', 'Interviews', 'Awards', 'Updates']
 const PER_PAGE = 6
+
+function computeTags(articles) {
+  const freq = {}
+  articles.forEach(a => (a.categories || []).forEach(c => {
+    const key = c.trim()
+    if (key) freq[key] = (freq[key] || 0) + 1
+  }))
+  const top = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k]) => k)
+  return ['All', ...top]
+}
 
 function paginationRange(current, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
@@ -78,6 +87,13 @@ function ArticleCard({ article, t }) {
         {date && <span className="blog-card-date">{date}</span>}
         <h3 className="blog-card-title">{article.title}</h3>
         {desc && <p className="blog-card-desc">{desc}</p>}
+        {article.categories?.length > 0 && (
+          <div className="blog-card-tags">
+            {article.categories.slice(0, 3).map(c => (
+              <span key={c} className="blog-card-tag">{c}</span>
+            ))}
+          </div>
+        )}
         <span className="blog-card-cta">{t('blogReadMore')}</span>
       </div>
     </a>
@@ -91,9 +107,11 @@ export function BlogView() {
   const [page, setPage] = useState(1)
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
+  const tags = useMemo(() => computeTags(articles), [articles])
+
   const filtered = activeTag === 'All'
     ? articles
-    : articles.filter(a => a.categories?.some(c => c.toLowerCase() === activeTag.toLowerCase()))
+    : articles.filter(a => a.categories?.some(c => c.trim().toLowerCase() === activeTag.toLowerCase()))
 
   const totalPages = Math.ceil(filtered.length / PER_PAGE)
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE)
@@ -108,7 +126,7 @@ export function BlogView() {
       <p className="page-sub">{t('blogSub')}</p>
 
       <div className="blog-tags">
-        {BLOG_TAGS.map(tag => (
+        {tags.map(tag => (
           <button
             key={tag}
             className={'blog-tag' + (activeTag === tag ? ' on' : '')}
