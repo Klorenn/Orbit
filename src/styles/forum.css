@@ -872,8 +872,24 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .wp-tabs button { padding: 6px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: rgba(var(--ink-rgb),.55); transition: background .15s, color .15s; }
 .wp-tabs button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 4px rgba(var(--ink-rgb),.1); }
 .preview-box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; min-height: 380px; }
-.live-preview-box { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: rgba(var(--ink-rgb),.02); }
-.live-preview-label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(var(--ink-rgb),.35); margin-bottom: 12px; }
+.og-preview-wrap { margin-top: 10px; }
+.og-preview { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px;
+  background: var(--card); transition: border-color .15s; }
+.og-preview:hover { border-color: rgba(var(--ink-rgb),.2); }
+.og-icon-wrap { flex-shrink: 0; width: 44px; height: 44px; border-radius: 10px; background: rgba(var(--ink-rgb),.06);
+  display: grid; place-items: center; color: rgba(var(--ink-rgb),.4); overflow: hidden; }
+.og-favicon { width: 44px; height: 44px; object-fit: cover; }
+.og-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.og-domain { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: rgba(var(--ink-rgb),.4); text-transform: uppercase; }
+.og-title { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.og-url { font-size: 12px; color: rgba(var(--ink-rgb),.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.og-ext { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center;
+  color: rgba(var(--ink-rgb),.4); transition: background .15s, color .15s; }
+.og-ext:hover { background: rgba(var(--ink-rgb),.06); color: var(--blue); }
+.og-dismiss { flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+  color: rgba(var(--ink-rgb),.35); border: none; background: none; cursor: pointer; transition: background .15s, color .15s; }
+.og-dismiss:hover { background: rgba(var(--ink-rgb),.06); color: var(--ink); }
+.og-preview--loading { opacity: .55; pointer-events: none; }
 .md-div { width: 1px; height: 20px; background: var(--line); margin: 0 4px; }
 .md-embed { display: inline-flex; align-items: center; gap: 6px; width: auto !important; padding: 0 12px !important;
   border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--blue) !important; height: 32px; }

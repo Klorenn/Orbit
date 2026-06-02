@@ -3,6 +3,7 @@ import { CATEGORIES, ME, cid } from '../data/constants'
 import { I } from '../components/Icons'
 import { WalletGate } from '../components/WalletGate'
 import { MarkdownEditor, renderRich } from '../components/MarkdownEditor'
+import { LinkPreview } from '../components/LinkPreview'
 import { useLighthouse } from '../hooks/useLighthouse'
 import { useT } from '../hooks/useT'
 
@@ -85,12 +86,7 @@ export function NewPostView({ connected, onConnect, onPublish, preset }) {
           {tab==='write' ? (
             <>
               <MarkdownEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} />
-              {body.trim() && (
-                <div className="live-preview-box">
-                  <span className="live-preview-label">Vista previa</span>
-                  <div className="prose">{renderRich(body)}</div>
-                </div>
-              )}
+              <LinkPreview body={body} />
             </>
           ) : (
             <div className="prose preview-box">{body.trim() ? renderRich(body) : <p className="empty" style={{textAlign:'left'}}>{t('nothingToPreview')}</p>}</div>
