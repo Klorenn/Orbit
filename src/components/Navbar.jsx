@@ -265,7 +265,7 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
                 {I.bell()}
                 {unread > 0 && <span className="notif-badge">{unread}</span>}
               </a>
-              <button className="pill pill-blue" onClick={onCompose}>{I.plus()} {newPostLabel}</button>
+              <button className="pill pill-blue" onClick={onCompose}>{I.plus()} <span>{newPostLabel}</span></button>
               <ProfileChip identity={identity} address={address} fullAddress={fullAddress} myAvatar={myAvatar} isAdmin={isAdmin} onSignOut={onSignOut} unread={unread} />
             </>
           ) : (
