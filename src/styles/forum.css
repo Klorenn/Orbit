@@ -37,9 +37,9 @@
 [data-theme="dark"] ::selection { background: rgba(0,144,255,.35); }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 body { font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility; }
+  text-rendering: optimizeLegibility; overflow-x: hidden; }
 img, svg { display: block; max-width: 100%; }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; border: 0; background: none; }
@@ -1340,9 +1340,15 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
   .onb-banners { grid-template-columns: 1fr 1fr; }
   .blog-grid { grid-template-columns: 1fr; }
   .connect-shell { padding: 0 20px; }
-  .topbar-inner { padding: 0 16px; }
+  .topbar-inner { padding: 0 12px; gap: 8px; }
   .page-wrap { padding: 24px 16px; }
   .pill.pill-blue { font-size: 13px; padding: 9px 14px; }
+  .pill.pill-line { font-size: 13px; padding: 8px 12px; }
+  .feed-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .feed-title { font-size: 20px; }
+  .sortbar { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; scrollbar-width: none; }
+  .sortbar::-webkit-scrollbar { display: none; }
+  .sortbar button { white-space: nowrap; padding: 7px 12px; font-size: 13px; }
 }
 
 @media (max-width: 1080px) {
