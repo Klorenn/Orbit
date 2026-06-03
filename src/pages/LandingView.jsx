@@ -393,7 +393,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
             <figure className="voice reveal">
               <blockquote className="quote">{tl.quote1}</blockquote>
               <figcaption className="by">
-                <img className="av av--photo" src="/assets/olga.jpg" alt="Olga Ramos" />
+                <img className="av av--photo" src="/assets/olga ramos.jpeg" alt="Olga Ramos" />
                 <span>
                   <span className="name">Olga Ramos</span>
                   <span className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></span>
