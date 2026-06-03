@@ -1,54 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { I } from '../components/Icons'
-import { supabase } from '../lib/supabase'
 import { useT } from '../hooks/useT'
 import { navTo } from '../data/constants'
 
 export function ConnectView({ connected }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [mode, setMode] = useState('signin')
-  const [phase, setPhase] = useState('idle')
-  const [errMsg, setErrMsg] = useState('')
   const { t } = useT()
 
   useEffect(() => {
     if (connected) navTo('#/forum')
   }, [connected])
-
-  const submit = async () => {
-    if (!email.trim() || !password.trim() || phase === 'loading') return
-    setPhase('loading')
-    setErrMsg('')
-
-    let error
-    if (mode === 'signup') {
-      const res = await supabase.auth.signUp({ email: email.trim(), password: password.trim() })
-      error = res.error
-      if (!error) {
-        const res2 = await supabase.auth.signInWithPassword({ email: email.trim(), password: password.trim() })
-        error = res2.error
-      }
-    } else {
-      const res = await supabase.auth.signInWithPassword({ email: email.trim(), password: password.trim() })
-      error = res.error
-    }
-
-    if (error) {
-      setPhase('error')
-      if (error.message.toLowerCase().includes('invalid login')) {
-        setErrMsg('Email o contraseña incorrectos.')
-      } else if (error.message.toLowerCase().includes('already registered')) {
-        setErrMsg('Ya existe una cuenta con ese email. Iniciá sesión.')
-        setMode('signin')
-      } else {
-        setErrMsg(error.message)
-      }
-    } else {
-      setPhase('done')
-    }
-  }
 
   return (
     <div className="connect-page-full">
@@ -82,63 +43,18 @@ export function ConnectView({ connected }) {
 
           <div className="cn-divider"><span>or</span></div>
 
-          <div className="cn-option">
+          <div className="cn-option cn-option--locked">
             <div className="cn-opt-head">
-              <span className="cn-opt-num">2</span>
+              <span className="cn-opt-num cn-opt-num--locked">2</span>
               <div>
-                <div className="cn-opt-label">{t('connectEmailLabel')}</div>
+                <div className="cn-opt-label">{t('connectEmailLabel')} <span className="cn-soon-badge">Próximamente</span></div>
                 <div className="cn-opt-desc">{t('connectEmailDesc')}</div>
               </div>
             </div>
-
-            {phase === 'done' ? (
-              <div className="cn-sent">
-                <span className="cn-badge">{I.check()} {mode === 'signup' ? 'Cuenta creada' : 'Sesión iniciada'}</span>
-                <p className="cn-sent-hint">Redirigiendo al foro…</p>
-              </div>
-            ) : (
-              <div className="cn-email-form">
-                <div className="cn-mode-toggle">
-                  <button
-                    type="button"
-                    className={mode === 'signin' ? 'on' : ''}
-                    onClick={() => { setMode('signin'); setErrMsg(''); setPhase('idle') }}
-                  >Iniciar sesión</button>
-                  <button
-                    type="button"
-                    className={mode === 'signup' ? 'on' : ''}
-                    onClick={() => { setMode('signup'); setErrMsg(''); setPhase('idle') }}
-                  >Crear cuenta</button>
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
-                  placeholder="you@example.com"
-                  className="cn-email-input"
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
-                  placeholder={mode === 'signup' ? 'Elegí una contraseña' : 'Contraseña'}
-                  className="cn-email-input"
-                  style={{ marginTop: 8 }}
-                />
-                {phase === 'error' && <p className="cn-error">{errMsg}</p>}
-                <button
-                  type="button"
-                  className="pill pill-blue cn-send-btn"
-                  style={{ opacity: email.trim() && password.trim() ? 1 : 0.45 }}
-                  onClick={submit}
-                  disabled={phase === 'loading'}
-                >
-                  {phase === 'loading' ? '…' : mode === 'signup' ? 'Crear cuenta' : 'Iniciar sesión'}
-                </button>
-              </div>
-            )}
+            <div className="cn-locked-msg">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Esta opción estará disponible pronto
+            </div>
           </div>
         </div>
 
