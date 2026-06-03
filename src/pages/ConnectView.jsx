@@ -7,6 +7,8 @@ import { navTo } from '../data/constants'
 
 export function ConnectView({ connected }) {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [mode, setMode] = useState('signin')
   const [phase, setPhase] = useState('idle')
   const [errMsg, setErrMsg] = useState('')
   const { t } = useT()
@@ -15,17 +17,37 @@ export function ConnectView({ connected }) {
     if (connected) navTo('#/forum')
   }, [connected])
 
-  const send = async () => {
-    if (!email.trim() || phase === 'sending') return
-    setPhase('sending')
+  const submit = async () => {
+    if (!email.trim() || !password.trim() || phase === 'loading') return
+    setPhase('loading')
     setErrMsg('')
-    const redirectTo = window.location.origin + '/'
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: { emailRedirectTo: redirectTo },
-    })
-    if (error) { setPhase('error'); setErrMsg(error.message) }
-    else setPhase('sent')
+
+    let error
+    if (mode === 'signup') {
+      const res = await supabase.auth.signUp({ email: email.trim(), password: password.trim() })
+      error = res.error
+      if (!error) {
+        const res2 = await supabase.auth.signInWithPassword({ email: email.trim(), password: password.trim() })
+        error = res2.error
+      }
+    } else {
+      const res = await supabase.auth.signInWithPassword({ email: email.trim(), password: password.trim() })
+      error = res.error
+    }
+
+    if (error) {
+      setPhase('error')
+      if (error.message.toLowerCase().includes('invalid login')) {
+        setErrMsg('Email o contraseña incorrectos.')
+      } else if (error.message.toLowerCase().includes('already registered')) {
+        setErrMsg('Ya existe una cuenta con ese email. Iniciá sesión.')
+        setMode('signin')
+      } else {
+        setErrMsg(error.message)
+      }
+    } else {
+      setPhase('done')
+    }
   }
 
   return (
@@ -68,28 +90,52 @@ export function ConnectView({ connected }) {
                 <div className="cn-opt-desc">{t('connectEmailDesc')}</div>
               </div>
             </div>
-            {phase === 'sent' ? (
+
+            {phase === 'done' ? (
               <div className="cn-sent">
-                <span className="cn-badge">{I.check()} {t('magicLinkSent')}</span>
-                <p className="cn-sent-hint">{t('checkEmailHint')}</p>
+                <span className="cn-badge">{I.check()} {mode === 'signup' ? 'Cuenta creada' : 'Sesión iniciada'}</span>
+                <p className="cn-sent-hint">Redirigiendo al foro…</p>
               </div>
             ) : (
               <div className="cn-email-form">
+                <div className="cn-mode-toggle">
+                  <button
+                    type="button"
+                    className={mode === 'signin' ? 'on' : ''}
+                    onClick={() => { setMode('signin'); setErrMsg(''); setPhase('idle') }}
+                  >Iniciar sesión</button>
+                  <button
+                    type="button"
+                    className={mode === 'signup' ? 'on' : ''}
+                    onClick={() => { setMode('signup'); setErrMsg(''); setPhase('idle') }}
+                  >Crear cuenta</button>
+                </div>
                 <input
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') send() }}
+                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
                   placeholder="you@example.com"
                   className="cn-email-input"
                 />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
+                  placeholder={mode === 'signup' ? 'Elegí una contraseña' : 'Contraseña'}
+                  className="cn-email-input"
+                  style={{ marginTop: 8 }}
+                />
                 {phase === 'error' && <p className="cn-error">{errMsg}</p>}
                 <button
+                  type="button"
                   className="pill pill-blue cn-send-btn"
-                  style={{ opacity: email.trim() ? 1 : 0.45 }}
-                  onClick={send}
+                  style={{ opacity: email.trim() && password.trim() ? 1 : 0.45 }}
+                  onClick={submit}
+                  disabled={phase === 'loading'}
                 >
-                  {phase === 'sending' ? t('sendingLabel') : t('sendMagicLink')}
+                  {phase === 'loading' ? '…' : mode === 'signup' ? 'Crear cuenta' : 'Iniciar sesión'}
                 </button>
               </div>
             )}
