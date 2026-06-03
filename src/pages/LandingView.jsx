@@ -58,10 +58,8 @@ const L = {
     readDocs: 'Leer los docs',
     voicesEyebrow: 'De los embajadores',
     voicesH2: 'Voces de la constelación.',
-    voicesLede: 'Cientos de embajadores en decenas de ciudades — compartiendo por fin un registro del trabajo.',
-    quote1: '"Por fin puedo ver qué están construyendo los demás embajadores."',
-    quote2: '"El wallet-gate significa identidad real sin los papeles."',
-    quote3: '"Nuestros reports viven en Filecoin ahora. Como debe ser."',
+    voicesLede: 'Embajadores de todo el mundo — coordinándose por fin en un solo lugar.',
+    quote1: '"Orbit le dio a nuestra comunidad de LatAm un espacio para coordinarnos, compartir nuestro trabajo y tener influencia real en cómo evoluciona el programa."',
     joinCta: 'Conectar wallet',
     notAmbassador: '¿No sos embajador aún?',
     applyLink: 'Aplicá al Programa Orbit →',
@@ -99,10 +97,8 @@ const L = {
     readDocs: 'Read the docs',
     voicesEyebrow: 'From the ambassadors',
     voicesH2: 'Voices from the constellation.',
-    voicesLede: 'Hundreds of ambassadors across dozens of cities — finally sharing one record of the work.',
-    quote1: '"Finally I can see what other ambassadors are building."',
-    quote2: '"Wallet-gating means real identity without the paperwork."',
-    quote3: '"Our reports live on Filecoin now. As they should."',
+    voicesLede: 'Ambassadors across the world — finally coordinating in one place.',
+    quote1: '"Orbit gave our LatAm community a space to coordinate, share our work, and have real influence over how the program evolves."',
     joinCta: 'Connect Wallet',
     notAmbassador: 'Not an ambassador yet?',
     applyLink: 'Apply to the Orbit Program →',
@@ -393,18 +389,17 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
             </div>
             <p className="lede reveal" data-delay="1">{tl.voicesLede}</p>
           </div>
-          <div className="voices-grid">
+          <div className="voices-grid voices-grid--single">
             <figure className="voice reveal">
               <blockquote className="quote">{tl.quote1}</blockquote>
-              <figcaption className="by"><span className="av" style={{ background: '#0090FF' }}></span><span><span className="name">Olga</span><br /><span className="city">Santiago, Chile</span></span></figcaption>
-            </figure>
-            <figure className="voice reveal" data-delay="1">
-              <blockquote className="quote">{tl.quote2}</blockquote>
-              <figcaption className="by"><span className="av" style={{ background: '#FFD60A' }}></span><span><span className="name">Kwame</span><br /><span className="city">Accra, Ghana</span></span></figcaption>
-            </figure>
-            <figure className="voice reveal" data-delay="2">
-              <blockquote className="quote">{tl.quote3}</blockquote>
-              <figcaption className="by"><span className="av" style={{ background: '#A855F7' }}></span><span><span className="name">Mira</span><br /><span className="city">Lisbon, Portugal</span></span></figcaption>
+              <figcaption className="by">
+                <img className="av av--photo" src="/assets/olga.jpg" alt="Olga Ramos" />
+                <span>
+                  <span className="name">Olga Ramos</span>
+                  <span className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></span>
+                  <span className="city">Lima, Perú</span>
+                </span>
+              </figcaption>
             </figure>
           </div>
         </div>
