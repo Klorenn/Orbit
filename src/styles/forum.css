@@ -1376,14 +1376,19 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
   .page-wrap { padding: 20px 16px 80px; }
   .pill.pill-blue { font-size: 13px; padding: 9px 14px; }
   .pill.pill-line { font-size: 13px; padding: 8px 12px; }
-  .feed-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .feed-head { flex-direction: column; align-items: flex-start; gap: 6px; }
   .feed-title { font-size: 20px; }
+  .feed-sub { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
   .sortbar { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; scrollbar-width: none; }
   .sortbar::-webkit-scrollbar { display: none; }
   .sortbar button { white-space: nowrap; padding: 7px 12px; font-size: 13px; }
   .post { grid-template-columns: 1fr; }
   .post .vote { display: none; }
   .post .cid { display: none; }
+  .cat-cards { gap: 8px; margin-bottom: 20px; }
+  .cat-card { padding: 14px; border-radius: 14px; }
+  .cc-dot { margin-bottom: 10px; }
+  .cc-name { font-size: 15px; }
 }
 
 @media (max-width: 480px) {
