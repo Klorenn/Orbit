@@ -95,6 +95,11 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
         <h4>{t('trending')}</h4>
         <div className="trend">{TRENDING.map(tr=><a key={tr} href="#/forum">{tr}</a>)}</div>
       </div>
+      <div className="rail-card rail-card--chat">
+        <h4>💬 General</h4>
+        <p className="rail-chat-sub">Canal abierto para todos los embajadores</p>
+        <a href="#/chat" className="pill pill-blue rail-chat-btn">Ir al chat</a>
+      </div>
     </aside>
   )
 }

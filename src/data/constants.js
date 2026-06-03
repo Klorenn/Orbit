@@ -215,7 +215,7 @@ export const DOCS = [
   },
 ];
 
-export const TRENDING = ['#storage-deals', '#onboarding', '#FVM', '#regional-hubs', '#IPFS', '#stipends'];
+export const TRENDING = ['#governance', '#LatAm', '#Filecoin', '#ProPGF', '#Orbit', '#eventos', '#propuestas', '#web3'];
 
 /* social network config — order + meta for rendering */
 export const SOCIALS = [

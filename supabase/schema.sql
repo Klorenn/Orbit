@@ -212,3 +212,18 @@ alter table follows enable row level security;
 create policy "follows are public"  on follows for select using (true);
 create policy "anyone can follow"   on follows for insert with check (true);
 create policy "anyone can unfollow" on follows for delete using (true);
+
+-- General Chat Messages
+create table if not exists messages (
+  id         uuid primary key default gen_random_uuid(),
+  author     text not null,
+  text       text not null,
+  created_at timestamptz default now()
+);
+
+alter table messages enable row level security;
+create policy "messages are public"  on messages for select using (true);
+create policy "anyone can message"   on messages for insert with check (true);
+create policy "author can delete"    on messages for delete using (true);
+
+create index if not exists messages_created_at_idx on messages(created_at desc);

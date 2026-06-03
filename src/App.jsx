@@ -43,6 +43,7 @@ import { MeetingsView, MeetingRoomView, ProposeMeetingView, OnboardingView } fro
 import { SavedView } from './pages/SavedView'
 import { LandingView } from './pages/LandingView'
 import { BlogView } from './pages/BlogView'
+import { ChatView } from './pages/ChatView'
 import './styles/forum.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -84,6 +85,7 @@ function parseHash() {
   if (seg[0] === 'docs') return { view: 'docs' }
   if (seg[0] === 'blog') return { view: 'blog' };
   if (seg[0] === 'connect') return { view: 'connect' };
+  if (seg[0] === 'chat') return { view: 'chat' };
   if (seg[0] === 'meetings') {
     if (seg[1] === 'new') return { view: 'meeting-new' };
     if (seg[1]) return { view: 'meeting-room', id: seg[1] };
@@ -402,6 +404,9 @@ export default function App() {
       break
     case 'connect':
       view = <ConnectView connected={connected} />
+      break
+    case 'chat':
+      view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('#/connect')} />
       break
     case 'meetings':
       view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />
