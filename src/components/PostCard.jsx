@@ -25,8 +25,8 @@ export function PostCard({ post, onVote }) {
             <span className="nm">{u.name}</span>
           </span>
           {u.role && <span className="role">{u.role}</span>}
-          <span className="dotsep"></span>
-          <span>{u.city}</span>
+          <span className="dotsep meta-city-sep"></span>
+          <span className="meta-city">{u.city}</span>
           {post.time && <><span className="dotsep"></span><span>{post.time} ago</span></>}
           <span className="dotsep"></span>
           <span className="cmtcount">{I.cmt()} {commentCount}</span>
