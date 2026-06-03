@@ -382,26 +382,22 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
       {/* VOICES */}
       <section className="section" id="voices" data-screen-label="Voices">
         <div className="inner">
-          <div className="intro-row" style={{ marginBottom: 0 }}>
-            <div className="intro-left">
-              <span className="eyebrow reveal">{tl.voicesEyebrow}</span>
-              <h2 className="h2 reveal" data-delay="1" style={{ marginTop: 8 }}>{tl.voicesH2}</h2>
-            </div>
-            <p className="lede reveal" data-delay="1">{tl.voicesLede}</p>
+          <div className="voices-header reveal">
+            <span className="eyebrow">{tl.voicesEyebrow}</span>
+            <h2 className="h2" style={{ marginTop: 8 }}>{tl.voicesH2}</h2>
+            <p className="voices-lede">{tl.voicesLede}</p>
           </div>
-          <div className="voices-grid voices-grid--single">
-            <figure className="voice reveal">
-              <blockquote className="quote">{tl.quote1}</blockquote>
-              <figcaption className="by">
-                <img className="av av--photo" src="/assets/olga ramos.jpeg" alt="Olga Ramos" />
-                <span>
-                  <span className="name">Olga Ramos</span>
-                  <span className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></span>
-                  <span className="city">Lima, Perú</span>
-                </span>
-              </figcaption>
-            </figure>
-          </div>
+          <figure className="voice voice--featured reveal">
+            <blockquote className="quote">{tl.quote1}</blockquote>
+            <figcaption className="by">
+              <img className="av av--photo" src="/assets/olga ramos.jpeg" alt="Olga Ramos" />
+              <div className="by-text">
+                <div className="name">Olga Ramos</div>
+                <div className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></div>
+                <div className="city">Lima, Perú</div>
+              </div>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
