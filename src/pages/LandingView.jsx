@@ -60,6 +60,8 @@ const L = {
     voicesH2: 'Voces de la constelación.',
     voicesLede: 'Embajadores de todo el mundo — coordinándose por fin en un solo lugar.',
     quote1: '"Orbit le dio a nuestra comunidad de LatAm un espacio para coordinarnos, compartir nuestro trabajo y tener influencia real en cómo evoluciona el programa."',
+    quote2: '"El wallet-gate significa identidad real sin los papeles."',
+    quote3: '"Nuestros reports viven en Filecoin ahora. Como debe ser."',
     joinCta: 'Conectar wallet',
     notAmbassador: '¿No sos embajador aún?',
     applyLink: 'Aplicá al Programa Orbit →',
@@ -99,6 +101,8 @@ const L = {
     voicesH2: 'Voices from the constellation.',
     voicesLede: 'Ambassadors across the world — finally coordinating in one place.',
     quote1: '"Orbit gave our LatAm community a space to coordinate, share our work, and have real influence over how the program evolves."',
+    quote2: '"Wallet-gating means real identity without the paperwork."',
+    quote3: '"Our reports live on Filecoin now. As they should."',
     joinCta: 'Connect Wallet',
     notAmbassador: 'Not an ambassador yet?',
     applyLink: 'Apply to the Orbit Program →',
@@ -382,22 +386,34 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
       {/* VOICES */}
       <section className="section" id="voices" data-screen-label="Voices">
         <div className="inner">
-          <div className="voices-header reveal">
-            <span className="eyebrow">{tl.voicesEyebrow}</span>
-            <h2 className="h2" style={{ marginTop: 8 }}>{tl.voicesH2}</h2>
-            <p className="voices-lede">{tl.voicesLede}</p>
+          <div className="intro-row" style={{ marginBottom: 0 }}>
+            <div className="intro-left">
+              <span className="eyebrow reveal">{tl.voicesEyebrow}</span>
+              <h2 className="h2 reveal" data-delay="1" style={{ marginTop: 8 }}>{tl.voicesH2}</h2>
+            </div>
+            <p className="lede reveal" data-delay="1">{tl.voicesLede}</p>
           </div>
-          <figure className="voice voice--featured reveal">
-            <blockquote className="quote">{tl.quote1}</blockquote>
-            <figcaption className="by">
-              <img className="av av--photo" src="/assets/olga ramos.jpeg" alt="Olga Ramos" />
-              <div className="by-text">
-                <div className="name">Olga Ramos</div>
-                <div className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></div>
-                <div className="city">Lima, Perú</div>
-              </div>
-            </figcaption>
-          </figure>
+          <div className="voices-grid">
+            <figure className="voice reveal">
+              <blockquote className="quote">{tl.quote1}</blockquote>
+              <figcaption className="by">
+                <img className="av av--photo" src="/assets/olga ramos.jpeg" alt="Olga Ramos" />
+                <div className="by-text">
+                  <div className="name">Olga Ramos</div>
+                  <div className="voice-role">Filecoin Ambassador · <a href="https://x.com/0lga_tech" target="_blank" rel="noopener noreferrer" className="voice-x">@0lga_tech</a></div>
+                  <div className="city">Lima, Perú</div>
+                </div>
+              </figcaption>
+            </figure>
+            <figure className="voice reveal" data-delay="1">
+              <blockquote className="quote">{tl.quote2}</blockquote>
+              <figcaption className="by"><span className="av" style={{ background: '#FFD60A' }}></span><span><span className="name">Kwame</span><br /><span className="city">Accra, Ghana</span></span></figcaption>
+            </figure>
+            <figure className="voice reveal" data-delay="2">
+              <blockquote className="quote">{tl.quote3}</blockquote>
+              <figcaption className="by"><span className="av" style={{ background: '#A855F7' }}></span><span><span className="name">Mira</span><br /><span className="city">Lisbon, Portugal</span></span></figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
