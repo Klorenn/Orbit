@@ -14,7 +14,7 @@ export function useFollows(identity) {
   }, [identity])
 
   const toggleFollow = async (target) => {
-    if (!identity || !target) return
+    if (!identity || !target || target === identity) return
     const isFollowing = following.includes(target)
     if (isFollowing) {
       await supabase.from('follows').delete().eq('follower', identity).eq('following', target)

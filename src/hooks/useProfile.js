@@ -10,10 +10,11 @@ function loadLocal() {
 
 async function upsertPublicProfile(identity, fields) {
   if (!identity) return
-  await supabase.from('public_profiles').upsert(
+  const { error } = await supabase.from('public_profiles').upsert(
     { identity, ...fields, updated_at: new Date().toISOString() },
     { onConflict: 'identity' }
   )
+  if (error) console.error('[useProfile] upsert failed:', error.message)
 }
 
 export function useProfile(identity) {

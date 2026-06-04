@@ -68,7 +68,7 @@ function MembersSidebar({ messages, identity, bannedUsers }) {
           return (
             <a
               key={author}
-              href={`#/profile/${encodeURIComponent(author)}`}
+              href={`/profile/${encodeURIComponent(author)}`}
               className={'chat-member' + (isBanned ? ' chat-member--banned' : '') + (isMe ? ' chat-member--me' : '')}
             >
               <span className="chat-member-av">

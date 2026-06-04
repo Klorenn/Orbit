@@ -32,7 +32,7 @@ function RepoCard({ repo }) {
 }
 
 export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], onToggleFollow, myAvatar, onSetMyAvatar }) {
-  const isMe = whoId === 'me' || whoId === 'you.fil'
+  const isMe = whoId === 'me' || whoId === 'you.fil' || (!!myIdentity && whoId === myIdentity)
   const [fetchedProfile, setFetchedProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
   const [theirPosts, setTheirPosts] = useState([])
