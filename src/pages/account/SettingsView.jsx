@@ -32,6 +32,7 @@ function parseRepos(raw) {
 export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const { t } = useT()
+  const [fullName, setFullName] = useState(profile.fullName || '')
   const [handle, setHandle] = useState(profile.handle || '')
   const [bio, setBio] = useState(profile.bio || '')
   const [city, setCity] = useState(profile.city || '')
@@ -43,6 +44,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
   const [repoUrl, setRepoUrl] = useState('')
 
   useEffect(() => {
+    setFullName(profile.fullName || '')
     setHandle(profile.handle || '')
     setBio(profile.bio || '')
     setCity(profile.city || '')
@@ -63,7 +65,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
     setRepoUrl('')
   }
   const removeRepo = (idx) => setRepos(r => r.filter((_, i) => i !== idx))
-  const save = () => onSave({ handle, bio, city, socials, banner, skills, repos })
+  const save = () => onSave({ fullName, handle, bio, city, socials, banner, skills, repos })
   const pickBanner = (id) => { setBanner(id); onSave({ banner: id }) }
   return (
     <div className="page-wrap">
@@ -125,6 +127,11 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
 
         <section className="set-card">
           <h3>{t('settingsIdentityTitle')}</h3>
+          <div className="field">
+            <label>Nombre real</label>
+            <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Ej: Olga Ramos" maxLength={64} />
+            <p className="field-hint">Tu nombre completo. Aparece en el OG y en tu perfil público.</p>
+          </div>
           <div className="field"><label>{t('handleLabel')}</label>
             <input type="text" value={handle} onChange={e => setHandle(e.target.value)} placeholder={ME.addr} maxLength={32} />
             <p className="field-hint">{t('handleHintShort')}</p>

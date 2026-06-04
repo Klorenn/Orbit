@@ -504,6 +504,7 @@ a.prop { text-decoration: none; }
   box-shadow: 0 8px 24px rgba(0,0,0,.35); z-index: 50; white-space: normal; }
 .rank-badge-tip strong { font-size: 13px; font-weight: 600; }
 .rank-badge-wrap:hover .rank-badge-tip { opacity: 1; }
+.ph-fullname { font-size: 15px; color: rgba(255,255,255,.65); font-weight: 500; margin-top: 2px; letter-spacing: .01em; }
 .ph-addr-copy { all: unset; cursor: pointer; font-size: 12.5px; color: rgba(255,255,255,.45); font-variant-numeric: tabular-nums;
   letter-spacing: .04em; margin-top: 3px; transition: color .15s; display: block; }
 .ph-addr-copy:hover { color: rgba(255,255,255,.75); }

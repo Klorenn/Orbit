@@ -22,6 +22,7 @@ export default async function handler(req) {
   const base = `${proto}://${host}`
 
   const name    = searchParams.get('name')   || 'Filecoin Ambassador'
+  const handle  = searchParams.get('handle') || ''
   const role    = searchParams.get('role')   || 'Ambassador'
   const city    = searchParams.get('city')   || ''
   const banner  = searchParams.get('banner') || 'galaxy2'
@@ -83,9 +84,11 @@ export default async function handler(req) {
               <div style={{ color: 'white', fontSize: '68px', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>
                 {name}
               </div>
-              <div style={{ color: 'rgba(255,255,255,.55)', fontSize: '24px', display: 'flex', gap: '10px' }}>
-                <span>{role}</span>
-                {city && <><span style={{ color: 'rgba(255,255,255,.25)' }}>·</span><span>{city}</span></>}
+              <div style={{ color: 'rgba(255,255,255,.55)', fontSize: '24px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                {handle
+                  ? <><span>{handle}</span><span style={{ color: 'rgba(255,255,255,.25)' }}>·</span><span>{role}</span></>
+                  : <><span>{role}</span>{city && <><span style={{ color: 'rgba(255,255,255,.25)' }}>·</span><span>{city}</span></>}</>
+                }
               </div>
               {skills.length > 0 && (
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '4px' }}>

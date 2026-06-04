@@ -123,8 +123,10 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
       ...SKILLS.filter(s => profileSkills.includes(s.id)).map(s => s.label),
     ].slice(0, 4)
 
+    const displayName = fetchedProfile?.fullName || u.name
     const params = new URLSearchParams({
-      name: u.name,
+      name: displayName,
+      ...(fetchedProfile?.fullName && { handle: u.name }),
       role: u.role || 'Ambassador',
       ...(u.city && { city: u.city }),
       banner: u.banner || 'galaxy2',
@@ -186,6 +188,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
                 {copied ? '✓ Copiado' : longTruncAddr(resolvedIdentity)}
               </button>
             )}
+            {fetchedProfile?.fullName && <div className="ph-fullname">{fetchedProfile.fullName}</div>}
             <div className="ph-meta">{u.city}{u.city && u.joined ? ' · ' : ''}{u.joined ? 'joined ' + u.joined : ''}</div>
             <p className="ph-bio">{u.bio}</p>
             <div className="ph-socials"><SocialLinks socials={u.socials} /></div>
