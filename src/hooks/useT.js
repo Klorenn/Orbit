@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { T } from '../i18n'
 
 export function useT() {
-  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'en')
   useEffect(() => {
     const h = (e) => setLang(e.detail)
     window.addEventListener('orbit-lang', h)

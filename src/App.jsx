@@ -13,6 +13,7 @@ import { useEvents } from './hooks/useEvents'
 import { useProposals } from './hooks/useProposals'
 import { useMeetings } from './hooks/useMeetings'
 import { useAmbassadors } from './hooks/useAmbassadors'
+import { useForumConfig } from './hooks/useForumConfig'
 import { useNotifications, insertNotification } from './hooks/useNotifications'
 import { supabase } from './lib/supabase'
 import { useFollows } from './hooks/useFollows'
@@ -114,6 +115,7 @@ export default function App() {
   const { proposals } = useProposals(posts)
   const { meetings, joinMeeting: _joinMeeting, leaveMeeting, proposeMeeting } = useMeetings(identity)
   const { ambassadors } = useAmbassadors()
+  const { tagColors, saveTagColors } = useForumConfig()
   const { notifications, markRead, markAllRead } = useNotifications(identity)
   const { following, toggleFollow } = useFollows(identity)
   const [route, setRoute] = useState(parseHash())
@@ -346,7 +348,7 @@ export default function App() {
   let view
   switch (route.view) {
     case 'forum-home':
-      view = <HomeView posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} />
+      view = <HomeView posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} />
       break
     case 'forum-category':
       view = <CategoryView cat={route.cat} posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} />
@@ -368,7 +370,7 @@ export default function App() {
       break
     case 'admin':
       view = isAdmin
-        ? <AdminView section={route.section} posts={posts} ambassadors={ambassadors} />
+        ? <AdminView section={route.section} posts={posts} ambassadors={ambassadors} tagColors={tagColors} saveTagColors={saveTagColors} />
         : <Error404View />
       break
     case 'events':

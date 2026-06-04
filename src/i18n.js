@@ -403,9 +403,18 @@ export const T = {
     railGuestTitle: 'Foro On-Chain',
     railGuestSub: 'Conectá tu wallet o iniciá sesión para publicar, votar y participar en la gobernanza.',
     railGuestBtn: 'Unirme',
-    ambassadorTipTitle: 'Orbit Ambassador',
-    ambassadorTipBody: 'Rol verificado por la Filecoin Foundation. Los embajadores publican reportes, proponen proyectos y votan propuestas on-chain.',
     ambassadorTipLink: 'Más info →',
+    badgeTip: {
+      Admin:             { title: 'Administrador', body: 'Acceso completo al panel de moderación. Gestiona usuarios, bans, categorías y configuración del foro.' },
+      Moderator:         { title: 'Moderador',     body: 'Revisa reportes de la comunidad, modera publicaciones y mantiene la salud del foro.' },
+      Core:              { title: 'Core',           body: 'Custodio del programa Orbit. Coordina con la Filecoin Foundation y define la dirección del programa.' },
+      Newcomer:          { title: 'Recién llegado', body: 'Nuevo en la comunidad Orbit. Publicá, comentá y votá para ganar karma y subir de rango.' },
+      Member:            { title: 'Miembro',        body: 'Miembro activo del foro. Participás regularmente en discusiones y gobernanza.' },
+      Contributor:       { title: 'Contribuidor',   body: 'Contribuidor destacado. Tu participación tiene peso real en las propuestas del ecosistema.' },
+      Ambassador:        { title: 'Orbit Ambassador', body: 'Embajador verificado de Filecoin Orbit. Publicás reportes, proponés proyectos y votás propuestas on-chain.' },
+      'Senior Ambassador': { title: 'Senior Ambassador', body: 'Embajador senior con alto impacto. Referente en la comunidad y mentor de nuevos integrantes.' },
+      Veteran:           { title: 'Veterano',       body: 'Veterano de la constelación. Uno de los contribuidores más destacados del ecosistema.' },
+    },
 
     // ── FOLLOWING SORT EMPTY STATES ──────────────────────
     sortFollowingEmpty: 'Nadie de los que seguís publicó aún en esta sección.',
@@ -862,9 +871,18 @@ export const T = {
     railGuestTitle: 'On-Chain Forum',
     railGuestSub: 'Connect your wallet or sign in to post, vote, and participate in governance.',
     railGuestBtn: 'Join',
-    ambassadorTipTitle: 'Orbit Ambassador',
-    ambassadorTipBody: 'Role verified by the Filecoin Foundation. Ambassadors publish reports, propose projects, and vote on proposals on-chain.',
     ambassadorTipLink: 'Learn more →',
+    badgeTip: {
+      Admin:             { title: 'Administrator',    body: 'Full access to the moderation panel. Manages users, bans, categories, and forum configuration.' },
+      Moderator:         { title: 'Moderator',        body: 'Reviews community reports, moderates posts, and maintains forum health.' },
+      Core:              { title: 'Core',              body: 'Orbit Program steward. Coordinates with the Filecoin Foundation and defines program direction.' },
+      Newcomer:          { title: 'Newcomer',          body: 'New to the Orbit community. Post, comment, and vote to earn karma and rank up.' },
+      Member:            { title: 'Member',            body: 'Active forum member. Participating regularly in discussions and governance.' },
+      Contributor:       { title: 'Contributor',       body: 'Notable contributor. Your participation carries real weight in ecosystem proposals.' },
+      Ambassador:        { title: 'Orbit Ambassador',  body: 'Verified Filecoin Orbit ambassador. Publishes reports, proposes projects, and votes on-chain.' },
+      'Senior Ambassador': { title: 'Senior Ambassador', body: 'Senior ambassador with high impact. Community reference and mentor to new members.' },
+      Veteran:           { title: 'Veteran',           body: 'Constellation veteran. One of the most outstanding contributors in the ecosystem.' },
+    },
 
     // ── FOLLOWING SORT EMPTY STATES ──────────────────────
     sortFollowingEmpty: 'Nobody you follow has posted in this section yet.',

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { CATEGORIES, ALLOWLIST, who } from '../../data/constants'
+import { CATEGORIES, ALLOWLIST, RANKS, who } from '../../data/constants'
 import { supabase } from '../../lib/supabase'
 import { I } from '../../components/Icons'
 import { AmbassadorAvatar } from '../../components/AmbassadorAvatar'
 import { MarkdownEditor } from '../../components/MarkdownEditor'
+import { DEFAULT_TAG_COLORS } from '../../hooks/useForumConfig'
 
 const ADMIN_NAV = [
   ['home', 'Dashboard', 'grid'],
@@ -13,6 +14,7 @@ const ADMIN_NAV = [
   ['categories', 'Categories', 'list'],
   ['allowlist', 'Allowlist', 'check'],
   ['announcements', 'Announcements', 'bell'],
+  ['appearance', 'Appearance', 'edit'],
 ]
 const ROLE_COLOR = { Core: '#0090FF', Moderator: '#A855F7', Ambassador: '#10B981', Applicant: '#FFD60A', Member: '#9aa0aa' }
 const FSTATUS_COLOR = { open: '#FF3B30', reviewing: '#FFD60A', resolved: '#10B981' }
@@ -262,7 +264,61 @@ function AdminAnnouncements() {
   )
 }
 
-export function AdminView({ section, posts = [], ambassadors = [] }) {
+const ELEVATED_ROLES = ['Admin', 'Moderator', 'Core']
+
+function AdminAppearance({ tagColors, saveTagColors }) {
+  const [colors, setColors] = useState({ ...DEFAULT_TAG_COLORS, ...tagColors })
+  const [saved, setSaved] = useState(false)
+  useEffect(() => { setColors({ ...DEFAULT_TAG_COLORS, ...tagColors }) }, [tagColors])
+  const set = (key, val) => setColors(c => ({ ...c, [key]: val }))
+  const save = async () => {
+    await saveTagColors(colors)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  const allLabels = [
+    ...ELEVATED_ROLES,
+    ...RANKS.map(r => r.label),
+  ]
+
+  return (
+    <>
+      <h1 className="admin-title">Appearance</h1>
+      <p className="admin-sub">Customize badge colors for roles and rank tiers. Changes take effect immediately for all users.</p>
+      <div className="set-card" style={{ maxWidth: 600 }}>
+        <h3 style={{ marginBottom: 4 }}>Roles</h3>
+        <p className="set-sub" style={{ marginBottom: 16 }}>Assigned by admins from the Users panel.</p>
+        {ELEVATED_ROLES.map(label => (
+          <div key={label} className="appearance-row">
+            <span className="ar-preview" style={{ background: colors[label] + '22', color: colors[label] }}>{label}</span>
+            <label className="ar-label">{label}</label>
+            <input type="color" value={colors[label] || '#888888'} onChange={e => set(label, e.target.value)} className="ar-color" />
+            <span className="ar-hex">{colors[label]}</span>
+          </div>
+        ))}
+        <h3 style={{ marginTop: 24, marginBottom: 4 }}>Rank tiers</h3>
+        <p className="set-sub" style={{ marginBottom: 16 }}>Earned automatically by karma.</p>
+        {RANKS.map(r => (
+          <div key={r.label} className="appearance-row">
+            <span className="ar-preview" style={{ background: colors[r.label] + '22', color: colors[r.label] }}>{r.label}</span>
+            <label className="ar-label">{r.label} <span style={{ opacity: .5, fontSize: 12 }}>≥{r.min} karma</span></label>
+            <input type="color" value={colors[r.label] || '#888888'} onChange={e => set(r.label, e.target.value)} className="ar-color" />
+            <span className="ar-hex">{colors[r.label]}</span>
+          </div>
+        ))}
+        <div className="settings-foot" style={{ marginTop: 20, paddingTop: 18 }}>
+          <span></span>
+          <button className="pill pill-blue" onClick={save} style={{ padding: '11px 24px' }}>
+            {saved ? <>{I.check()} Saved</> : 'Save colors'}
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export function AdminView({ section, posts = [], ambassadors = [], tagColors = {}, saveTagColors = () => {} }) {
   useEffect(() => { window.scrollTo(0, 0) }, [section])
   const sec = section || 'home'
   return (
@@ -282,6 +338,7 @@ export function AdminView({ section, posts = [], ambassadors = [] }) {
         {sec === 'categories' && <AdminCategories />}
         {sec === 'allowlist' && <AdminAllowlist />}
         {sec === 'announcements' && <AdminAnnouncements />}
+        {sec === 'appearance' && <AdminAppearance tagColors={tagColors} saveTagColors={saveTagColors} />}
       </main>
     </div>
   )

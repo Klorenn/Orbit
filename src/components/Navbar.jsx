@@ -40,7 +40,7 @@ function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unre
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-theme') === 'dark')
-  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'en')
   const [copied, setCopied] = useState(false)
 
   const copyAddress = () => {
@@ -152,7 +152,7 @@ function PrefsButton() {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const [dark, setDark] = useState(() => document.documentElement.getAttribute('data-theme') === 'dark')
-  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'en')
 
   useEffect(() => {
     const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
@@ -205,7 +205,7 @@ function PrefsButton() {
 }
 
 export function Navbar({ route, connected, identity, address, fullAddress, myAvatar, isAdmin, onCompose, onConnect, onWallet, onSignOut, unread }) {
-  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'es')
+  const [lang, setLang] = useState(() => localStorage.getItem('orbit-lang') || 'en')
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
   useEffect(() => {
     if (mobileOpen) {
       const close = () => setMobileOpen(false)
-      window.addEventListener('hashchange', close)
+      window.addEventListener('popstate', close)
       return () => window.removeEventListener('hashchange', close)
     }
   }, [mobileOpen])

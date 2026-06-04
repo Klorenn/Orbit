@@ -35,7 +35,7 @@ function Sidebar({ activeCat, counts }) {
 }
 
 /* ---------- right rail ---------- */
-function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myRole = 'Member' }) {
+function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myRole = 'Member', tagColors = {} }) {
   const { t } = useT()
   const [tipOpen, setTipOpen] = useState(false)
   const tipRef = useRef(null)
@@ -45,9 +45,9 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
   const banner = connected ? BANNERS.find(b=>b.id===who('you.fil').banner) : null
   const ELEVATED = ['Admin', 'Moderator', 'Core']
   const badgeLabel = ELEVATED.includes(myRole) ? myRole : rankOf(myKarma).label
-  const badgeColor = ELEVATED.includes(myRole)
+  const badgeColor = tagColors[badgeLabel] || (ELEVATED.includes(myRole)
     ? (myRole === 'Admin' ? '#FF3B30' : myRole === 'Moderator' ? '#A855F7' : '#0090FF')
-    : rankOf(myKarma).color
+    : rankOf(myKarma).color)
   return (
     <aside className="rail sticky">
       {connected ? (
@@ -56,22 +56,29 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
           <AmbassadorAvatar user="you.fil" size={56} link={false} nft />
           <div className="pc-name">{ME.name}</div>
           {ME.addr && ME.addr !== ME.name && <div className="pc-addr">{ME.addr}</div>}
-          <span
-            ref={tipRef}
-            className="pc-nft"
-            style={{cursor:'help',position:'relative', background: badgeColor + '22', color: badgeColor}}
-            onMouseEnter={openTip}
-            onMouseLeave={closeTip}
-          >
-            {I.check()} {badgeLabel}
-            {tipOpen && (
-              <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
-                <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
-                <div className="nft-tip-body">{t('ambassadorTipBody')}</div>
-                <a className="nft-tip-link" href="/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
-              </div>
-            )}
-          </span>
+          {(() => {
+            const tip = (t('badgeTip') || {})[badgeLabel] || (t('badgeTip') || {})['Ambassador'] || {}
+            return (
+              <span
+                ref={tipRef}
+                className="pc-nft"
+                style={{cursor:'help',position:'relative', background: badgeColor + '22', color: badgeColor}}
+                onMouseEnter={openTip}
+                onMouseLeave={closeTip}
+              >
+                {I.check()} {badgeLabel}
+                {tipOpen && (
+                  <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
+                    <div className="nft-tip-title">{tip.title}</div>
+                    <div className="nft-tip-body">{tip.body}</div>
+                    {!['Admin','Moderator','Core'].includes(badgeLabel) && (
+                      <a className="nft-tip-link" href="/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
+                    )}
+                  </div>
+                )}
+              </span>
+            )
+          })()}
           <div className="pc-grid">
             <div><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></div>
             <div><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></div>
@@ -133,7 +140,7 @@ function sortPosts(list, sort, following = []) {
 /* ============================================================
    VIEW: FORUM HOME
    ============================================================ */
-export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member' }) {
+export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member', tagColors = {} }) {
   const [sort, setSort] = useState('latest');
   const { t } = useT()
   const list = sortPosts(posts, sort, following);
@@ -170,7 +177,7 @@ export function HomeView({ posts, onVote, counts, proposals, connected, identity
           </div>
         )}
       </main>
-      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} myRole={myRole} />
+      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} myRole={myRole} tagColors={tagColors} />
     </div>
   );
 }

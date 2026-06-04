@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { AMBASSADORS } from '../data/constants'
 import { I } from '../components/Icons'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
 import { useT } from '../hooks/useT'
@@ -11,10 +10,8 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
   const { t } = useT()
   const [q, setQ] = useState('')
 
-  const all = propAmbassadors && propAmbassadors.length > 0
-    ? propAmbassadors
-    : Object.values(AMBASSADORS).filter(u => u.role !== 'Core' && u.name !== 'you.fil')
-
+  const loading = !propAmbassadors
+  const all = propAmbassadors || []
   const list = all.filter(u => (u.name + (u.city || '')).toLowerCase().includes(q.toLowerCase()))
 
   return (
@@ -23,8 +20,9 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
       <h1 className="page-title">{t('ambassadorsTitle')}</h1>
       <p className="page-sub">{all.length} {t('ambassadorsSubCount')}</p>
       <div className="amb-search">{I.search()}<input placeholder={t('searchByNameCity')} value={q} onChange={e => setQ(e.target.value)} /></div>
+      {loading && <p className="empty" style={{ opacity: .5 }}>Cargando…</p>}
       <div className="amb-grid">
-        {list.map(u => {
+        {!loading && list.map(u => {
           const key = u.identity || u.name
           return (
             <a key={key} className="amb-card" href={'/profile/' + encodeURIComponent(key)}>
