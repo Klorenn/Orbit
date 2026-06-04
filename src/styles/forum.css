@@ -1045,6 +1045,28 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .settings-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line); }
 .settings-foot .note { font-size: 12.5px; color: rgba(var(--ink-rgb),.5); display: inline-flex; align-items: center; gap: 7px; }
 
+/* ── SKILLS ── */
+.skill-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.skill-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9px; background: rgba(var(--ink-rgb),.05); font-size: 13px; font-weight: 500; border: 1.5px solid var(--line); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.skill-toggle:hover { background: rgba(var(--ink-rgb),.1); }
+.skill-toggle.on { background: rgba(0,144,255,.1); border-color: var(--blue); color: var(--blue); }
+.skill-toggle i { font-size: 17px; }
+.skill-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.skill-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 8px; background: rgba(var(--ink-rgb),.06); font-size: 12.5px; font-weight: 500; border: 1px solid var(--line); }
+.skill-chip i { font-size: 15px; }
+
+/* ── REPOS ── */
+.repo-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.repo-row { display: flex; align-items: center; gap: 8px; }
+.repo-link { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9px; background: rgba(var(--ink-rgb),.05); font-size: 13px; font-weight: 500; border: 1px solid var(--line); transition: border-color .15s, background .15s; }
+.repo-link:hover { border-color: rgba(var(--ink-rgb),.28); background: rgba(var(--ink-rgb),.08); }
+.repo-link i { font-size: 15px; }
+.repo-remove { width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; opacity: .45; line-height: 1; transition: opacity .15s, background .15s, color .15s; }
+.repo-remove:hover { opacity: 1; background: rgba(255,59,48,.1); color: var(--red); }
+.repo-inputs { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.ph-tech { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.repo-links { display: flex; flex-wrap: wrap; gap: 7px; }
+
 /* ============================================================
    ADMIN PANEL
    ============================================================ */

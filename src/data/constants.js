@@ -25,6 +25,29 @@ export const AV = {
 export const AVATAR_OPTIONS = ['blue','navy','indigo','lavender','purple','green','mint','yellow','gold','orange','coral','red','olive','brown','gray','pink'];
 export const COLORHEX = { blue:'#0090FF', red:'#FF3B30', yellow:'#FFD60A', purple:'#A855F7', green:'#10B981', orange:'#FF9500', brown:'#8B5E3C', gray:'#8A8F98', pink:'#FF2D9B' };
 
+export const SKILLS = [
+  { id: 'html5',        label: 'HTML',        icon: 'devicon-html5-plain colored' },
+  { id: 'css3',         label: 'CSS',         icon: 'devicon-css3-plain colored' },
+  { id: 'javascript',   label: 'JavaScript',  icon: 'devicon-javascript-plain colored' },
+  { id: 'typescript',   label: 'TypeScript',  icon: 'devicon-typescript-plain colored' },
+  { id: 'python',       label: 'Python',      icon: 'devicon-python-plain colored' },
+  { id: 'react',        label: 'React',       icon: 'devicon-react-original colored' },
+  { id: 'vuejs',        label: 'Vue',         icon: 'devicon-vuejs-plain colored' },
+  { id: 'nodejs',       label: 'Node.js',     icon: 'devicon-nodejs-plain colored' },
+  { id: 'rust',         label: 'Rust',        icon: 'devicon-rust-plain' },
+  { id: 'go',           label: 'Go',          icon: 'devicon-go-original colored' },
+  { id: 'solidity',     label: 'Solidity',    icon: 'devicon-solidity-plain' },
+  { id: 'docker',       label: 'Docker',      icon: 'devicon-docker-plain colored' },
+  { id: 'git',          label: 'Git',         icon: 'devicon-git-plain colored' },
+  { id: 'nextjs',       label: 'Next.js',     icon: 'devicon-nextjs-plain' },
+  { id: 'graphql',      label: 'GraphQL',     icon: 'devicon-graphql-plain colored' },
+  { id: 'postgresql',   label: 'PostgreSQL',  icon: 'devicon-postgresql-plain colored' },
+  { id: 'mongodb',      label: 'MongoDB',     icon: 'devicon-mongodb-plain colored' },
+  { id: 'java',         label: 'Java',        icon: 'devicon-java-plain colored' },
+  { id: 'tailwindcss',  label: 'Tailwind',    icon: 'devicon-tailwindcss-plain colored' },
+  { id: 'linux',        label: 'Linux',       icon: 'devicon-linux-plain' },
+]
+
 export const CATEGORIES = [
   { id: 'reports',       name: 'Reports',        color: '#0090FF', desc: 'Ambassador reports — events, activities, and field work.' },
   { id: 'projects',      name: 'Projects',       color: '#A855F7', desc: 'New project proposals seeking signaling and collaborators.' },

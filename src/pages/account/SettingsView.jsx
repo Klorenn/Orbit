@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
-import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS } from '../../data/constants'
+import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS } from '../../data/constants'
 import { I } from '../../components/Icons'
 import { socialIcon } from '../../components/SocialLinks'
 import { ProfileTabs } from './MyPostsView'
 import { useT } from '../../hooks/useT'
+
+function parseRepos(raw) {
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw
+  try { return JSON.parse(raw) } catch { return [] }
+}
 
 export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -13,6 +19,10 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
   const [city, setCity] = useState(profile.city || '')
   const [socials, setSocials] = useState({ ...(profile.socials || {}) })
   const [banner, setBanner] = useState(profile.banner || 'green')
+  const [skills, setSkills] = useState(() => profile.skills || [])
+  const [repos, setRepos] = useState(() => parseRepos(profile.repos))
+  const [repoName, setRepoName] = useState('')
+  const [repoUrl, setRepoUrl] = useState('')
 
   useEffect(() => {
     setHandle(profile.handle || '')
@@ -20,9 +30,22 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
     setCity(profile.city || '')
     setSocials({ ...(profile.socials || {}) })
     setBanner(profile.banner || 'green')
-  }, [profile.handle, profile.bio, profile.city, profile.banner])
+    setSkills(profile.skills || [])
+    setRepos(parseRepos(profile.repos))
+  }, [profile.handle, profile.bio, profile.city, profile.banner, profile.skills, profile.repos])
+
   const setS = (k, v) => setSocials(s => ({ ...s, [k]: v }))
-  const save = () => onSave({ handle, bio, city, socials, banner })
+  const toggleSkill = (id) => setSkills(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id])
+  const addRepo = () => {
+    const url = repoUrl.trim()
+    if (!url) return
+    const name = repoName.trim() || url.split('/').filter(Boolean).pop() || url
+    setRepos(r => [...r, { name, url }])
+    setRepoName('')
+    setRepoUrl('')
+  }
+  const removeRepo = (idx) => setRepos(r => r.filter((_, i) => i !== idx))
+  const save = () => onSave({ handle, bio, city, socials, banner, skills, repos })
   const pickBanner = (id) => { setBanner(id); onSave({ banner: id }) }
   return (
     <div className="page-wrap">
@@ -101,6 +124,60 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
           </div>
         </section>
       </div>
+
+      <section className="set-card" style={{ marginTop: 16 }}>
+        <h3>{t('settingsSkillsTitle')}</h3>
+        <p className="set-sub">{t('settingsSkillsSub')}</p>
+        <div className="skill-picker">
+          {SKILLS.map(s => (
+            <button
+              key={s.id}
+              className={'skill-toggle' + (skills.includes(s.id) ? ' on' : '')}
+              onClick={() => toggleSkill(s.id)}
+              type="button"
+            >
+              <i className={s.icon} />
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="set-card" style={{ marginTop: 16 }}>
+        <h3>{t('settingsReposTitle')}</h3>
+        <p className="set-sub">{t('settingsReposSub')}</p>
+        <div className="repo-list">
+          {repos.map((r, i) => (
+            <div className="repo-row" key={i}>
+              <a className="repo-link" href={r.url} target="_blank" rel="noopener noreferrer">
+                <i className="devicon-github-plain" /> {r.name}
+              </a>
+              <button className="repo-remove" onClick={() => removeRepo(i)} title="Remove">×</button>
+            </div>
+          ))}
+          {repos.length === 0 && <p className="set-sub" style={{ margin: 0 }}>{t('noReposYet')}</p>}
+        </div>
+        <div className="repo-inputs">
+          <input
+            type="text"
+            value={repoName}
+            onChange={e => setRepoName(e.target.value)}
+            placeholder={t('repoNamePlaceholder')}
+            style={{ flex: 1 }}
+          />
+          <input
+            type="url"
+            value={repoUrl}
+            onChange={e => setRepoUrl(e.target.value)}
+            placeholder={t('repoUrlPlaceholder')}
+            style={{ flex: 2 }}
+            onKeyDown={e => e.key === 'Enter' && addRepo()}
+          />
+          <button className="pill pill-blue" onClick={addRepo} type="button" style={{ padding: '9px 16px', flexShrink: 0 }}>
+            {t('addRepo')}
+          </button>
+        </div>
+      </section>
 
       <div className="settings-foot">
         <span className="note">{I.shield()} {t('settingsSignedNote')} {ME.name}</span>

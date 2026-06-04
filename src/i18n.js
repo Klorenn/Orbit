@@ -89,10 +89,10 @@ export const T = {
     connectToComment: 'Conectá tu wallet para comentar',
 
     // ── AMBASSADORS ──────────────────────────────────────
-    ambassadorsTitle: 'Embajadores',
-    ambassadorsSubCount: 'embajadores verificados en la constelación. Cada uno es titular del Orbit Ambassador.',
+    ambassadorsTitle: 'Miembros',
+    ambassadorsSubCount: 'miembros en la constelación Orbit — embajadores, moderadores y admins.',
     searchByNameCity: 'Buscar por nombre o ciudad…',
-    noAmbassadorsMatch: 'Ningún embajador coincide con',
+    noAmbassadorsMatch: 'Ningún miembro coincide con',
 
     // ── LEADERBOARD ──────────────────────────────────────
     leaderboardTitle: 'Tabla de líderes',
@@ -308,6 +308,14 @@ export const T = {
     settingsIdentityTitle: 'Identidad',
     settingsSocialsTitle: 'Redes sociales',
     settingsSocialsSub: 'Agregá tu GitHub, X, Discord, Slack, Telegram y sitio web — visibles en tu perfil público.',
+    settingsSkillsTitle: 'Habilidades técnicas',
+    settingsSkillsSub: 'Elegí las tecnologías que dominás. Se muestran en tu perfil público.',
+    settingsReposTitle: 'Repositorios destacados',
+    settingsReposSub: 'Mostrá tu trabajo — agrega links a tus repos más importantes.',
+    repoNamePlaceholder: 'Nombre del repo',
+    repoUrlPlaceholder: 'https://github.com/...',
+    addRepo: 'Agregar',
+    noReposYet: 'Sin repositorios agregados aún.',
     settingsSignedNote: 'Los cambios están guardados localmente y firmados por',
     handleHintShort: 'Se muestra en lugar de tu dirección de wallet. Dejá en blanco para usar la dirección.',
     walletBound: 'vinculado a wallet',
@@ -557,10 +565,10 @@ export const T = {
     connectToComment: 'Connect your wallet to comment',
 
     // ── AMBASSADORS ──────────────────────────────────────
-    ambassadorsTitle: 'Ambassadors',
-    ambassadorsSubCount: 'verified ambassadors across the constellation. Every one holds the Orbit Ambassador credential.',
+    ambassadorsTitle: 'Members',
+    ambassadorsSubCount: 'members across the Orbit constellation — ambassadors, moderators, and admins.',
     searchByNameCity: 'Search by name or city…',
-    noAmbassadorsMatch: 'No ambassadors match',
+    noAmbassadorsMatch: 'No members match',
 
     // ── LEADERBOARD ──────────────────────────────────────
     leaderboardTitle: 'Leaderboard',
@@ -776,6 +784,14 @@ export const T = {
     settingsIdentityTitle: 'Identity',
     settingsSocialsTitle: 'Social links',
     settingsSocialsSub: 'Add your GitHub, X, Discord, Slack, Telegram and website — shown on your public profile.',
+    settingsSkillsTitle: 'Tech skills',
+    settingsSkillsSub: 'Pick the technologies you know. Shown on your public profile.',
+    settingsReposTitle: 'Featured repositories',
+    settingsReposSub: "Show your work — link your most important GitHub repos.",
+    repoNamePlaceholder: 'Repo name',
+    repoUrlPlaceholder: 'https://github.com/...',
+    addRepo: 'Add',
+    noReposYet: 'No repositories added yet.',
     settingsSignedNote: 'Changes are saved locally and signed by',
     handleHintShort: 'Shown instead of your wallet address. Leave blank to use address.',
     walletBound: 'wallet-bound',

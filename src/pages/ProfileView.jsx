@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { AMBASSADORS, BANNERS, SUPER_ADMIN, who, rankOf } from '../data/constants'
+import { AMBASSADORS, BANNERS, SUPER_ADMIN, SKILLS, who, rankOf } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -115,6 +115,35 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
             <div className="ph-meta">{u.city}{u.city && u.joined ? ' · ' : ''}{u.joined ? 'joined ' + u.joined : ''}</div>
             <p className="ph-bio">{u.bio}</p>
             <div className="ph-socials"><SocialLinks socials={u.socials} /></div>
+            {(() => {
+              const profileSkills = fetchedProfile?.skills || []
+              const profileRepos = Array.isArray(fetchedProfile?.repos) ? fetchedProfile.repos : []
+              const skillDefs = SKILLS.filter(s => profileSkills.includes(s.id))
+              if (!skillDefs.length && !profileRepos.length) return null
+              return (
+                <div className="ph-tech">
+                  {skillDefs.length > 0 && (
+                    <div className="skill-list">
+                      {skillDefs.map(s => (
+                        <span key={s.id} className="skill-chip" title={s.label}>
+                          <i className={s.icon} />
+                          {s.label}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {profileRepos.length > 0 && (
+                    <div className="repo-links">
+                      {profileRepos.map((r, i) => (
+                        <a key={i} className="repo-link" href={r.url} target="_blank" rel="noopener noreferrer">
+                          <i className="devicon-github-plain" /> {r.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
           </div>
           {isMe
             ? <a className="pill pill-line ph-edit" href="/profile/me/settings">{I.edit()} {t('editProfile')}</a>

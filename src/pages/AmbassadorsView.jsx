@@ -28,7 +28,12 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
             <a key={key} className="amb-card" href={'/profile/' + encodeURIComponent(key)}>
               <AmbassadorAvatar user={key} size={56} link={false} nft />
               <div className="amb-info">
-                <div className="amb-name">{u.name}</div>
+                <div className="amb-name">
+                  {u.name}
+                  {u.role && !['Ambassador', 'Member', 'Newcomer', 'Contributor', 'Senior Ambassador', 'Veteran'].includes(u.role) && (
+                    <span className="role" data-role={u.role}>{u.role}</span>
+                  )}
+                </div>
                 <div className="amb-city">{u.city}</div>
               </div>
               <p className="amb-bio">{u.bio}</p>
