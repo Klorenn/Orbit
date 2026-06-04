@@ -227,3 +227,16 @@ create policy "anyone can message"   on messages for insert with check (true);
 create policy "author can delete"    on messages for delete using (true);
 
 create index if not exists messages_created_at_idx on messages(created_at desc);
+
+-- Chat bans
+create table if not exists bans (
+  identity   text primary key,
+  banned_by  text not null,
+  reason     text,
+  banned_at  timestamptz not null default now()
+);
+
+alter table bans enable row level security;
+create policy "bans are public"   on bans for select using (true);
+create policy "admins can ban"    on bans for insert with check (is_admin());
+create policy "admins can unban"  on bans for delete using (is_admin());

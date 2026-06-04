@@ -480,6 +480,8 @@ a.prop { text-decoration: none; }
 .ph-name { font-size: 24px; font-weight: 600; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
 .ph-name .role { background: rgba(0,144,255,.22); color: #7cc4ff; }
 .ph-name .role[data-role="Admin"] { background: rgba(255,59,48,.2); color: #ff6b6b; }
+.rank-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+  letter-spacing: .01em; margin-left: 4px; vertical-align: middle; }
 .ph-addr-copy { all: unset; cursor: pointer; font-size: 12.5px; color: rgba(255,255,255,.45); font-variant-numeric: tabular-nums;
   letter-spacing: .04em; margin-top: 3px; transition: color .15s; display: block; }
 .ph-addr-copy:hover { color: rgba(255,255,255,.75); }
@@ -1545,7 +1547,8 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 /* ============================================================
    GENERAL CHAT
    ============================================================ */
-.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 64px); max-width: 800px; margin: 0 auto; }
+.chat-layout { display: flex; gap: 0; height: calc(100vh - 64px); max-width: 1080px; margin: 0 auto; }
+.chat-wrap { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .chat-header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; border-bottom: 1px solid var(--line); flex: none; }
 .chat-hash { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; }
 .chat-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
@@ -1563,10 +1566,51 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 .chat-msg-body { display: flex; align-items: flex-start; gap: 6px; }
 .chat-msg-indent { width: 32px; flex: none; }
 .chat-text { font-size: 14.5px; line-height: 1.55; color: var(--ink); flex: 1; word-break: break-word; }
-.chat-del { opacity: 0; padding: 4px; border-radius: 6px; color: rgba(var(--ink-rgb),.4); flex: none;
-  transition: opacity .15s, color .15s; align-self: center; }
-.chat-msg:hover .chat-del { opacity: 1; }
+/* chat message actions */
+.chat-msg-actions { display: flex; align-items: center; gap: 2px; opacity: 0; flex: none;
+  transition: opacity .15s; align-self: center; }
+.chat-msg:hover .chat-msg-actions { opacity: 1; }
+.chat-del, .chat-ban-btn, .chat-unban-btn { padding: 4px; border-radius: 6px;
+  color: rgba(var(--ink-rgb),.4); transition: color .15s; }
 .chat-del:hover { color: var(--red); }
+.chat-ban-btn:hover { color: #FF9500; }
+.chat-unban-btn:hover { color: #10B981; }
+
+/* banned message */
+.chat-msg--banned { opacity: .45; }
+.chat-banned-badge { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  padding: 1px 6px; border-radius: 999px; background: rgba(255,59,48,.12); color: #FF3B30; }
+
+/* admin badge in header */
+.chat-admin-badge { margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 999px;
+  background: rgba(168,85,247,.12); color: #A855F7; }
+
+/* chat links */
+.chat-link { color: #0090FF; text-decoration: underline; text-underline-offset: 2px;
+  word-break: break-all; }
+.chat-link:hover { color: #0072CC; }
+
+/* banned gate */
+.chat-gate--banned { background: rgba(255,59,48,.06); border: 1px solid rgba(255,59,48,.15);
+  border-radius: 12px; }
+.chat-gate--banned span { color: #FF3B30; font-weight: 500; }
+
+/* ban modal */
+.ban-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 9999;
+  display: flex; align-items: center; justify-content: center; }
+.ban-modal { background: var(--card); border: 1.5px solid var(--line); border-radius: 20px;
+  padding: 28px; width: 380px; max-width: calc(100vw - 32px); display: flex; flex-direction: column; gap: 14px; }
+.ban-modal-title { font-size: 17px; font-weight: 700; }
+.ban-modal-user { font-size: 13px; font-family: var(--mono); background: rgba(var(--ink-rgb),.06);
+  padding: 6px 10px; border-radius: 8px; word-break: break-all; }
+.ban-modal-input { padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--line);
+  background: var(--card); color: var(--ink); font-size: 14px; outline: none;
+  transition: border-color .15s; }
+.ban-modal-input:focus { border-color: var(--red); }
+.ban-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.pill-red { background: #FF3B30 !important; color: #fff !important; border-color: #FF3B30 !important; }
+.pill-red:hover { background: #e0332b !important; }
 .chat-foot { flex: none; padding: 12px 24px 16px; border-top: 1px solid var(--line); }
 .chat-form { display: flex; gap: 10px; align-items: center; }
 .chat-input { flex: 1; padding: 11px 16px; border-radius: 12px; border: 1.5px solid var(--line);
@@ -1581,8 +1625,32 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 .rail-chat-sub { font-size: 12.5px; color: rgba(var(--ink-rgb),.5); margin: 4px 0 12px; line-height: 1.4; }
 .rail-chat-btn { display: flex; width: 100%; justify-content: center; font-size: 13px !important; padding: 8px 14px !important; }
 
+/* ── members sidebar ─────────────────────────────── */
+.chat-members { width: 220px; flex: none; border-right: 1px solid var(--line);
+  overflow-y: auto; padding: 20px 0; }
+.chat-members-title { font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(var(--ink-rgb),.4); padding: 0 16px 10px; }
+.chat-members-ct { font-weight: 600; color: rgba(var(--ink-rgb),.3); }
+.chat-members-list { display: flex; flex-direction: column; gap: 2px; }
+.chat-member { display: flex; align-items: center; gap: 9px; padding: 6px 14px;
+  border-radius: 0; text-decoration: none; transition: background .12s; }
+.chat-member:hover { background: rgba(var(--ink-rgb),.05); }
+.chat-member--me { background: rgba(0,144,255,.06); }
+.chat-member--banned { opacity: .45; }
+.chat-member-av { position: relative; flex: none; }
+.chat-member-dot { position: absolute; bottom: 0; right: 0; width: 8px; height: 8px;
+  border-radius: 50%; border: 2px solid var(--bg); }
+.chat-member-info { flex: 1; min-width: 0; }
+.chat-member-name { font-size: 13px; font-weight: 600; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; }
+.chat-member-rank { font-size: 11px; font-weight: 500; margin-top: 1px; }
+.chat-member-banned-icon { color: #FF3B30; flex: none; opacity: .7; }
+
+@media (max-width: 900px) {
+  .chat-members { display: none; }
+}
 @media (max-width: 760px) {
-  .chat-wrap { height: calc(100vh - 64px - 60px); }
+  .chat-layout { height: calc(100vh - 64px - 60px); }
   .chat-header, .chat-feed, .chat-foot { padding-left: 16px; padding-right: 16px; }
 }
 

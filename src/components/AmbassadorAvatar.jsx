@@ -17,14 +17,15 @@ function hexToHue(hex) {
 
 const BASE_HUE = 206 // hue of the blue astronaut base image (#0090FF)
 
-export function AmbassadorAvatar({ user, size = 40, link = true, nft }) {
+export function AmbassadorAvatar({ user, size = 40, link = true, nft, color: colorOverride }) {
   const u = AMBASSADORS[user] || { name: user, color: 'blue' }
-  const isHex = u.color && u.color.startsWith('#')
-  const color = isHex ? u.color : (COLORHEX[u.color] || '#0090FF')
-  const src = isHex ? AV['blue'] : AV[u.color]
+  const resolvedColor = colorOverride || u.color || 'blue'
+  const isHex = resolvedColor.startsWith('#')
+  const color = isHex ? resolvedColor : (COLORHEX[resolvedColor] || '#0090FF')
+  const src = isHex ? AV['blue'] : AV[resolvedColor]
   const imgStyle = { borderRadius: '50%', objectFit: 'cover' }
   if (isHex) {
-    const rotation = Math.round(hexToHue(u.color) - BASE_HUE)
+    const rotation = Math.round(hexToHue(resolvedColor) - BASE_HUE)
     imgStyle.filter = `hue-rotate(${rotation}deg) saturate(1.4)`
   }
   const img = src

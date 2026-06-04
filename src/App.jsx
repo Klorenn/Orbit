@@ -406,7 +406,7 @@ export default function App() {
       view = <ConnectView connected={connected} />
       break
     case 'chat':
-      view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('#/connect')} />
+      view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('#/connect')} isAdmin={isAdmin} />
       break
     case 'meetings':
       view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />

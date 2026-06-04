@@ -9,6 +9,7 @@ const ADMIN_NAV = [
   ['home', 'Dashboard', 'grid'],
   ['reports', 'Reports', 'flag'],
   ['users', 'Users', 'shield'],
+  ['bans', 'Bans', 'ban'],
   ['categories', 'Categories', 'list'],
   ['allowlist', 'Allowlist', 'check'],
   ['announcements', 'Announcements', 'bell'],
@@ -96,7 +97,7 @@ function AdminReports() {
   )
 }
 
-const ROLES = ['Member', 'Ambassador', 'Admin']
+const ROLES = ['Newcomer', 'Member', 'Contributor', 'Ambassador', 'Moderator', 'Core', 'Admin']
 
 function AdminUsers() {
   const [users, setUsers] = useState([])
@@ -199,6 +200,41 @@ function AdminAllowlist() {
   )
 }
 
+function AdminBans() {
+  const [bans, setBans] = useState([])
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    supabase.from('bans').select('*').order('banned_at', { ascending: false })
+      .then(({ data }) => { if (data) setBans(data); setLoading(false) })
+  }, [])
+  const unban = async (identity) => {
+    await supabase.from('bans').delete().eq('identity', identity)
+    setBans(bs => bs.filter(b => b.identity !== identity))
+  }
+  return (
+    <>
+      <h1 className="admin-title">Chat bans</h1>
+      <p className="admin-sub">Users suspended from the general chat. Unban from here or directly in the chat.</p>
+      {loading && <p className="empty">Loading…</p>}
+      {!loading && bans.length === 0 && <p className="empty" style={{ color: '#10B981' }}>{I.check()} No active bans.</p>}
+      {!loading && bans.length > 0 && (
+        <div className="admin-table">
+          <div className="at-head"><span>User</span><span>Reason</span><span>Banned by</span><span>Date</span><span></span></div>
+          {bans.map(b => (
+            <div className="at-row" key={b.identity}>
+              <span className="at-user"><AmbassadorAvatar user={b.identity} size={28} link={false} /><b className="at-mono" style={{ fontSize: 12 }}>{b.identity.length > 16 ? b.identity.slice(0, 8) + '…' + b.identity.slice(-4) : b.identity}</b></span>
+              <span>{b.reason || <span style={{ opacity: .4 }}>—</span>}</span>
+              <span className="at-mono" style={{ fontSize: 12 }}>{b.banned_by ? b.banned_by.slice(0, 10) + '…' : '—'}</span>
+              <span style={{ fontSize: 12, opacity: .6 }}>{new Date(b.banned_at).toLocaleDateString()}</span>
+              <span><button className="pill pill-line" style={{ padding: '4px 12px', fontSize: 12 }} onClick={() => unban(b.identity)}>Desbanear</button></span>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
+
 function AdminAnnouncements() {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -242,6 +278,7 @@ export function AdminView({ section, posts = [], ambassadors = [] }) {
         {sec === 'home' && <AdminHome posts={posts} ambassadors={ambassadors} />}
         {sec === 'reports' && <AdminReports />}
         {sec === 'users' && <AdminUsers />}
+        {sec === 'bans' && <AdminBans />}
         {sec === 'categories' && <AdminCategories />}
         {sec === 'allowlist' && <AdminAllowlist />}
         {sec === 'announcements' && <AdminAnnouncements />}

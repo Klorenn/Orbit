@@ -336,6 +336,17 @@ export const USER_BADGES = {
   'you.fil':['first-report','storage','mentor'],
 }
 
+export const RANKS = [
+  { min: 0,    label: 'Newcomer',          color: '#8A8F98' },
+  { min: 50,   label: 'Member',            color: '#0090FF' },
+  { min: 250,  label: 'Contributor',       color: '#10B981' },
+  { min: 600,  label: 'Ambassador',        color: '#A855F7' },
+  { min: 1200, label: 'Senior Ambassador', color: '#FF9500' },
+  { min: 2500, label: 'Veteran',           color: '#FFD60A' },
+]
+export const rankOf = (karma = 0) =>
+  [...RANKS].reverse().find(r => karma >= r.min) || RANKS[0]
+
 export const karmaBreakdown = (u) => {
   const total = u.karma || 0
   return [

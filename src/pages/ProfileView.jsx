@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { AMBASSADORS, BANNERS, who } from '../data/constants'
+import { AMBASSADORS, BANNERS, SUPER_ADMIN, who, rankOf } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -13,6 +13,8 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   const isMe = whoId === 'me' || whoId === 'you.fil'
   const [fetchedProfile, setFetchedProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  const [theirPosts, setTheirPosts] = useState([])
+  const [realKarma, setRealKarma] = useState(null)
   const [eventsCount, setEventsCount] = useState(0)
   const [followersCount, setFollowersCount] = useState(0)
   const [followingCount, setFollowingCount] = useState(0)
@@ -23,45 +25,37 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   useEffect(() => {
     setProfileLoading(true)
     setFetchedProfile(null)
-    async function loadProfile() {
+    setTheirPosts([])
+    setRealKarma(null)
+    async function load() {
       const target = isMe ? myIdentity : whoId
       if (!target) { setProfileLoading(false); return }
-      const { data } = await supabase
-        .from('public_profiles')
-        .select('*')
-        .eq('identity', target)
-        .maybeSingle()
-      if (data) setFetchedProfile(data)
+
+      const [profileRes, postsRes, rsvpRes, frsRes, fngRes] = await Promise.all([
+        supabase.from('public_profiles').select('*').eq('identity', target).maybeSingle(),
+        supabase.from('posts').select('*').eq('author', target).order('created_at', { ascending: false }),
+        supabase.from('rsvps').select('*', { count: 'exact', head: true }).eq('attendee', target),
+        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following', target),
+        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('follower', target),
+      ])
+
+      if (profileRes.data) setFetchedProfile(profileRes.data)
+      if (postsRes.data) {
+        const enriched = postsRes.data.map(p => ({ ...p, comments: p.comments || [], upvoted: false }))
+        setTheirPosts(enriched)
+        const karma = enriched.reduce((s, p) => s + (p.upvotes || 0), 0)
+        setRealKarma(karma)
+        // sync karma in DB if it drifted
+        if (profileRes.data && profileRes.data.karma !== karma) {
+          supabase.from('public_profiles').update({ karma }).eq('identity', target)
+        }
+      }
+      if (rsvpRes.count != null) setEventsCount(rsvpRes.count)
+      if (frsRes.count != null) setFollowersCount(frsRes.count)
+      if (fngRes.count != null) setFollowingCount(fngRes.count)
       setProfileLoading(false)
     }
-    loadProfile()
-  }, [whoId, isMe, myIdentity])
-
-  useEffect(() => {
-    async function loadEventsCount() {
-      const identity = isMe ? myIdentity : whoId
-      if (!identity) return
-      const { count } = await supabase
-        .from('rsvps')
-        .select('*', { count: 'exact', head: true })
-        .eq('attendee', identity)
-      if (count != null) setEventsCount(count)
-    }
-    loadEventsCount()
-  }, [whoId, isMe, myIdentity])
-
-  useEffect(() => {
-    async function loadFollowCounts() {
-      const identity = isMe ? myIdentity : whoId
-      if (!identity) return
-      const [{ count: frs }, { count: fng }] = await Promise.all([
-        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following', identity),
-        supabase.from('follows').select('*', { count: 'exact', head: true }).eq('follower', identity),
-      ])
-      if (frs != null) setFollowersCount(frs)
-      if (fng != null) setFollowingCount(fng)
-    }
-    loadFollowCounts()
+    load()
   }, [whoId, isMe, myIdentity])
 
   const truncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 6) + '...' + addr.slice(-4) : addr
@@ -87,13 +81,15 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         socials: typeof fetchedProfile.socials === 'object' ? fetchedProfile.socials : {},
         banner: fetchedProfile.banner || staticU.banner,
         color: fetchedProfile.avatar || staticU.color || 'blue',
-        karma: fetchedProfile.karma ?? 0,
+        karma: realKarma ?? fetchedProfile.karma ?? 0,
         role: fetchedProfile.role || staticU.role || 'Member',
       }
-    : staticU
+    : { ...staticU, karma: realKarma ?? staticU.karma ?? 0 }
 
-  const authorKey = isMe ? (myIdentity || who('you.fil').name) : whoId
-  const theirPosts = posts.filter(p => p.author === authorKey)
+  const isAdmin = resolvedIdentity && (
+    resolvedIdentity.toLowerCase() === SUPER_ADMIN ||
+    u.role === 'Admin'
+  )
   const banner = BANNERS.find(b => b.id === u.banner) || null
   const isFollowing = !isMe && following.includes(whoId)
 
@@ -103,9 +99,14 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
       <div className={'profile-hero' + (banner ? ' has-banner' : '')} style={banner ? { backgroundImage: 'url(' + banner.src + ')' } : null}>
         {banner ? <div className="ph-banner-scrim"></div> : <div className="ph-stars"><Stars n={14} /></div>}
         <div className="ph-row">
-          <AmbassadorAvatar user={isMe ? 'you.fil' : whoId} size={88} link={false} nft />
+          <AmbassadorAvatar user={isMe ? 'you.fil' : whoId} size={88} link={false} nft color={isMe ? myAvatar : u.color} />
           <div className="ph-info">
-            <div className="ph-name">{u.name} {u.role && u.role !== 'Member' && <span className="role" data-role={u.role}>{u.role}</span>}</div>
+            <div className="ph-name">
+              {u.name}
+              {isAdmin && <span className="role" data-role="Admin">Admin</span>}
+              {!isAdmin && u.role && u.role !== 'Member' && <span className="role" data-role={u.role}>{u.role}</span>}
+              {(() => { const r = rankOf(u.karma); return <span className="rank-badge" style={{ background: r.color + '18', color: r.color }}>{r.label}</span> })()}
+            </div>
             {resolvedIdentity?.startsWith('0x') && (
               <button className="ph-addr-copy" onClick={copyAddr}>
                 {copied ? '✓ Copiado' : longTruncAddr(resolvedIdentity)}
@@ -150,8 +151,9 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         </div>
       </div>
       <div className="feed">
-        {theirPosts.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}
-        {theirPosts.length === 0 && <p className="empty">{t('noPostsYet')}{isMe && <> <a href="#/forum/new">{t('writeFirst')}</a></>}</p>}
+        {profileLoading && <p className="empty" style={{ opacity: .5 }}>Cargando…</p>}
+        {!profileLoading && theirPosts.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}
+        {!profileLoading && theirPosts.length === 0 && <p className="empty">{t('noPostsYet')}{isMe && <> <a href="#/forum/new">{t('writeFirst')}</a></>}</p>}
       </div>
     </div>
   )
