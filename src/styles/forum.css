@@ -526,7 +526,7 @@ a.prop { text-decoration: none; }
 .ap-grid { display: flex; gap: 14px; flex-wrap: wrap; }
 .ap-opt { position: relative; width: 76px; height: 76px; border-radius: 18px; border: 2px solid var(--line);
   background: var(--bg); display: grid; place-items: center; transition: border-color .15s, transform .15s, background .15s; }
-.ap-opt img { width: 60px; height: 60px; }
+.ap-opt img { width: 76px; height: 76px; object-fit: cover; object-position: center; border-radius: 16px; }
 .ap-opt:hover { transform: translateY(-3px); border-color: rgba(var(--ink-rgb),.25); }
 .ap-opt.on { border-color: var(--blue); background: rgba(0,144,255,.08); }
 .ap-check { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; background: var(--blue);
@@ -1301,7 +1301,7 @@ a.at-row:hover { background: rgba(var(--ink-rgb),.02); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .onb-avatars { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
 .onb-avatars .ap-opt { width: 64px; height: 64px; border-radius: 16px; border: 2px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); position: relative; display: grid; place-items: center; transition: border-color .15s, transform .15s; }
-.onb-avatars .ap-opt img { width: 50px; height: 50px; }
+.onb-avatars .ap-opt img { width: 64px; height: 64px; object-fit: cover; border-radius: 14px; }
 .onb-avatars .ap-opt:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.4); }
 .onb-avatars .ap-opt.on { border-color: var(--blue); background: rgba(0,144,255,.14); }
 .onb-avatars .ap-check { position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; border: 2px solid var(--space); }
