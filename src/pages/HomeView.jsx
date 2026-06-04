@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { CATEGORIES, ME, AMBASSADORS, BANNERS, TRENDING, PROP_STATUS, who } from '../data/constants'
+import { CATEGORIES, ME, AMBASSADORS, BANNERS, TRENDING, PROP_STATUS, who, rankOf } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -35,7 +35,7 @@ function Sidebar({ activeCat, counts }) {
 }
 
 /* ---------- right rail ---------- */
-function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
+function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myRole = 'Member' }) {
   const { t } = useT()
   const [tipOpen, setTipOpen] = useState(false)
   const tipRef = useRef(null)
@@ -43,6 +43,11 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
   const openTip = () => { clearTimeout(tipTimer.current); setTipOpen(true) }
   const closeTip = () => { tipTimer.current = setTimeout(() => setTipOpen(false), 120) }
   const banner = connected ? BANNERS.find(b=>b.id===who('you.fil').banner) : null
+  const ELEVATED = ['Admin', 'Moderator', 'Core']
+  const badgeLabel = ELEVATED.includes(myRole) ? myRole : rankOf(myKarma).label
+  const badgeColor = ELEVATED.includes(myRole)
+    ? (myRole === 'Admin' ? '#FF3B30' : myRole === 'Moderator' ? '#A855F7' : '#0090FF')
+    : rankOf(myKarma).color
   return (
     <aside className="rail sticky">
       {connected ? (
@@ -54,11 +59,11 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
           <span
             ref={tipRef}
             className="pc-nft"
-            style={{cursor:'help',position:'relative'}}
+            style={{cursor:'help',position:'relative', background: badgeColor + '22', color: badgeColor}}
             onMouseEnter={openTip}
             onMouseLeave={closeTip}
           >
-            {I.check()} {t('ambassadorBadge')}
+            {I.check()} {badgeLabel}
             {tipOpen && (
               <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
                 <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
@@ -128,7 +133,7 @@ function sortPosts(list, sort, following = []) {
 /* ============================================================
    VIEW: FORUM HOME
    ============================================================ */
-export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore }) {
+export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member' }) {
   const [sort, setSort] = useState('latest');
   const { t } = useT()
   const list = sortPosts(posts, sort, following);
@@ -165,7 +170,7 @@ export function HomeView({ posts, onVote, counts, proposals, connected, identity
           </div>
         )}
       </main>
-      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} />
+      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} myRole={myRole} />
     </div>
   );
 }

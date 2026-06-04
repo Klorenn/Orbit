@@ -3,10 +3,12 @@ import { who } from '../data/constants';
 import { AmbassadorAvatar } from './AmbassadorAvatar';
 import { Vote } from './Vote';
 import { CategoryBadge } from './CategoryBadge';
+import { useT } from '../hooks/useT';
 import { BookmarkBtn } from './BookmarkBtn';
 
 export function PostCard({ post, onVote }) {
   const u = who(post.author);
+  const { t } = useT();
   const commentCount = Array.isArray(post.comments) ? post.comments.length : 0;
   return (
     <a className="post" href={'#/forum/' + post.cat + '/' + post.id}>
@@ -27,7 +29,7 @@ export function PostCard({ post, onVote }) {
           {u.role && <span className="role">{u.role}</span>}
           <span className="dotsep meta-city-sep"></span>
           <span className="meta-city">{u.city}</span>
-          {post.time && <><span className="dotsep"></span><span>{post.time} ago</span></>}
+          {post.time && <><span className="dotsep"></span><span>{t('agoFormat').replace('{0}', post.time)}</span></>}
           <span className="dotsep"></span>
           <span className="cmtcount">{I.cmt()} {commentCount}</span>
           <span className="post-actions" onClick={e => e.preventDefault()}>

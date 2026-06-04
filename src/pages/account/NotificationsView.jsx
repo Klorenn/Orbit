@@ -38,7 +38,7 @@ export function NotificationsView({ notifications = [], markRead, markAllRead })
             <AmbassadorAvatar user={n.actor} size={36} link={false} />
             <div className="ni-body">
               <span className="ni-text"><b>{n.actor}</b> {n.text}</span>
-              <span className="ni-time">{timeAgo(n.created_at)} ago</span>
+              <span className="ni-time">{t('agoFormat').replace('{0}', timeAgo(n.created_at))}</span>
             </div>
             {n.unread && <span className="ni-dot"></span>}
           </a>

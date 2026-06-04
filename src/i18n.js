@@ -67,6 +67,8 @@ export const T = {
     tip_followers: 'Personas que siguen tu actividad en Orbit.',
     tip_following: 'Personas cuya actividad seguís en Orbit.',
 
+    agoFormat: 'hace {0}',
+
     // ── HOME / FEED ──────────────────────────────────────
     recentActivity: 'Actividad reciente',
     recentActivitySub: 'En todas las categorías · cualquiera lee, los miembros publican',
@@ -523,6 +525,8 @@ export const T = {
     tip_events: 'Governance events you attended.',
     tip_followers: 'People following your activity on Orbit.',
     tip_following: 'People whose activity you follow on Orbit.',
+
+    agoFormat: '{0} ago',
 
     // ── HOME / FEED ──────────────────────────────────────
     recentActivity: 'Recent activity',

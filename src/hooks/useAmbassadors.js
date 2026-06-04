@@ -25,7 +25,7 @@ export function useAmbassadors() {
           banner: p.banner || 'green',
           addr: p.identity,
           karma: p.karma || 0,
-          role: AMBASSADORS[p.identity]?.role || 'Ambassador',
+          role: p.role || 'Member',
         }
       })
       setProfiles(data)
@@ -46,7 +46,7 @@ export function useAmbassadors() {
       banner: p.banner || 'green',
       addr: p.identity,
       karma: p.karma || 0,
-      role: AMBASSADORS[p.identity]?.role || 'Ambassador',
+      role: p.role || 'Member',
     }))
 
   return { profiles, ambassadors: merged }

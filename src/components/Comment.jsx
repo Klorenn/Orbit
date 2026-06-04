@@ -49,7 +49,7 @@ export function Comment({ c, onReact, onReply, onDelete, identity, depth = 0 }) 
         <div className="ch">
           <span className="nm">{u.name}</span>
           {u.role && <span className="role">{u.role}</span>}
-          <span className="tm">· {c.time} ago</span>
+          <span className="tm">· {t('agoFormat').replace('{0}', c.time)}</span>
           {isAuthor && (
             <button className="icon-btn cmt-delete" onClick={handleDelete} title={t('deletePost')}>
               {I.trash({ width: 12, height: 12 })}

@@ -87,7 +87,7 @@ export function ThreadView({ cat, id, posts, connected, onConnect, onVote, onAdd
             <AmbassadorAvatar user={post.author} size={44} nft />
             <div>
               <div className="nm"><a href={'#/profile/' + u.name}>{u.name}</a> {u.role && <span className="role">{u.role}</span>}</div>
-              <div className="sub">{u.city} · {post.time} ago</div>
+              <div className="sub">{u.city} · {t('agoFormat').replace('{0}', post.time)}</div>
             </div>
             <Vote count={post.upvotes} voted={post.upvoted} onToggle={() => onVote(post.id)} row />
           </div>
