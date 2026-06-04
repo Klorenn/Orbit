@@ -351,7 +351,7 @@ export default function App() {
       view = <HomeView posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} />
       break
     case 'forum-category':
-      view = <CategoryView cat={route.cat} posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} />
+      view = <CategoryView cat={route.cat} posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} />
       break
     case 'forum-thread':
       view = <ThreadView cat={route.cat} id={route.id} posts={posts} connected={connected} identity={identity} onConnect={connect} onVote={vote} onAddComment={addComment} onReact={reactComment} onReply={replyComment} onReactPost={reactPost} onUpdate={updatePost} onDelete={deletePost} onDeleteComment={deleteComment} onReport={reportPost} />

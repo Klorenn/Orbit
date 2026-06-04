@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { CATEGORIES, ME, AMBASSADORS, BANNERS, TRENDING, PROP_STATUS, who, rankOf } from '../data/constants'
+import { CATEGORIES, ME, AMBASSADORS, BANNERS, TRENDING, PROP_STATUS, who, rankOf, navTo } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -13,12 +13,12 @@ function Sidebar({ activeCat, counts }) {
     <aside className="side sticky">
       <h4>{t('categories')}</h4>
       <div className="cat-list">
-        <a className={'cat'+(!activeCat?' active':'')} href="/forum">
+        <a className={'cat'+(!activeCat?' active':'')} href="/forum" onClick={e=>{e.preventDefault();navTo('/forum')}}>
           <span className="dot" style={{background:'#0A0A0A'}}></span>{t('allPosts')}
           <span className="ct">{counts.all}</span>
         </a>
         {CATEGORIES.map(c=>(
-          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id}>
+          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id} onClick={e=>{e.preventDefault();navTo('/forum/'+c.id)}}>
             <span className="dot" style={{background:c.color}}></span>{c.name}
             <span className="ct">{counts[c.id]||0}</span>
           </a>

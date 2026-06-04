@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { CATEGORIES, BANNERS, ME, PROP_STATUS, TRENDING, catOf, who } from '../data/constants'
+import { CATEGORIES, BANNERS, ME, PROP_STATUS, TRENDING, catOf, who, navTo, rankOf } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -13,12 +13,12 @@ function Sidebar({ activeCat, counts }) {
     <aside className="side sticky">
       <h4>{t('categories')}</h4>
       <div className="cat-list">
-        <a className={'cat'+(!activeCat?' active':'')} href="/forum">
+        <a className={'cat'+(!activeCat?' active':'')} href="/forum" onClick={e=>{e.preventDefault();navTo('/forum')}}>
           <span className="dot" style={{background:'#0A0A0A'}}></span>{t('allPosts')}
           <span className="ct">{counts.all}</span>
         </a>
         {CATEGORIES.map(c=>(
-          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id}>
+          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id} onClick={e=>{e.preventDefault();navTo('/forum/'+c.id)}}>
             <span className="dot" style={{background:c.color}}></span>{c.name}
             <span className="ct">{counts[c.id]||0}</span>
           </a>
@@ -35,11 +35,19 @@ function Sidebar({ activeCat, counts }) {
 }
 
 /* ---------- right rail ---------- */
-function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
+function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myRole = 'Member', tagColors = {} }) {
   const { t } = useT()
   const [tipOpen, setTipOpen] = useState(false)
   const tipRef = useRef(null)
+  const tipTimer = useRef(null)
+  const openTip = () => { clearTimeout(tipTimer.current); setTipOpen(true) }
+  const closeTip = () => { tipTimer.current = setTimeout(() => setTipOpen(false), 120) }
   const banner = connected ? BANNERS.find(b=>b.id===who('you.fil').banner) : null
+  const ELEVATED = ['Admin', 'Moderator', 'Core']
+  const badgeLabel = ELEVATED.includes(myRole) ? myRole : rankOf(myKarma).label
+  const badgeColor = tagColors[badgeLabel] || (ELEVATED.includes(myRole)
+    ? (myRole === 'Admin' ? '#FF3B30' : myRole === 'Moderator' ? '#A855F7' : '#0090FF')
+    : rankOf(myKarma).color)
   return (
     <aside className="rail sticky">
       {connected ? (
@@ -48,22 +56,26 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
           <AmbassadorAvatar user="you.fil" size={56} link={false} nft />
           <div className="pc-name">{ME.name}</div>
           {ME.addr && ME.addr !== ME.name && <div className="pc-addr">{ME.addr}</div>}
+          {(() => {
+            const tip = (t('badgeTip') || {})[badgeLabel] || (t('badgeTip') || {})['Ambassador'] || {}
+            return (
           <span
             ref={tipRef}
             className="pc-nft"
-            style={{cursor:'help',position:'relative'}}
-            onMouseEnter={()=>setTipOpen(true)}
-            onMouseLeave={()=>setTipOpen(false)}
+            style={{cursor:'help',position:'relative', background: badgeColor + '22', color: badgeColor}}
+            onMouseEnter={openTip}
+            onMouseLeave={closeTip}
           >
-            {I.check()} {t('ambassadorBadge')}
+            {I.check()} {badgeLabel}
             {tipOpen && (
-              <div className="nft-tip">
-                <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
-                <div className="nft-tip-body">{t('ambassadorTipBody')}</div>
-                <a className="nft-tip-link" href="/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
+              <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
+                <div className="nft-tip-title">{tip.title}</div>
+                <div className="nft-tip-body">{tip.body}</div>
               </div>
             )}
           </span>
+            )
+          })()}
           <div className="pc-grid">
             <div><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></div>
             <div><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></div>
@@ -120,7 +132,7 @@ function sortPosts(list, sort, following = []) {
 /* ============================================================
    VIEW: CATEGORY
    ============================================================ */
-export function CategoryView({ cat, posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore }) {
+export function CategoryView({ cat, posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member', tagColors = {} }) {
   const [sort, setSort] = useState('latest');
   const { t } = useT()
   const c = catOf(cat);
@@ -131,7 +143,7 @@ export function CategoryView({ cat, posts, onVote, counts, proposals, connected,
     <div className="shell">
       <Sidebar activeCat={cat} counts={counts} />
       <main>
-        <a className="back-link" href="/forum">{I.back()} {t('allCategories')}</a>
+        <a className="back-link" href="/forum" onClick={e=>{e.preventDefault();navTo('/forum')}}>{I.back()} {t('allCategories')}</a>
         <div className="feed-head" style={{marginTop:10}}>
           <div>
             <div className="feed-title" style={{display:'flex',alignItems:'center',gap:12}}>
@@ -154,7 +166,7 @@ export function CategoryView({ cat, posts, onVote, counts, proposals, connected,
           </div>
         )}
       </main>
-      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} />
+      <Rail proposals={proposals} connected={connected} myPosts={myPosts} myKarma={myKarma} myRole={myRole} tagColors={tagColors} />
     </div>
   );
 }
