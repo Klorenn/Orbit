@@ -288,6 +288,12 @@ export const BANNERS = [
   { id:'blackhole', label:'Event Horizon', src:'/assets/bn-blackhole.png' },
   { id:'sun',       label:'Solar Flare',   src:'/assets/bn-sun.png' },
   { id:'galaxy',    label:'Milky Way',     src:'/assets/bn-galaxy.jpg' },
+  { id:'nebula',    label:'Nébula Crimson', src:'/assets/bn-nebula.png' },
+  { id:'deep-space',label:'Deep Space',    src:'/assets/bn-deep-space.png' },
+  { id:'solar',     label:'Solar Flare',   src:'/assets/bn-solar.png' },
+  { id:'ice-planet',label:'Ice Giant',     src:'/assets/bn-ice-planet.png' },
+  { id:'supernova', label:'Supernova',     src:'/assets/bn-supernova.png' },
+  { id:'comet',     label:'Comet Trail',   src:'/assets/bn-comet.png' },
 ];
 
 export const NOTIFICATIONS = [

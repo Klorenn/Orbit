@@ -73,6 +73,7 @@ const toGenerate = target ? { [target]: BANNERS[target] } : BANNERS
 for (const [id, banner] of Object.entries(toGenerate)) {
   if (!banner) { console.error(`Unknown: ${id}`); continue }
   try {
+    await new Promise(r => setTimeout(r, 3000))
     process.stdout.write(`${id} (${banner.label})... `)
     const taskId = await generate(id, banner)
     const url = await poll(taskId, id)
