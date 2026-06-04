@@ -246,6 +246,7 @@ export const BANNERS = [
   { id:'neptune',   label:'Ice Giant',     src:'/assets/bn-neptune.png' },
   { id:'blackhole', label:'Event Horizon', src:'/assets/bn-blackhole.png' },
   { id:'sun',       label:'Solar Flare',   src:'/assets/bn-sun.png' },
+  { id:'galaxy',    label:'Milky Way',     src:'/assets/bn-galaxy.jpg' },
 ];
 
 export const NOTIFICATIONS = [
