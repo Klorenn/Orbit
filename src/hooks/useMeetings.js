@@ -61,5 +61,22 @@ export function useMeetings(identity) {
     return result
   }, [identity])
 
-  return { meetings, setMeetings, joinMeeting, leaveMeeting, proposeMeeting }
+  const deleteMeeting = useCallback(async (id) => {
+    setMeetings(ms => ms.filter(m => m.id !== id))
+    await supabase.from('meetings').delete().eq('id', id)
+  }, [])
+
+  const updateMeeting = useCallback(async (id, updates) => {
+    setMeetings(ms => ms.map(m => m.id !== id ? m : { ...m, ...updates }))
+    await supabase.from('meetings').update({
+      title: updates.title,
+      description: updates.desc || updates.description || '',
+      kind: updates.kind,
+      when_label: updates.when,
+      duration_min: updates.durationMin || 50,
+      capacity: updates.capacity || null,
+    }).eq('id', id)
+  }, [])
+
+  return { meetings, setMeetings, joinMeeting, leaveMeeting, proposeMeeting, deleteMeeting, updateMeeting }
 }

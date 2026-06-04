@@ -41,17 +41,23 @@ function AvatarStack({ names, max = 5, size = 30 }) {
 /* ============================================================
    MEETINGS LIST
    ============================================================ */
-export function MeetingsView({ meetings, onJoin }) {
+export function MeetingsView({ meetings, onJoin, onDelete, onEdit, identity, myKarma = 0, myRole = 'Member', isAdmin = false }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const { t } = useT()
   const live = meetings.filter(m => m.status === 'live');
   const upcoming = meetings.filter(m => m.status === 'upcoming');
   const past = meetings.filter(m => m.status === 'ended');
+  const ELEVATED = ['Admin', 'Moderator', 'Core']
+  const canCreate = myKarma >= 50 || ELEVATED.includes(myRole)
 
   const Card = ({ m }) => {
     const h = meetingHost(m);
     const color = MEETING_KIND[m.kind] || '#0090FF';
-    const joined = m.attendees.includes('you.fil');
+    const joined = m.attendees.includes(identity || 'you.fil');
+    const isHost = identity && (identity === m.host || isAdmin)
+    const handleDelete = () => {
+      if (window.confirm(t('confirmDeleteMeeting') || 'Delete this meeting?')) onDelete && onDelete(m.id)
+    }
     return (
       <div className={'meet-card' + (m.status === 'live' ? ' is-live' : '')}>
         <div className="mc-top">
@@ -59,6 +65,12 @@ export function MeetingsView({ meetings, onJoin }) {
           {m.status === 'live' && <span className="live-badge"><span className="live-dot"></span>{t('liveNow')}</span>}
           {m.status === 'upcoming' && <span className="meet-when">{I.cal({ width: 14, height: 14 })} {m.when}</span>}
           {m.status === 'ended' && <span className="meet-when ended">{t('endedLabel')} · {m.when}</span>}
+          {isHost && m.status !== 'ended' && (
+            <div className="mc-host-actions">
+              <button className="mc-host-btn" onClick={() => onEdit && onEdit(m)} title={t('editMeeting') || 'Edit'}>{I.edit()}</button>
+              <button className="mc-host-btn mc-host-del" onClick={handleDelete} title={t('deleteMeeting') || 'Delete'}>×</button>
+            </div>
+          )}
         </div>
         <a className="mc-title" href={'/meetings/' + m.id}>{m.title}</a>
         <p className="mc-desc">{m.desc}</p>
@@ -88,7 +100,10 @@ export function MeetingsView({ meetings, onJoin }) {
           <h1 className="page-title">{I.video({ width: 26, height: 26 })} {t('meetingsTitle')}</h1>
           <p className="page-sub" style={{ marginBottom: 0 }}>{t('meetingsSub')}</p>
         </div>
-        <a className="pill pill-solid" href="/meetings/new">{I.plus()} {t('proposeMeetingTitle')}</a>
+        {canCreate
+          ? <a className="pill pill-solid" href="/meetings/new">{I.plus()} {t('proposeMeetingTitle')}</a>
+          : <span className="pill pill-line" style={{ opacity: .5, cursor: 'not-allowed' }} title={t('meetingCreateRankHint') || 'Member rank required (50 karma)'}>{I.plus()} {t('proposeMeetingTitle')}</span>
+        }
       </div>
 
       {live.length > 0 && <>
@@ -212,19 +227,24 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
    PROPOSE A MEETING
    ============================================================ */
 const MEET_KINDS = ['Community', 'Proposal', 'Workshop', 'Admin'];
-export function ProposeMeetingView({ connected, onConnect, onPublish }) {
+export function ProposeMeetingView({ connected, onConnect, onPublish, initialMeeting = null, onUpdate }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const { t } = useT()
-  const [title, setTitle] = useState('');
-  const [kind, setKind] = useState('Community');
-  const [when, setWhen] = useState('');
-  const [cap, setCap] = useState('30');
-  const [desc, setDesc] = useState('');
+  const isEditing = !!initialMeeting
+  const [title, setTitle] = useState(initialMeeting?.title || '');
+  const [kind, setKind] = useState(initialMeeting?.kind || 'Community');
+  const [when, setWhen] = useState(initialMeeting?.when || '');
+  const [cap, setCap] = useState(String(initialMeeting?.capacity || '30'));
+  const [desc, setDesc] = useState(initialMeeting?.desc || '');
   const [startNow, setStartNow] = useState(false);
-  const canPost = title.trim() && (startNow || when.trim());
+  const canPost = title.trim() && (isEditing || startNow || when.trim());
   const submit = () => {
     if (!canPost) return;
     if (!connected) { onConnect(); return; }
+    if (isEditing) {
+      onUpdate && onUpdate(initialMeeting.id, { title: title.trim(), kind, when: when.trim(), capacity: Number(cap) || null, desc: desc.trim() });
+      return;
+    }
     onPublish({
       id: 'm' + Date.now(), title: title.trim(), kind,
       when: startNow ? t('nowJustStarted') : when.trim(),
@@ -238,7 +258,7 @@ export function ProposeMeetingView({ connected, onConnect, onPublish }) {
   return (
     <div className="page-wrap compose">
       <a className="back-link" href="/meetings">{I.back()} {t('proposeMeetingBack')}</a>
-      <h1 className="page-title">{t('proposeMeetingTitle')}</h1>
+      <h1 className="page-title">{isEditing ? (t('editMeeting') || 'Edit meeting') : t('proposeMeetingTitle')}</h1>
       <p className="page-sub">{t('meetingsHostSub')}</p>
 
       <div className="field">
@@ -249,13 +269,21 @@ export function ProposeMeetingView({ connected, onConnect, onPublish }) {
         <label>{t('typeLabel')}</label>
         <div className="type-row">{MEET_KINDS.map(k => <button key={k} className={kind === k ? 'on' : ''} onClick={() => setKind(k)}>{k}</button>)}</div>
       </div>
-      <div className="field">
-        <label>{t('meetingWhenLabel')}</label>
-        <div className="when-row">
-          <label className={'now-toggle' + (startNow ? ' on' : '')}><input type="checkbox" checked={startNow} onChange={e => setStartNow(e.target.checked)} /><span className="live-dot"></span>{t('startLiveNow')}</label>
-          {!startNow && <input type="text" value={when} onChange={e => setWhen(e.target.value)} placeholder={t('meetingWhenPlaceholder')} />}
+      {!isEditing && (
+        <div className="field">
+          <label>{t('meetingWhenLabel')}</label>
+          <div className="when-row">
+            <label className={'now-toggle' + (startNow ? ' on' : '')}><input type="checkbox" checked={startNow} onChange={e => setStartNow(e.target.checked)} /><span className="live-dot"></span>{t('startLiveNow')}</label>
+            {!startNow && <input type="text" value={when} onChange={e => setWhen(e.target.value)} placeholder={t('meetingWhenPlaceholder')} />}
+          </div>
         </div>
-      </div>
+      )}
+      {isEditing && (
+        <div className="field">
+          <label>{t('meetingWhenLabel')}</label>
+          <input type="text" value={when} onChange={e => setWhen(e.target.value)} placeholder={t('meetingWhenPlaceholder')} />
+        </div>
+      )}
       <div className="field">
         <label>{t('meetingCapacityLabel')}</label>
         <input type="number" value={cap} onChange={e => setCap(e.target.value)} min="2" max="500" style={{ maxWidth: 140 }} />
@@ -266,7 +294,9 @@ export function ProposeMeetingView({ connected, onConnect, onPublish }) {
       </div>
       <div className="compose-foot">
         <span className="note">{I.shield()} {t('hostedAs')} {ME.name} · {t('visibleToAll')}</span>
-        <button className="pill pill-blue" onClick={submit} style={{ opacity: canPost ? 1 : .5, padding: '11px 24px' }}>{startNow ? t('startMeeting') : t('scheduleMeeting')}</button>
+        <button className="pill pill-blue" onClick={submit} style={{ opacity: canPost ? 1 : .5, padding: '11px 24px' }}>
+          {isEditing ? (t('editMeeting') || 'Save changes') : (startNow ? t('startMeeting') : t('scheduleMeeting'))}
+        </button>
       </div>
     </div>
   );

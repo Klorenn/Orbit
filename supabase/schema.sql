@@ -173,6 +173,7 @@ alter table meetings enable row level security;
 create policy "meetings are public"        on meetings for select using (true);
 create policy "anyone can propose meeting" on meetings for insert with check (true);
 create policy "host can update meeting"    on meetings for update using (auth.jwt()->>'sub' = host or auth.email() = host);
+create policy "host can delete meeting"    on meetings for delete using (auth.jwt()->>'sub' = host or auth.email() = host);
 
 -- Meeting attendees
 create table if not exists meeting_attendees (

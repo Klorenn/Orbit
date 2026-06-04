@@ -89,6 +89,7 @@ function parseHash() {
   if (seg[0] === 'chat') return { view: 'chat' };
   if (seg[0] === 'meetings') {
     if (seg[1] === 'new') return { view: 'meeting-new' };
+    if (seg[1] === 'edit') return { view: 'meeting-edit' };
     if (seg[1]) return { view: 'meeting-room', id: seg[1] };
     return { view: 'meetings' };
   }
@@ -113,7 +114,8 @@ export default function App() {
   ))
   const { events, myRsvps, rsvp, cancelRsvp } = useEvents(identity)
   const { proposals } = useProposals(posts)
-  const { meetings, joinMeeting: _joinMeeting, leaveMeeting, proposeMeeting } = useMeetings(identity)
+  const { meetings, joinMeeting: _joinMeeting, leaveMeeting, proposeMeeting, deleteMeeting, updateMeeting } = useMeetings(identity)
+  const [editingMeeting, setEditingMeeting] = useState(null)
   const { ambassadors } = useAmbassadors()
   const { tagColors, saveTagColors } = useForumConfig()
   const { notifications, markRead, markAllRead } = useNotifications(identity)
@@ -410,13 +412,31 @@ export default function App() {
       view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('/connect')} isAdmin={isAdmin} />
       break
     case 'meetings':
-      view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />
+      view = <MeetingsView
+        meetings={meetings}
+        onJoin={joinMeeting}
+        onDelete={async (id) => { await deleteMeeting(id); flash(t('deleteMeeting') || 'Meeting deleted') }}
+        onEdit={(m) => { setEditingMeeting(m); navTo('/meetings/edit') }}
+        identity={identity}
+        myKarma={myProfile?.karma || 0}
+        myRole={myProfile?.role || 'Member'}
+        isAdmin={isAdmin}
+      />
       break
     case 'meeting-room':
       view = <MeetingRoomView id={route.id} meetings={meetings} onJoin={joinMeeting} onLeave={leaveMeeting} />
       break
     case 'meeting-new':
       view = <ProposeMeetingView connected={connected} onConnect={() => navTo('/connect')} onPublish={async (m) => { await proposeMeeting(m); navTo('/meetings') }} />
+      break
+    case 'meeting-edit':
+      view = <ProposeMeetingView
+        connected={connected}
+        onConnect={() => navTo('/connect')}
+        onPublish={async (m) => { await proposeMeeting(m); navTo('/meetings') }}
+        initialMeeting={editingMeeting}
+        onUpdate={async (id, updates) => { await updateMeeting(id, updates); setEditingMeeting(null); navTo('/meetings') }}
+      />
       break
     case 'onboarding':
       view = <OnboardingView onFinish={(data) => {
