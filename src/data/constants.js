@@ -303,7 +303,14 @@ export const BANNERS = [
   { id:'redplanet', label:'Red Desert',    src:'/assets/bn-redplanet.png' },
   { id:'stormplanet',label:'Storm World',  src:'/assets/bn-stormplanet.png' },
   { id:'galaxy2',   label:'Spiral Galaxy', src:'/assets/bn-galaxy.png' },
-  { id:'filecoin',  label:'Circuit Orbit', src:'/assets/bn-filecoin.png' },
+  { id:'filecoin',   label:'Circuit Orbit',  src:'/assets/bn-filecoin.png' },
+  { id:'wormhole',   label:'Wormhole',       src:'/assets/bn-wormhole.png' },
+  { id:'pulsar',     label:'Pulsar',         src:'/assets/bn-pulsar.png' },
+  { id:'ringworld',  label:'Ring World',     src:'/assets/bn-ringworld.png' },
+  { id:'twin-stars', label:'Binary Stars',   src:'/assets/bn-twin-stars.png' },
+  { id:'ocean-world',label:'Ocean World',    src:'/assets/bn-ocean-world.png' },
+  { id:'lava-world', label:'Lava World',     src:'/assets/bn-lava-world.png' },
+  { id:'eclipse',    label:'Eclipse',        src:'/assets/bn-eclipse.png' },
 ];
 
 export const NOTIFICATIONS = [
