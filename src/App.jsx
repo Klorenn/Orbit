@@ -47,10 +47,10 @@ import { ChatView } from './pages/ChatView'
 import './styles/forum.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
-/* ---------- hash router ---------- */
+/* ---------- path router ---------- */
 function parseHash() {
   if (window.location.hash.includes('access_token=')) return { view: 'forum-home' };
-  let h = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '');
+  let h = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
   const seg = h.split('/').filter(Boolean);
   if (seg.length === 0) return { view: 'landing' };
   if (seg[0] === 'forum') {
@@ -145,10 +145,9 @@ export default function App() {
   const setMyProfile = (updates) => { saveProfile(updates); flash(t('flashProfileSaved')) }
 
   useEffect(() => {
-    const onHash = () => setRoute(parseHash())
-    window.addEventListener('hashchange', onHash)
-    if (!window.location.hash) window.location.hash = '#/'
-    return () => window.removeEventListener('hashchange', onHash)
+    const onPop = () => setRoute(parseHash())
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
   }, [])
 
   const flash = (msg) => {
@@ -171,16 +170,16 @@ export default function App() {
     const hasProfile = myProfile && (myProfile.bio || myProfile.city || myProfile.handle)
     if (hasProfile) { localStorage.setItem('orbit-onboarded', 'true'); return }
     const safe = ['onboarding', 'connect', 'landing', 'maintenance']
-    if (!safe.includes(route.view)) navTo('#/onboarding')
+    if (!safe.includes(route.view)) navTo('/onboarding')
   }, [connected, route.view])
 
   const joinMeeting = (id) => {
     if (!connected) { flash(t('flashConnectToJoin')); return }
     _joinMeeting(id)
-    navTo('#/meetings/' + id)
+    navTo('/meetings/' + id)
   }
 
-  const connect = () => navTo('#/connect')
+  const connect = () => navTo('/connect')
 
   const vote = async (id) => {
     if (!connected) { flash(t('flashConnectToVote')); return }
@@ -195,7 +194,7 @@ export default function App() {
           actor: identity,
           postId: id,
           text: t('notifUpvoted') + ' ' + post.title,
-          link: '#/forum/' + post.cat + '/' + id,
+          link: '/forum/' + post.cat + '/' + id,
         })
       }
       setPosts(ps => ps.map(p => p.id === id
@@ -255,7 +254,7 @@ export default function App() {
             actor: identity,
             postId: pid,
             text: t('notifCommented') + ' ' + p.title,
-            link: '#/forum/' + p.cat + '/' + pid,
+            link: '/forum/' + p.cat + '/' + pid,
           })
         }
         return { ...p, comments: [...(p.comments || []), { ...comment, reactions: {}, replies: [] }] }
@@ -299,7 +298,7 @@ export default function App() {
         })
       }
       flash(t('flashPostPublished'))
-      navTo('#/forum/' + data.cat + '/' + post.id)
+      navTo('/forum/' + data.cat + '/' + post.id)
     } catch (e) {
       flash('Publish failed: ' + e.message)
     }
@@ -307,7 +306,7 @@ export default function App() {
 
   const signOut = async () => {
     await authSignOut()
-    navTo('#/')
+    navTo('/')
     flash(t('flashSignedOut'))
   }
 
@@ -322,7 +321,7 @@ export default function App() {
         actor: identity,
         postId: null,
         text: t('notifFollowed'),
-        link: '#/profile/' + encodeURIComponent(identity),
+        link: '/profile/' + encodeURIComponent(identity),
       })
     }
   }
@@ -342,7 +341,7 @@ export default function App() {
   const counts = { all: posts.length, ambassadors: ambassadors.length }
   CATEGORIES.forEach(c => counts[c.id] = posts.filter(p => p.cat === c.id).length)
 
-  const goCompose = () => navTo('#/forum/new')
+  const goCompose = () => navTo('/forum/new')
 
   let view
   switch (route.view) {
@@ -406,7 +405,7 @@ export default function App() {
       view = <ConnectView connected={connected} />
       break
     case 'chat':
-      view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('#/connect')} isAdmin={isAdmin} />
+      view = <ChatView connected={connected} identity={identity} onConnect={() => navTo('/connect')} isAdmin={isAdmin} />
       break
     case 'meetings':
       view = <MeetingsView meetings={meetings} onJoin={joinMeeting} />
@@ -415,7 +414,7 @@ export default function App() {
       view = <MeetingRoomView id={route.id} meetings={meetings} onJoin={joinMeeting} onLeave={leaveMeeting} />
       break
     case 'meeting-new':
-      view = <ProposeMeetingView connected={connected} onConnect={() => navTo('#/connect')} onPublish={async (m) => { await proposeMeeting(m); navTo('#/meetings') }} />
+      view = <ProposeMeetingView connected={connected} onConnect={() => navTo('/connect')} onPublish={async (m) => { await proposeMeeting(m); navTo('/meetings') }} />
       break
     case 'onboarding':
       view = <OnboardingView onFinish={(data) => {
@@ -423,7 +422,7 @@ export default function App() {
         setMyProfile({ ...data.profile, handle: data.profile.handle || '' })
         localStorage.setItem('orbit-onboarded', 'true')
         flash(t('flashWelcome'))
-        navTo('#/forum')
+        navTo('/forum')
       }} />
       break
     case 'saved':
@@ -460,8 +459,8 @@ export default function App() {
           myAvatar={myAvatar}
           isAdmin={isAdmin}
           onCompose={goCompose}
-          onConnect={() => navTo('#/connect')}
-          onWallet={() => navTo('#/profile/me')}
+          onConnect={() => navTo('/connect')}
+          onWallet={() => navTo('/profile/me')}
           onSignOut={signOut}
           unread={unread}
         />

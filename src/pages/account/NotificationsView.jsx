@@ -20,7 +20,7 @@ export function NotificationsView({ notifications = [], markRead, markAllRead })
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/profile/me">{I.back()} {t('backToProfile')}</a>
+      <a className="back-link" href="/profile/me">{I.back()} {t('backToProfile')}</a>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>{t('notificationsTitle')}</h1>
         {notifications.some(n => n.unread) && (
@@ -32,7 +32,7 @@ export function NotificationsView({ notifications = [], markRead, markAllRead })
         {notifications.length === 0 && <p className="empty">{t('noNotifications')}</p>}
         {notifications.map(n => (
           <a key={n.id} className={'notif-row' + (n.unread ? ' unread' : '')}
-            href={n.link || '#/forum'}
+            href={n.link || '/forum'}
             onClick={() => n.unread && markRead(n.id)}>
             <span className={'ni-ic ni-' + n.type}>{I[NOTIF_ICON[n.type] || 'bell']()}</span>
             <AmbassadorAvatar user={n.actor} size={36} link={false} />

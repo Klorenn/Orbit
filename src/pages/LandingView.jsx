@@ -131,7 +131,7 @@ function LandingChip({ identity, myAvatar, onSignOut, lang }) {
       </button>
       {open && (
         <div className="ln-menu">
-          <a className="ln-item" href="#/forum" onClick={() => setOpen(false)}>{t.forum} →</a>
+          <a className="ln-item" href="/forum" onClick={() => setOpen(false)}>{t.forum} →</a>
           <button className="ln-item ln-disconnect" onClick={() => { setOpen(false); onSignOut() }}>{t.disconnect}</button>
         </div>
       )}
@@ -205,7 +205,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
     const handleAnchor = (e) => {
       const a = e.currentTarget
       const id = a.getAttribute('href')
-      if (!id || id.length < 2 || id.startsWith('#/')) return
+      if (!id || id.length < 2 || id.startsWith('/')) return
       const target = document.querySelector(id)
       if (!target) return
       e.preventDefault()
@@ -230,7 +230,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
       <div className="hero-wrap">
         <nav className="nav">
           <div className="inner nav-row">
-            <a className="brand" href="#/forum" aria-label="Orbit — enter forum">
+            <a className="brand" href="/forum" aria-label="Orbit — enter forum">
               <svg className="logo" width="38" height="38" viewBox="0 0 256 256" fill="none" aria-hidden="true">
                 <ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" />
                 <circle cx="128" cy="128" r="33" fill="currentColor" />
@@ -248,7 +248,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
             {connected ? (
               <LandingChip identity={identity} myAvatar={myAvatar} onSignOut={onSignOut} lang={lang} />
             ) : (
-              <button className="nav-pill" type="button" onClick={() => { window.location.hash = '#/forum' }}>
+              <button className="nav-pill" type="button" onClick={() => { window.location.hash = '/forum' }}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="2.5" y="6" width="19" height="13" rx="3" stroke="currentColor" strokeWidth="2" />
                   <path d="M2.5 10h19" stroke="currentColor" strokeWidth="2" /><circle cx="17" cy="14.5" r="1.4" fill="currentColor" />
@@ -270,7 +270,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
               <span className="hero-eyebrow reveal"><span className="dot"></span>{tl.heroEyebrow}</span>
               <h1 className="display reveal" data-delay="1">{tl.heroH1}</h1>
               <p className="sub reveal" data-delay="2">{tl.heroP}</p>
-              <a className="btn btn-arrow on-light reveal" data-delay="3" href="#/forum">
+              <a className="btn btn-arrow on-light reveal" data-delay="3" href="/forum">
                 {connected ? tl.cta : tl.ctaGuest}
                 <span className="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
               </a>
@@ -422,7 +422,7 @@ export function LandingView({ connected, identity, myAvatar, onSignOut }) {
         <div className="inner">
           <div className="join-card reveal">
             <img className="join-art" src="/assets/ready-voice-v3.png" alt="Ready to add your voice? Report, propose, debate, research and connect — all through Orbit." />
-            <a className="btn btn-arrow on-light join-cta" href="#/forum">
+            <a className="btn btn-arrow on-light join-cta" href="/forum">
               {tl.joinCta}
               <span className="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
             </a>

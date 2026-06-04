@@ -45,7 +45,7 @@ export function SearchView({ q, posts, onVote, ambassadors: propAmbassadors }) {
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('searchTitle')}</h1>
       <div className="amb-search big">{I.search()}<input autoFocus placeholder={t('searchPlaceholder')} value={query} onChange={e => setQuery(e.target.value)} /></div>
       {!ql && <p className="empty">{t('typeToSearch')}</p>}
@@ -55,7 +55,7 @@ export function SearchView({ q, posts, onVote, ambassadors: propAmbassadors }) {
             <h3 className="section-h">{t('ambassadorsSection')} · {ambHits.length}</h3>
             <div className="amb-grid">
               {ambHits.map(u => (
-                <a key={u.name} className="amb-card" href={'#/profile/' + u.name}>
+                <a key={u.name} className="amb-card" href={'/profile/' + u.name}>
                   <AmbassadorAvatar user={u.name} size={48} link={false} nft />
                   <div className="amb-info"><div className="amb-name">{u.name}</div><div className="amb-city">{u.city}</div></div>
                 </a>

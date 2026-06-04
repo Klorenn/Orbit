@@ -45,7 +45,7 @@ function AdminHome({ posts = [], ambassadors = [] }) {
       <div className="admin-table">
         <div className="at-head"><span>Post ID</span><span>Reason</span><span>Reporter</span><span>Status</span></div>
         {openFlags.map(f => (
-          <a key={f.id} className="at-row" href="#/admin/reports">
+          <a key={f.id} className="at-row" href="/admin/reports">
             <span className="at-strong">{String(f.post_id).slice(0, 8)}…</span><span>{f.reason}</span><span>{f.reporter ? String(f.reporter).slice(0, 10) + '…' : '—'}</span>
             <span><span className="status-pill" style={{ background: FSTATUS_COLOR[f.status] + '22', color: FSTATUS_COLOR[f.status] }}>● {f.status}</span></span>
           </a>
@@ -53,8 +53,8 @@ function AdminHome({ posts = [], ambassadors = [] }) {
         {openFlags.length === 0 && <div className="at-row"><span style={{ color: '#10B981' }}>{I.check()} All clear — no open flags</span></div>}
       </div>
       <div className="admin-quick">
-        <a href="#/admin/announcements" className="pill pill-solid">{I.bell()} Post announcement</a>
-        <a href="#/admin/allowlist" className="pill pill-line">{I.check()} Manage allowlist</a>
+        <a href="/admin/announcements" className="pill pill-solid">{I.bell()} Post announcement</a>
+        <a href="/admin/allowlist" className="pill pill-line">{I.check()} Manage allowlist</a>
       </div>
     </>
   )
@@ -270,9 +270,9 @@ export function AdminView({ section, posts = [], ambassadors = [] }) {
       <aside className="admin-side">
         <div className="admin-brand">{I.grid()} <span>Moderation</span></div>
         {ADMIN_NAV.map(([k, l, ic]) => (
-          <a key={k} href={'#/admin' + (k === 'home' ? '' : '/' + k)} className={sec === k ? 'on' : ''}>{I[ic]()} {l}</a>
+          <a key={k} href={'/admin' + (k === 'home' ? '' : '/' + k)} className={sec === k ? 'on' : ''}>{I[ic]()} {l}</a>
         ))}
-        <a href="#/forum" className="admin-exit">{I.back()} Exit to forum</a>
+        <a href="/forum" className="admin-exit">{I.back()} Exit to forum</a>
       </aside>
       <main className="admin-main">
         {sec === 'home' && <AdminHome posts={posts} ambassadors={ambassadors} />}

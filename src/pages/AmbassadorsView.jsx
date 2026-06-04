@@ -19,7 +19,7 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('ambassadorsTitle')}</h1>
       <p className="page-sub">{all.length} {t('ambassadorsSubCount')}</p>
       <div className="amb-search">{I.search()}<input placeholder={t('searchByNameCity')} value={q} onChange={e => setQ(e.target.value)} /></div>
@@ -27,7 +27,7 @@ export function AmbassadorsView({ posts, ambassadors: propAmbassadors }) {
         {list.map(u => {
           const key = u.identity || u.name
           return (
-            <a key={key} className="amb-card" href={'#/profile/' + encodeURIComponent(key)}>
+            <a key={key} className="amb-card" href={'/profile/' + encodeURIComponent(key)}>
               <AmbassadorAvatar user={key} size={56} link={false} nft />
               <div className="amb-info">
                 <div className="amb-name">{u.name}</div>

@@ -121,7 +121,7 @@ export function BlogView() {
 
   return (
     <div className="page-wrap blog">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('blogTitle')}</h1>
       <p className="page-sub">{t('blogSub')}</p>
 

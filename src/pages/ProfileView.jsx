@@ -95,7 +95,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <div className={'profile-hero' + (banner ? ' has-banner' : '')} style={banner ? { backgroundImage: 'url(' + banner.src + ')' } : null}>
         {banner ? <div className="ph-banner-scrim"></div> : <div className="ph-stars"><Stars n={14} /></div>}
         <div className="ph-row">
@@ -117,7 +117,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
             <div className="ph-socials"><SocialLinks socials={u.socials} /></div>
           </div>
           {isMe
-            ? <a className="pill pill-line ph-edit" href="#/profile/me/settings">{I.edit()} {t('editProfile')}</a>
+            ? <a className="pill pill-line ph-edit" href="/profile/me/settings">{I.edit()} {t('editProfile')}</a>
             : <button
                 className={'pill ph-edit ' + (isFollowing ? 'pill-line' : 'pill-solid')}
                 onClick={() => onToggleFollow && onToggleFollow(whoId)}
@@ -153,7 +153,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
       <div className="feed">
         {profileLoading && <p className="empty" style={{ opacity: .5 }}>Cargando…</p>}
         {!profileLoading && theirPosts.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}
-        {!profileLoading && theirPosts.length === 0 && <p className="empty">{t('noPostsYet')}{isMe && <> <a href="#/forum/new">{t('writeFirst')}</a></>}</p>}
+        {!profileLoading && theirPosts.length === 0 && <p className="empty">{t('noPostsYet')}{isMe && <> <a href="/forum/new">{t('writeFirst')}</a></>}</p>}
       </div>
     </div>
   )

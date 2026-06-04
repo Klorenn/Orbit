@@ -60,7 +60,7 @@ export function MeetingsView({ meetings, onJoin }) {
           {m.status === 'upcoming' && <span className="meet-when">{I.cal({ width: 14, height: 14 })} {m.when}</span>}
           {m.status === 'ended' && <span className="meet-when ended">{t('endedLabel')} · {m.when}</span>}
         </div>
-        <a className="mc-title" href={'#/meetings/' + m.id}>{m.title}</a>
+        <a className="mc-title" href={'/meetings/' + m.id}>{m.title}</a>
         <p className="mc-desc">{m.desc}</p>
         <div className="mc-foot">
           <div className="mc-host">
@@ -71,10 +71,10 @@ export function MeetingsView({ meetings, onJoin }) {
         </div>
         <div className="mc-actions">
           <span className="mc-count">{I.users({ width: 14, height: 14 })} {m.attendees.length}{m.capacity ? (' / ' + m.capacity) : ''}</span>
-          {m.status === 'live' && <a className="pill pill-live" href={'#/meetings/' + m.id} onClick={() => onJoin(m.id)}>{I.video({ width: 15, height: 15 })} {t('joinNow')}</a>}
+          {m.status === 'live' && <a className="pill pill-live" href={'/meetings/' + m.id} onClick={() => onJoin(m.id)}>{I.video({ width: 15, height: 15 })} {t('joinNow')}</a>}
           {m.status === 'upcoming' && <button className="mc-cal" onClick={() => addToCalendar(m, t)} title={t('agendaLabel')}>{I.cal({ width: 14, height: 14 })}</button>}
-          {m.status === 'upcoming' && <a className={'pill ' + (joined ? 'pill-line' : 'pill-blue')} href={'#/meetings/' + m.id} onClick={(e) => { if (!joined) { e.preventDefault(); onJoin(m.id); } }}>{joined ? ('✓ ' + t('going')) : t('rsvp')}</a>}
-          {m.status === 'ended' && <a className="pill pill-line" href={'#/meetings/' + m.id}>{t('viewRecap')}</a>}
+          {m.status === 'upcoming' && <a className={'pill ' + (joined ? 'pill-line' : 'pill-blue')} href={'/meetings/' + m.id} onClick={(e) => { if (!joined) { e.preventDefault(); onJoin(m.id); } }}>{joined ? ('✓ ' + t('going')) : t('rsvp')}</a>}
+          {m.status === 'ended' && <a className="pill pill-line" href={'/meetings/' + m.id}>{t('viewRecap')}</a>}
         </div>
       </div>
     );
@@ -82,13 +82,13 @@ export function MeetingsView({ meetings, onJoin }) {
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <div className="meet-head">
         <div>
           <h1 className="page-title">{I.video({ width: 26, height: 26 })} {t('meetingsTitle')}</h1>
           <p className="page-sub" style={{ marginBottom: 0 }}>{t('meetingsSub')}</p>
         </div>
-        <a className="pill pill-solid" href="#/meetings/new">{I.plus()} {t('proposeMeetingTitle')}</a>
+        <a className="pill pill-solid" href="/meetings/new">{I.plus()} {t('proposeMeetingTitle')}</a>
       </div>
 
       {live.length > 0 && <>
@@ -141,7 +141,7 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
       apiRef.current.addEventListener('readyToClose', () => {
         if (apiRef.current) { apiRef.current.dispose(); apiRef.current = null }
         onLeave && onLeave(id)
-        navTo('#/meetings')
+        navTo('/meetings')
       })
     }
 
@@ -163,7 +163,7 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
 
   if (!m) return (
     <div className="page-wrap">
-      <p className="empty">{t('meetingNotFound')} <a href="#/meetings">{t('allMeetings')}</a></p>
+      <p className="empty">{t('meetingNotFound')} <a href="/meetings">{t('allMeetings')}</a></p>
     </div>
   )
 
@@ -172,7 +172,7 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
     const notes = ['Kicked off the LatAm regional hub with intros from 6 ambassadors.', 'Agreed on a shared monthly cadence and a rotating host.', 'Action items: Olga drafts the hub charter; Tunde maps overlapping timezones.']
     return (
       <div className="page-wrap">
-        <a className="back-link" href="#/meetings">{I.back()} {t('allMeetings')}</a>
+        <a className="back-link" href="/meetings">{I.back()} {t('allMeetings')}</a>
         <div className="recap-hero">
           <span className="meet-when ended">{t('endedLabel')} · {m.when}</span>
           <h1 className="dt" style={{ marginTop: 8 }}>{m.title}</h1>
@@ -182,7 +182,7 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
         <h3 className="section-h">{t('notesLabel')}</h3>
         <ul className="recap-notes">{notes.map((n, i) => <li key={i}>{n}</li>)}</ul>
         <h3 className="section-h">{t('whoCame')}</h3>
-        <div className="recap-people">{m.attendees.map(n => { const u = who(n); return <a key={n} className="rp-chip" href={'#/profile/' + u.name}><AmbassadorAvatar user={n} size={24} link={false} />{u.name}</a>; })}</div>
+        <div className="recap-people">{m.attendees.map(n => { const u = who(n); return <a key={n} className="rp-chip" href={'/profile/' + u.name}><AmbassadorAvatar user={n} size={24} link={false} />{u.name}</a>; })}</div>
       </div>
     )
   }
@@ -190,7 +190,7 @@ export function MeetingRoomView({ id, meetings, onJoin, onLeave }) {
   const handleLeave = () => {
     if (apiRef.current) { apiRef.current.dispose(); apiRef.current = null }
     onLeave && onLeave(id)
-    navTo('#/meetings')
+    navTo('/meetings')
   }
 
   return (
@@ -237,7 +237,7 @@ export function ProposeMeetingView({ connected, onConnect, onPublish }) {
   };
   return (
     <div className="page-wrap compose">
-      <a className="back-link" href="#/meetings">{I.back()} {t('proposeMeetingBack')}</a>
+      <a className="back-link" href="/meetings">{I.back()} {t('proposeMeetingBack')}</a>
       <h1 className="page-title">{t('proposeMeetingTitle')}</h1>
       <p className="page-sub">{t('meetingsHostSub')}</p>
 
@@ -295,7 +295,7 @@ export function OnboardingView({ onFinish }) {
   const back = () => setStep(s => Math.max(s - 1, 0));
   const finish = () => {
     if (onFinish) onFinish({ avatar, banner, profile: { handle: handle.trim(), banner, city: city.trim() || 'Your node', bio: bio.trim() || 'New Filecoin Orbit ambassador.' } });
-    else navTo('#/forum');
+    else navTo('/forum');
   };
 
   return (
@@ -303,7 +303,7 @@ export function OnboardingView({ onFinish }) {
       <div className="onb-stars"><Stars n={16} /></div>
       <div className="onb-shell">
         <div className="onb-rail">
-          <a className="onb-brand" href="#/forum">
+          <a className="onb-brand" href="/forum">
             <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true"><ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" /><circle cx="128" cy="128" r="33" fill="currentColor" /><circle cx="173" cy="69" r="17" fill="currentColor" /></svg>
             <span>Orbit</span>
           </a>

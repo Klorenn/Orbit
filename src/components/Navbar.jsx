@@ -6,33 +6,33 @@ import { T } from '../i18n'
 
 const NAV = {
   es: [
-    ['Foro', '#/forum'],
-    ['Reuniones', '#/meetings'],
-    ['Eventos', '#/events'],
-    ['Propuestas', '#/proposals'],
-    ['Embajadores', '#/ambassadors'],
-    ['Docs', '#/docs'],
-    ['Blog', '#/blog'],
+    ['Foro', '/forum'],
+    ['Reuniones', '/meetings'],
+    ['Eventos', '/events'],
+    ['Propuestas', '/proposals'],
+    ['Embajadores', '/ambassadors'],
+    ['Docs', '/docs'],
+    ['Blog', '/blog'],
   ],
   en: [
-    ['Forum', '#/forum'],
-    ['Meetings', '#/meetings'],
-    ['Events', '#/events'],
-    ['Proposals', '#/proposals'],
-    ['Ambassadors', '#/ambassadors'],
-    ['Docs', '#/docs'],
-    ['Blog', '#/blog'],
+    ['Forum', '/forum'],
+    ['Meetings', '/meetings'],
+    ['Events', '/events'],
+    ['Proposals', '/proposals'],
+    ['Ambassadors', '/ambassadors'],
+    ['Docs', '/docs'],
+    ['Blog', '/blog'],
   ],
 }
 
 function isActive(view, href) {
-  if (href === '#/forum') return view?.startsWith('forum')
-  if (href === '#/meetings') return view?.startsWith('meeting')
-  if (href === '#/events') return view === 'events' || view === 'event-detail'
-  if (href === '#/proposals') return view === 'proposals' || view === 'proposal-detail'
-  if (href === '#/ambassadors') return view === 'ambassadors'
-  if (href === '#/docs') return view === 'docs'
-  if (href === '#/blog') return view === 'blog'
+  if (href === '/forum') return view?.startsWith('forum')
+  if (href === '/meetings') return view?.startsWith('meeting')
+  if (href === '/events') return view === 'events' || view === 'event-detail'
+  if (href === '/proposals') return view === 'proposals' || view === 'proposal-detail'
+  if (href === '/ambassadors') return view === 'ambassadors'
+  if (href === '/docs') return view === 'docs'
+  if (href === '/blog') return view === 'blog'
   return false
 }
 
@@ -99,24 +99,24 @@ function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unre
             </div>
           )}
           <div className="pd-sep" />
-          <a className="pd-item" href="#/profile/me" onClick={() => setOpen(false)}>
+          <a className="pd-item" href="/profile/me" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>
             {(T[lang] || T.es).myProfile}
           </a>
-          <a className="pd-item" href="#/profile/me/posts" onClick={() => setOpen(false)}>
+          <a className="pd-item" href="/profile/me/posts" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="3" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
             {(T[lang] || T.es).myPosts}
           </a>
-          <a className="pd-item" href="#/saved" onClick={() => setOpen(false)}>
+          <a className="pd-item" href="/saved" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" /></svg>
             {(T[lang] || T.es).saved}
           </a>
-          <a className="pd-item" href="#/profile/me/notifications" onClick={() => setOpen(false)}>
+          <a className="pd-item" href="/profile/me/notifications" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" /></svg>
             {(T[lang] || T.es).notifications}
             {unread > 0 && <span className="pd-badge">{unread}</span>}
           </a>
-          <a className="pd-item" href="#/profile/me/settings" onClick={() => setOpen(false)}>
+          <a className="pd-item" href="/profile/me/settings" onClick={() => setOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></svg>
             {(T[lang] || T.es).settings}
           </a>
@@ -132,7 +132,7 @@ function ProfileChip({ identity, address, fullAddress, myAvatar, onSignOut, unre
           </button>
           {isAdmin && <>
             <div className="pd-sep" />
-            <a className="pd-item" href="#/admin" onClick={() => setOpen(false)}>
+            <a className="pd-item" href="/admin" onClick={() => setOpen(false)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
               {(T[lang] || T.es).adminPanel}
             </a>
@@ -228,7 +228,7 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
   return (
     <nav className="topbar">
       <div className="topbar-inner">
-        <a className="fbrand" href="#/">
+        <a className="fbrand" href="/">
           <svg className="logo" viewBox="0 0 256 256" fill="none" aria-hidden="true">
             <ellipse cx="128" cy="128" rx="98" ry="52" transform="rotate(-20 128 128)" stroke="currentColor" strokeWidth="15" />
             <circle cx="128" cy="128" r="33" fill="currentColor" />
@@ -257,11 +257,11 @@ export function Navbar({ route, connected, identity, address, fullAddress, myAva
           <button className="nav-burger" onClick={() => setMobileOpen(o => !o)} aria-label="Menu">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
           </button>
-          <a href="#/search" className="nav-icon">{I.search()}</a>
+          <a href="/search" className="nav-icon">{I.search()}</a>
 
           {connected ? (
             <>
-              <a href="#/profile/me/notifications" className="nav-icon notif-wrap">
+              <a href="/profile/me/notifications" className="nav-icon notif-wrap">
                 {I.bell()}
                 {unread > 0 && <span className="notif-badge">{unread}</span>}
               </a>

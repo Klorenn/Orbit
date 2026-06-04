@@ -16,7 +16,7 @@ export function EventsView({ events = [], myRsvps = [], connected, onRsvp, onCan
         <div className="ev-date"><span className="ev-mon">{e.month}</span><span className="ev-day">{e.day}</span></div>
         <div className="ev-body">
           <div className="ev-title">{e.title}</div>
-          <div className="ev-meta">{e.city} · hosted by <a href={'#/profile/' + h.name}>{h.name}</a></div>
+          <div className="ev-meta">{e.city} · hosted by <a href={'/profile/' + h.name}>{h.name}</a></div>
           <div className="ev-spots">{e.spots}</div>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -25,14 +25,14 @@ export function EventsView({ events = [], myRsvps = [], connected, onRsvp, onCan
               {rsvped ? '✓ Going' : 'RSVP'}
             </button>
           )}
-          <a className="pill pill-line" href={'#/events/' + e.id}>{e.status === 'upcoming' ? 'Details' : 'Recap'}</a>
+          <a className="pill pill-line" href={'/events/' + e.id}>{e.status === 'upcoming' ? 'Details' : 'Recap'}</a>
         </div>
       </div>
     )
   }
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{I.cal({ width: 26, height: 26 })} {t('eventsTitle')}</h1>
       <p className="page-sub">Ambassador meetups, workshops, and recaps across the constellation.</p>
       <h3 className="section-h">{t('upcomingEvents')}</h3>

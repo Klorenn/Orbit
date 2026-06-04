@@ -14,7 +14,7 @@ export function DocsView() {
     : doc.body
   return (
     <div className="page-wrap docs">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('docsTitle')}</h1>
       <p className="page-sub">{lang === 'es' ? 'Todo lo que necesitás para participar en Orbit.' : 'Everything you need to participate in Orbit.'}</p>
       <div className="docs-grid">
@@ -23,7 +23,7 @@ export function DocsView() {
             const label = typeof d.title === 'object' ? (d.title[lang] || d.title.en) : d.title
             return <button key={d.id} className={active === d.id ? 'on' : ''} onClick={() => setActive(d.id)}>{label}</button>
           })}
-          <a className="docs-cta" href="#/forum/new">{I.plus()} {t('newPost')}</a>
+          <a className="docs-cta" href="/forum/new">{I.plus()} {t('newPost')}</a>
         </nav>
         <article className="docs-body prose">
           <h2>{docTitle}</h2>

@@ -11,7 +11,7 @@ export function SavedView({ posts, onVote }) {
   const list = posts.filter(p => saved.includes(p.id))
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('savedPostsTitle')}</h1>
       <div className="feed" style={{ marginTop: 18 }}>
         {list.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}

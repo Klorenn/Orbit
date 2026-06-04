@@ -13,12 +13,20 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
   const [city, setCity] = useState(profile.city || '')
   const [socials, setSocials] = useState({ ...(profile.socials || {}) })
   const [banner, setBanner] = useState(profile.banner || 'green')
+
+  useEffect(() => {
+    setHandle(profile.handle || '')
+    setBio(profile.bio || '')
+    setCity(profile.city || '')
+    setSocials({ ...(profile.socials || {}) })
+    setBanner(profile.banner || 'green')
+  }, [profile.handle, profile.bio, profile.city, profile.banner])
   const setS = (k, v) => setSocials(s => ({ ...s, [k]: v }))
   const save = () => onSave({ handle, bio, city, socials, banner })
   const pickBanner = (id) => { setBanner(id); onSave({ banner: id }) }
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/profile/me">{I.back()} {t('backToProfile')}</a>
+      <a className="back-link" href="/profile/me">{I.back()} {t('backToProfile')}</a>
       <h1 className="page-title">{t('settingsTitle')}</h1>
       <ProfileTabs active="settings" />
 

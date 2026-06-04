@@ -13,7 +13,7 @@ function renderMentions(text) {
     if (/^@[a-z0-9_.]+$/i.test(p)) {
       const raw = p.slice(1);
       const u = AMBASSADORS[raw] || AMBASSADORS[raw + '.fil'];
-      if (u) return <a key={i} className="mention" href={'#/profile/' + u.name}>@{u.name}</a>;
+      if (u) return <a key={i} className="mention" href={'/profile/' + u.name}>@{u.name}</a>;
     }
     return <span key={i}>{p}</span>;
   });

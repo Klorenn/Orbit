@@ -2,5 +2,6 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install --loglevel=error"
+  "installCommand": "npm install --loglevel=error",
+  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
 }

@@ -12,8 +12,8 @@ export function Error404View() {
       <h1 className="nf-title">{t('lostInSpace')}</h1>
       <p className="nf-sub">{t('pageNotFoundSub')}</p>
       <div className="nf-actions">
-        <a className="pill pill-solid" href="#/forum">{I.back()} {t('backToForum')}</a>
-        <a className="pill pill-line" href="#/search">{I.search()} {t('searchInstead')}</a>
+        <a className="pill pill-solid" href="/forum">{I.back()} {t('backToForum')}</a>
+        <a className="pill pill-line" href="/search">{I.search()} {t('searchInstead')}</a>
       </div>
     </div>
   )
@@ -29,7 +29,7 @@ export function Error500View() {
       <p className="nf-sub">{t('serverErrorSub')}</p>
       <div className="nf-actions">
         <button className="pill pill-solid" onClick={() => location.reload()}>{t('reload')}</button>
-        <a className="pill pill-line" href="#/forum">{I.back()} {t('backToForum')}</a>
+        <a className="pill pill-line" href="/forum">{I.back()} {t('backToForum')}</a>
       </div>
     </div>
   )
@@ -45,7 +45,7 @@ export function MaintenanceView() {
         <div className="util-badge" style={{ background: 'rgba(255,255,255,.12)', color: '#fff', borderColor: 'rgba(255,255,255,.2)' }}>{I.shield()} {t('maintenanceBadge')}</div>
         <h1>{t('maintenanceTitle')}</h1>
         <p>{t('maintenanceSub')}</p>
-        <a className="pill pill-blue" href="#/forum" style={{ padding: '12px 26px' }}>{t('checkAgain')}</a>
+        <a className="pill pill-blue" href="/forum" style={{ padding: '12px 26px' }}>{t('checkAgain')}</a>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ export function AboutView() {
   const team = ['orbit-team.fil', 'olga.fil', 'mira.fil', 'devi.fil', 'tunde.fil', 'kwame.fil']
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <div className="about-hero">
         <div className="ah-stars"><Stars n={14} /></div>
         <div className="ah-inner">
@@ -48,7 +48,7 @@ export function AboutView() {
       <h3 className="section-h">{t('stewardsTitle')}</h3>
       <div className="team-grid">
         {team.map(id => { const u = who(id); return (
-          <a key={id} className="team-card" href={'#/profile/' + u.name}>
+          <a key={id} className="team-card" href={'/profile/' + u.name}>
             <AmbassadorAvatar user={id} size={52} link={false} nft />
             <div className="tc-name">{u.name}</div>
             <div className="tc-role">{u.role} · {u.city}</div>

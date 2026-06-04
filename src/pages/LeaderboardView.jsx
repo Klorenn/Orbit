@@ -22,12 +22,12 @@ export function LeaderboardView({ posts, ambassadors: propAmbassadors }) {
 
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{t('leaderboardTitle')}</h1>
       <p className="page-sub">{t('leaderboardSub')}</p>
       <div className="lb-list">
         {ranked.map((u, i) => (
-          <a key={u.name} className="lb-row" href={'#/profile/' + u.name}>
+          <a key={u.name} className="lb-row" href={'/profile/' + u.name}>
             <span className="lb-rank" style={i < 3 ? { background: medal[i], color: '#0A0E27' } : null}>{i + 1}</span>
             <AmbassadorAvatar user={u.name} size={42} link={false} nft />
             <div className="lb-info"><div className="lb-name">{u.name}</div><div className="lb-city">{u.city}</div></div>

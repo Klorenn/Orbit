@@ -13,12 +13,12 @@ function Sidebar({ activeCat, counts }) {
     <aside className="side sticky">
       <h4>{t('categories')}</h4>
       <div className="cat-list">
-        <a className={'cat'+(!activeCat?' active':'')} href="#/forum">
+        <a className={'cat'+(!activeCat?' active':'')} href="/forum">
           <span className="dot" style={{background:'#0A0A0A'}}></span>{t('allPosts')}
           <span className="ct">{counts.all}</span>
         </a>
         {CATEGORIES.map(c=>(
-          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'#/forum/'+c.id}>
+          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id}>
             <span className="dot" style={{background:c.color}}></span>{c.name}
             <span className="ct">{counts[c.id]||0}</span>
           </a>
@@ -68,7 +68,7 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
               <div className="nft-tip" onMouseEnter={openTip} onMouseLeave={closeTip}>
                 <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
                 <div className="nft-tip-body">{t('ambassadorTipBody')}</div>
-                <a className="nft-tip-link" href="#/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
+                <a className="nft-tip-link" href="/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
               </div>
             )}
           </span>
@@ -76,34 +76,34 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
             <div><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></div>
             <div><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></div>
           </div>
-          <a href="#/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
+          <a href="/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
         </div>
       ) : (
         <div className="profile-card rail-guest">
           <Stars />
           <div className="rg-title">{t('railGuestTitle')}</div>
           <div className="rg-sub">{t('railGuestSub')}</div>
-          <a href="#/connect" className="pill pill-blue rg-btn">{t('railGuestBtn')}</a>
+          <a href="/connect" className="pill pill-blue rg-btn">{t('railGuestBtn')}</a>
         </div>
       )}
       <div className="rail-card">
         <h4>{t('activeProposals')}</h4>
         {proposals.filter(p=>p.status!=='Approved'&&p.status!=='Draft').slice(0,3).map((p,i)=>(
-          <a className="prop" key={i} href={p.threadId?('#/forum/'+p.cat+'/'+p.threadId):'#/proposals'}>
+          <a className="prop" key={i} href={p.threadId?('/forum/'+p.cat+'/'+p.threadId):'/proposals'}>
             <span className="pstat" style={{background:PROP_STATUS[p.status]}}></span>
             <div><div className="ptitle">{p.title}</div><div className="pmeta">{p.status} · {p.forVotes} {t('inFavor')}</div></div>
           </a>
         ))}
-        <a href="#/proposals" className="rail-more">{t('allProposalsLink')} {I.back({style:{transform:'rotate(180deg)'},width:13,height:13})}</a>
+        <a href="/proposals" className="rail-more">{t('allProposalsLink')} {I.back({style:{transform:'rotate(180deg)'},width:13,height:13})}</a>
       </div>
       <div className="rail-card">
         <h4>{t('trending')}</h4>
-        <div className="trend">{TRENDING.map(tr=><a key={tr} href="#/forum">{tr}</a>)}</div>
+        <div className="trend">{TRENDING.map(tr=><a key={tr} href="/forum">{tr}</a>)}</div>
       </div>
       <div className="rail-card rail-card--chat">
         <h4>💬 General</h4>
         <p className="rail-chat-sub">Canal abierto para todos los embajadores</p>
-        <a href="#/chat" className="pill pill-blue rail-chat-btn">Ir al chat</a>
+        <a href="/chat" className="pill pill-blue rail-chat-btn">Ir al chat</a>
       </div>
     </aside>
   )
@@ -145,7 +145,7 @@ export function HomeView({ posts, onVote, counts, proposals, connected, identity
       <main>
         <div className="cat-cards">
           {CATEGORIES.slice(0,4).map(c=>(
-            <a key={c.id} className="cat-card" href={'#/forum/'+c.id}>
+            <a key={c.id} className="cat-card" href={'/forum/'+c.id}>
               <span className="cc-dot" style={{background:c.color}}></span>
               <div className="cc-name">{c.name}</div>
               <div className="cc-ct">{counts[c.id]||0} {t('postsLabel')}</div>

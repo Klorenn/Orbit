@@ -11,7 +11,7 @@ export function PostCard({ post, onVote }) {
   const { t } = useT();
   const commentCount = Array.isArray(post.comments) ? post.comments.length : 0;
   return (
-    <a className="post" href={'#/forum/' + post.cat + '/' + post.id}>
+    <a className="post" href={'/forum/' + post.cat + '/' + post.id}>
       <Vote count={post.upvotes} voted={post.upvoted} onToggle={() => onVote(post.id)} />
       <div className="post-main">
         <div className="post-tags">

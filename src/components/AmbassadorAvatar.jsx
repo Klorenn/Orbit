@@ -40,5 +40,5 @@ export function AmbassadorAvatar({ user, size = 40, link = true, nft, color: col
     </span>
   )
   if (!link) return inner
-  return <a href={'#/profile/' + u.name}>{inner}</a>
+  return <a href={'/profile/' + u.name}>{inner}</a>
 }

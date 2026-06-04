@@ -14,7 +14,7 @@ export function ProposalsView({ proposals = [] }) {
   const list = proposals.filter(p => filter === 'All' || p.status === filter)
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{I.gov({ width: 26, height: 26 })} {t('proposalsTitle')}</h1>
       <p className="page-sub">{t('proposalsSub')}</p>
       <div className="sortbar" style={{ marginBottom: 20, width: 'fit-content' }}>
@@ -39,7 +39,7 @@ export function ProposalsView({ proposals = [] }) {
             </>
           )
           return p.threadId
-            ? <a key={p.id} className="prop-row" href={'#/forum/' + p.cat + '/' + p.threadId}>{inner}</a>
+            ? <a key={p.id} className="prop-row" href={'/forum/' + p.cat + '/' + p.threadId}>{inner}</a>
             : <div key={p.id} className="prop-row">{inner}</div>
         })}
       </div>

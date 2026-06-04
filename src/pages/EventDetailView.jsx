@@ -9,7 +9,7 @@ export function EventDetailView({ id, events = [], myRsvps = [], connected, onRs
   useEffect(() => { window.scrollTo(0, 0) }, [id])
   const { t } = useT()
   const ev = events.find(e => e.id === id)
-  if (!ev) return <div className="page-wrap"><p className="empty">{t('eventNotFound')} <a href="#/events">{t('allEvents')}</a></p></div>
+  if (!ev) return <div className="page-wrap"><p className="empty">{t('eventNotFound')} <a href="/events">{t('allEvents')}</a></p></div>
   const host = who(ev.host)
   const recap = posts.find(p => p.cat === 'reports' && p.author === ev.host)
   const agenda = Array.isArray(ev.agenda)
@@ -18,7 +18,7 @@ export function EventDetailView({ id, events = [], myRsvps = [], connected, onRs
   const rsvped = myRsvps.includes(ev.id)
   return (
     <div className="page-wrap">
-      <a className="back-link" href="#/events">{I.back()} {t('allEvents')}</a>
+      <a className="back-link" href="/events">{I.back()} {t('allEvents')}</a>
       <div className="ev-detail-hero">
         <div className="evd-date"><span className="ev-mon">{ev.month}</span><span className="ev-day">{ev.day}</span></div>
         <div>
@@ -40,7 +40,7 @@ export function EventDetailView({ id, events = [], myRsvps = [], connected, onRs
         <aside className="evd-side">
           <div className="rail-card">
             <h4>{t('hostLabel')}</h4>
-            <a className="evd-host" href={'#/profile/' + host.name}>
+            <a className="evd-host" href={'/profile/' + host.name}>
               <AmbassadorAvatar user={ev.host} size={44} link={false} nft />
               <div><div className="amb-name">{host.name}</div><div className="amb-city">{host.city}</div></div>
             </a>

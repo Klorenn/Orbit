@@ -13,12 +13,12 @@ function Sidebar({ activeCat, counts }) {
     <aside className="side sticky">
       <h4>{t('categories')}</h4>
       <div className="cat-list">
-        <a className={'cat'+(!activeCat?' active':'')} href="#/forum">
+        <a className={'cat'+(!activeCat?' active':'')} href="/forum">
           <span className="dot" style={{background:'#0A0A0A'}}></span>{t('allPosts')}
           <span className="ct">{counts.all}</span>
         </a>
         {CATEGORIES.map(c=>(
-          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'#/forum/'+c.id}>
+          <a key={c.id} className={'cat'+(activeCat===c.id?' active':'')} href={'/forum/'+c.id}>
             <span className="dot" style={{background:c.color}}></span>{c.name}
             <span className="ct">{counts[c.id]||0}</span>
           </a>
@@ -60,7 +60,7 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
               <div className="nft-tip">
                 <div className="nft-tip-title">{t('ambassadorTipTitle')}</div>
                 <div className="nft-tip-body">{t('ambassadorTipBody')}</div>
-                <a className="nft-tip-link" href="#/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
+                <a className="nft-tip-link" href="/about" onClick={()=>setTipOpen(false)}>{t('ambassadorTipLink')}</a>
               </div>
             )}
           </span>
@@ -68,29 +68,29 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0 }) {
             <div><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></div>
             <div><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></div>
           </div>
-          <a href="#/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
+          <a href="/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
         </div>
       ) : (
         <div className="profile-card rail-guest">
           <Stars />
           <div className="rg-title">{t('railGuestTitle')}</div>
           <div className="rg-sub">{t('railGuestSub')}</div>
-          <a href="#/connect" className="pill pill-blue rg-btn">{t('railGuestBtn')}</a>
+          <a href="/connect" className="pill pill-blue rg-btn">{t('railGuestBtn')}</a>
         </div>
       )}
       <div className="rail-card">
         <h4>{t('activeProposals')}</h4>
         {proposals.filter(p=>p.status!=='Approved'&&p.status!=='Draft').slice(0,3).map((p,i)=>(
-          <a className="prop" key={i} href={p.threadId?('#/forum/'+p.cat+'/'+p.threadId):'#/proposals'}>
+          <a className="prop" key={i} href={p.threadId?('/forum/'+p.cat+'/'+p.threadId):'/proposals'}>
             <span className="pstat" style={{background:PROP_STATUS[p.status]}}></span>
             <div><div className="ptitle">{p.title}</div><div className="pmeta">{p.status} · {p.forVotes} {t('inFavor')}</div></div>
           </a>
         ))}
-        <a href="#/proposals" className="rail-more">{t('allProposalsLink')} {I.back({style:{transform:'rotate(180deg)'},width:13,height:13})}</a>
+        <a href="/proposals" className="rail-more">{t('allProposalsLink')} {I.back({style:{transform:'rotate(180deg)'},width:13,height:13})}</a>
       </div>
       <div className="rail-card">
         <h4>{t('trending')}</h4>
-        <div className="trend">{TRENDING.map(tr=><a key={tr} href="#/forum">{tr}</a>)}</div>
+        <div className="trend">{TRENDING.map(tr=><a key={tr} href="/forum">{tr}</a>)}</div>
       </div>
     </aside>
   )
@@ -131,7 +131,7 @@ export function CategoryView({ cat, posts, onVote, counts, proposals, connected,
     <div className="shell">
       <Sidebar activeCat={cat} counts={counts} />
       <main>
-        <a className="back-link" href="#/forum">{I.back()} {t('allCategories')}</a>
+        <a className="back-link" href="/forum">{I.back()} {t('allCategories')}</a>
         <div className="feed-head" style={{marginTop:10}}>
           <div>
             <div className="feed-title" style={{display:'flex',alignItems:'center',gap:12}}>

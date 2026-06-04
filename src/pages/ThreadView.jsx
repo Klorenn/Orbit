@@ -21,7 +21,7 @@ export function ThreadView({ cat, id, posts, connected, onConnect, onVote, onAdd
   const { t } = useT()
   useEffect(() => { window.scrollTo(0, 0) }, [id])
 
-  if (!post) return <div className="page-wrap"><p className="empty">{t('postNotFound')} <a href="#/forum">{t('backToForum')}</a></p></div>
+  if (!post) return <div className="page-wrap"><p className="empty">{t('postNotFound')} <a href="/forum">{t('backToForum')}</a></p></div>
 
   const u = who(post.author)
   const isAuthor = connected && identity && post.author === identity
@@ -48,12 +48,12 @@ export function ThreadView({ cat, id, posts, connected, onConnect, onVote, onAdd
   const handleDelete = async () => {
     if (!window.confirm(t('confirmDeletePost'))) return
     await onDelete(post.id)
-    navTo('#/forum/' + post.cat)
+    navTo('/forum/' + post.cat)
   }
 
   return (
     <div className="page-wrap thread">
-      <a className="back-link" href={'#/forum/' + post.cat}>{I.back()} {catOf(post.cat).name}</a>
+      <a className="back-link" href={'/forum/' + post.cat}>{I.back()} {catOf(post.cat).name}</a>
       <div className="post-tags" style={{ marginTop: 12, marginBottom: 14 }}>
         <span className="tag type">{post.type}</span>
         <CategoryBadge cat={post.cat} soft />
@@ -86,7 +86,7 @@ export function ThreadView({ cat, id, posts, connected, onConnect, onVote, onAdd
           <div className="detail-author">
             <AmbassadorAvatar user={post.author} size={44} nft />
             <div>
-              <div className="nm"><a href={'#/profile/' + u.name}>{u.name}</a> {u.role && <span className="role">{u.role}</span>}</div>
+              <div className="nm"><a href={'/profile/' + u.name}>{u.name}</a> {u.role && <span className="role">{u.role}</span>}</div>
               <div className="sub">{u.city} · {t('agoFormat').replace('{0}', post.time)}</div>
             </div>
             <Vote count={post.upvotes} voted={post.upvoted} onToggle={() => onVote(post.id)} row />

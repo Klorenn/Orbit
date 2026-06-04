@@ -58,7 +58,7 @@ export function NewPostView({ connected, onConnect, onPublish, preset }) {
   const pageTitle = preset === 'Proposal' ? t('newProposal') : preset === 'Event' ? t('newEvent') : t('newPostTitle')
   return (
     <div className="page-wrap compose">
-      <a className="back-link" href="#/forum">{I.back()} {t('backToForum')}</a>
+      <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
       <h1 className="page-title">{pageTitle}</h1>
       <WalletGate connected={connected} onConnect={onConnect} label={t('connectToPublish')}>
         <div className="field">

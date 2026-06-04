@@ -239,11 +239,11 @@ export const BANNERS = [
 ];
 
 export const NOTIFICATIONS = [
-  { id:'n1', type:'comment', who:'kwame.fil', text:'commented on your report "Filecoin Orbit meetup, Santiago"', time:'2h', unread:true, link:'#/forum/reports/p1' },
-  { id:'n2', type:'vote',    who:'mira.fil',  text:'and 11 others signaled support on your proposal', time:'5h', unread:true, link:'#/proposals' },
-  { id:'n3', type:'mention', who:'devi.fil',  text:'mentioned you in "Onboarding asks for a wallet…"', time:'1d', unread:true, link:'#/forum/feedback/p4' },
-  { id:'n4', type:'event',   who:'tunde.fil', text:'invited you to co-facilitate the Lagos workshop', time:'2d', unread:false, link:'#/events/e1' },
-  { id:'n5', type:'system',  who:'orbit-team.fil', text:'Your post was pinned to IPFS + Filecoin successfully', time:'3d', unread:false, link:'#/profile/me/posts' },
+  { id:'n1', type:'comment', who:'kwame.fil', text:'commented on your report "Filecoin Orbit meetup, Santiago"', time:'2h', unread:true, link:'/forum/reports/p1' },
+  { id:'n2', type:'vote',    who:'mira.fil',  text:'and 11 others signaled support on your proposal', time:'5h', unread:true, link:'/proposals' },
+  { id:'n3', type:'mention', who:'devi.fil',  text:'mentioned you in "Onboarding asks for a wallet…"', time:'1d', unread:true, link:'/forum/feedback/p4' },
+  { id:'n4', type:'event',   who:'tunde.fil', text:'invited you to co-facilitate the Lagos workshop', time:'2d', unread:false, link:'/events/e1' },
+  { id:'n5', type:'system',  who:'orbit-team.fil', text:'Your post was pinned to IPFS + Filecoin successfully', time:'3d', unread:false, link:'/profile/me/posts' },
 ];
 
 /* admin / moderation data */
@@ -278,12 +278,10 @@ export function who(name) {
   return AMBASSADORS[name] || { name, color: 'gray', addr: '0x???', role: 'Member' };
 }
 
-export function navTo(hash) {
-  if (window.location.pathname !== '/') {
-    window.location.href = '/' + hash;
-  } else {
-    window.location.hash = hash;
-  }
+export function navTo(path) {
+  const clean = path.replace(/^#/, '') || '/'
+  history.pushState(null, '', clean)
+  window.dispatchEvent(new PopStateEvent('popstate'))
 }
 
 export const MEETINGS = [
