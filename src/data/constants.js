@@ -294,6 +294,11 @@ export const BANNERS = [
   { id:'ice-planet',label:'Ice Giant',     src:'/assets/bn-ice-planet.png' },
   { id:'supernova', label:'Supernova',     src:'/assets/bn-supernova.png' },
   { id:'comet',     label:'Comet Trail',   src:'/assets/bn-comet.png' },
+  { id:'aurora',    label:'Aurora Orbit',  src:'/assets/bn-aurora.png' },
+  { id:'redplanet', label:'Red Desert',    src:'/assets/bn-redplanet.png' },
+  { id:'stormplanet',label:'Storm World',  src:'/assets/bn-stormplanet.png' },
+  { id:'galaxy2',   label:'Spiral Galaxy', src:'/assets/bn-galaxy.png' },
+  { id:'filecoin',  label:'Circuit Orbit', src:'/assets/bn-filecoin.png' },
 ];
 
 export const NOTIFICATIONS = [
