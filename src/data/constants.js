@@ -291,11 +291,11 @@ export const BANNERS = [
   { id:'gold',      label:'Golden Orbit',  src:'/assets/bn-gold.png' },
   { id:'neptune',   label:'Ice Giant',     src:'/assets/bn-neptune.png' },
   { id:'blackhole', label:'Event Horizon', src:'/assets/bn-blackhole.png' },
-  { id:'sun',       label:'Solar Flare',   src:'/assets/bn-sun.png' },
+  { id:'sun',       label:'Solar Flare',   src:'/assets/bn-sun.png',   light: true },
   { id:'galaxy',    label:'Milky Way',     src:'/assets/bn-galaxy.jpg' },
   { id:'nebula',    label:'Nébula Crimson', src:'/assets/bn-nebula.png' },
   { id:'deep-space',label:'Deep Space',    src:'/assets/bn-deep-space.png' },
-  { id:'solar',     label:'Solar Flare',   src:'/assets/bn-solar.png' },
+  { id:'solar',     label:'Solar Flare',   src:'/assets/bn-solar.png',  light: true },
   { id:'ice-planet',label:'Ice Giant',     src:'/assets/bn-ice-planet.png' },
   { id:'supernova', label:'Supernova',     src:'/assets/bn-supernova.png' },
   { id:'comet',     label:'Comet Trail',   src:'/assets/bn-comet.png' },
@@ -309,7 +309,7 @@ export const BANNERS = [
   { id:'ringworld',  label:'Ring World',     src:'/assets/bn-ringworld.png' },
   { id:'twin-stars', label:'Binary Stars',   src:'/assets/bn-twin-stars.png' },
   { id:'ocean-world',label:'Ocean World',    src:'/assets/bn-ocean-world.png' },
-  { id:'lava-world', label:'Lava World',     src:'/assets/bn-lava-world.png' },
+  { id:'lava-world', label:'Lava World',     src:'/assets/bn-lava-world.png', light: true },
   { id:'eclipse',    label:'Eclipse',        src:'/assets/bn-eclipse.png' },
 ];
 

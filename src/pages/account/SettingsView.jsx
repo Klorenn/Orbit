@@ -72,18 +72,29 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
       <ProfileTabs active="settings" />
 
       {/* Preview */}
-      <section className="set-card set-preview-card" style={{ marginTop: 18 }}>
-        <div
-          className="set-banner-preview"
-          style={{ backgroundImage: `url(${(BANNERS.find(b => b.id === banner) || BANNERS[0]).src})` }}
-        >
-          <img
-            className="set-av-preview"
-            src={AV[myAvatar] || AV.blue}
-            alt=""
-          />
-        </div>
-      </section>
+      {(() => {
+        const pb = BANNERS.find(b => b.id === banner) || BANNERS[0]
+        return (
+          <section className={'set-preview-card' + (pb.light ? ' banner-light' : '')} style={{ marginTop: 18 }}>
+            <div className="set-preview-hero" style={{ backgroundImage: `url(${pb.src})` }}>
+              <div className="set-preview-scrim" />
+              <div className="set-preview-row">
+                <img className="set-preview-av" src={AV[myAvatar] || AV.blue} alt="" />
+                <div className="set-preview-info">
+                  <div className="set-preview-name">{profile.handle || ME.name || 'you.fil'}</div>
+                  <div className="set-preview-meta">{profile.city || 'Filecoin Ambassador'}</div>
+                  {profile.bio && <div className="set-preview-bio">{profile.bio.slice(0, 80)}{profile.bio.length > 80 ? '…' : ''}</div>}
+                </div>
+              </div>
+              <div className="set-preview-stats">
+                <div><span className="spv">0</span><span className="spl">{t('karma') || 'Karma'}</span></div>
+                <div><span className="spv">0</span><span className="spl">{t('posts') || 'Entradas'}</span></div>
+                <div><span className="spv">0</span><span className="spl">{t('followers') || 'Seguidores'}</span></div>
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       <section className="set-card" style={{ marginTop: 16 }}>
         <h3>{t('settingsBannerTitle')}</h3>

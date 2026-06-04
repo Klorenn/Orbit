@@ -472,6 +472,15 @@ a.prop { text-decoration: none; }
    ============================================================ */
 .profile-hero { position: relative; background: var(--space); color: #fff; border-radius: 22px; padding: 30px; overflow: hidden; margin-top: 14px; }
 .profile-hero.has-banner { background-size: cover; background-position: center; }
+.profile-hero.banner-light { color: #0f1117; }
+.profile-hero.banner-light .ph-banner-scrim { background: linear-gradient(105deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.55) 48%, rgba(255,255,255,.22) 100%), linear-gradient(to top, rgba(255,255,255,.6), transparent 50%); }
+.profile-hero.banner-light .ph-addr-copy { color: rgba(15,17,23,.45); }
+.profile-hero.banner-light .ph-addr-copy:hover { color: rgba(15,17,23,.75); }
+.profile-hero.banner-light .ph-meta { color: rgba(15,17,23,.55); }
+.profile-hero.banner-light .ph-bio { color: rgba(15,17,23,.8); }
+.profile-hero.banner-light .ph-stats { border-top-color: rgba(15,17,23,.14); }
+.profile-hero.banner-light .ph-stats .l { color: rgba(15,17,23,.55); }
+.profile-hero.banner-light .ph-edit.pill-line { background: rgba(15,17,23,.08); border-color: rgba(15,17,23,.2); color: #0f1117; }
 .ph-banner-scrim { position: absolute; inset: 0; z-index: 0;
   background: linear-gradient(105deg, rgba(10,14,39,.86) 0%, rgba(10,14,39,.6) 48%, rgba(10,14,39,.32) 100%),
               linear-gradient(to top, rgba(10,14,39,.7), transparent 50%); }
@@ -552,11 +561,31 @@ a.prop { text-decoration: none; }
 
 /* banner picker */
 /* settings preview */
-.set-preview-card { padding: 0 !important; overflow: hidden; }
-.set-banner-preview { position: relative; width: 100%; aspect-ratio: 16/5; background-size: cover; background-position: center;
-  border-radius: 14px; display: flex; align-items: flex-end; padding: 16px 20px; }
-.set-av-preview { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #fff;
-  object-fit: cover; box-shadow: 0 2px 12px rgba(0,0,0,.35); }
+.set-preview-card { border-radius: 18px; overflow: hidden; padding: 0 !important; }
+.set-preview-hero { position: relative; width: 100%; background-size: cover; background-position: center;
+  padding: 24px 24px 20px; color: #fff; display: flex; flex-direction: column; gap: 0; }
+.set-preview-scrim { position: absolute; inset: 0; background:
+  linear-gradient(105deg, rgba(10,14,39,.86) 0%, rgba(10,14,39,.6) 48%, rgba(10,14,39,.32) 100%),
+  linear-gradient(to top, rgba(10,14,39,.7), transparent 50%); z-index: 0; }
+.set-preview-card.banner-light .set-preview-scrim { background:
+  linear-gradient(105deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.55) 48%, rgba(255,255,255,.22) 100%),
+  linear-gradient(to top, rgba(255,255,255,.6), transparent 50%); }
+.set-preview-card.banner-light { color: #0f1117; }
+.set-preview-card.banner-light .set-preview-meta,
+.set-preview-card.banner-light .set-preview-bio { color: rgba(15,17,23,.6); }
+.set-preview-card.banner-light .set-preview-stats { border-top-color: rgba(15,17,23,.14); }
+.set-preview-card.banner-light .spl { color: rgba(15,17,23,.55); }
+.set-preview-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+.set-preview-av { width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.9);
+  object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 12px rgba(0,0,0,.4); background: rgba(255,255,255,.1); }
+.set-preview-info { flex: 1; min-width: 0; }
+.set-preview-name { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+.set-preview-meta { font-size: 12.5px; color: rgba(255,255,255,.55); margin-top: 2px; }
+.set-preview-bio { font-size: 13px; color: rgba(255,255,255,.75); margin-top: 6px; line-height: 1.4; }
+.set-preview-stats { position: relative; z-index: 1; display: flex; gap: 24px; margin-top: 18px;
+  padding-top: 16px; border-top: 1px solid rgba(255,255,255,.14); }
+.set-preview-stats .spv { font-size: 20px; font-weight: 600; display: block; }
+.set-preview-stats .spl { font-size: 11.5px; color: rgba(255,255,255,.5); display: block; margin-top: 1px; }
 
 /* picker carousel */
 .picker-carousel { display: flex; align-items: center; gap: 10px; }

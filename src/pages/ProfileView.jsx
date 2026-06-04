@@ -96,7 +96,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   return (
     <div className="page-wrap">
       <a className="back-link" href="/forum">{I.back()} {t('backToForum')}</a>
-      <div className={'profile-hero' + (banner ? ' has-banner' : '')} style={banner ? { backgroundImage: 'url(' + banner.src + ')' } : null}>
+      <div className={'profile-hero' + (banner ? ' has-banner' : '') + (banner?.light ? ' banner-light' : '')} style={banner ? { backgroundImage: 'url(' + banner.src + ')' } : null}>
         {banner ? <div className="ph-banner-scrim"></div> : <div className="ph-stars"><Stars n={14} /></div>}
         <div className="ph-row">
           <AmbassadorAvatar user={isMe ? 'you.fil' : whoId} size={88} link={false} nft color={isMe ? myAvatar : u.color} />
