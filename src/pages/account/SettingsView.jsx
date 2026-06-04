@@ -1,5 +1,6 @@
-import { useState, useEffect, Children } from 'react'
+import { useState, useEffect, Children, useRef } from 'react'
 import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS, SPECIALTIES } from '../../data/constants'
+import { supabase } from '../../lib/supabase'
 import { I } from '../../components/Icons'
 import { socialIcon } from '../../components/SocialLinks'
 import { ProfileTabs } from './MyPostsView'
@@ -29,7 +30,7 @@ function parseRepos(raw) {
   try { return JSON.parse(raw) } catch { return [] }
 }
 
-export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
+export function SettingsView({ profile, myAvatar, setMyAvatar, onSave, identity }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const { t } = useT()
   const [fullName, setFullName] = useState(profile.fullName || '')
@@ -65,7 +66,31 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
     setRepoUrl('')
   }
   const removeRepo = (idx) => setRepos(r => r.filter((_, i) => i !== idx))
-  const save = () => onSave({ fullName, handle, bio, city, socials, banner, skills, repos })
+
+  // Handle availability check
+  const [handleStatus, setHandleStatus] = useState('idle') // idle | checking | available | taken
+  const debounceRef = useRef(null)
+  useEffect(() => {
+    const val = handle.trim()
+    if (!val || val === (profile.handle || '').trim()) { setHandleStatus('idle'); return }
+    setHandleStatus('checking')
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('identity')
+        .ilike('handle', val)
+        .neq('identity', identity || '')
+        .limit(1)
+      setHandleStatus(data?.length ? 'taken' : 'available')
+    }, 500)
+    return () => clearTimeout(debounceRef.current)
+  }, [handle])
+
+  const save = () => {
+    if (handleStatus === 'taken') return
+    onSave({ fullName, handle, bio, city, socials, banner, skills, repos })
+  }
   const pickBanner = (id) => { setBanner(id); onSave({ banner: id }) }
   return (
     <div className="page-wrap">
@@ -132,8 +157,19 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
             <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Ej: Olga Ramos" maxLength={64} />
             <p className="field-hint">Tu nombre completo. Aparece en el OG y en tu perfil público.</p>
           </div>
-          <div className="field"><label>{t('handleLabel')}</label>
-            <input type="text" value={handle} onChange={e => setHandle(e.target.value)} placeholder={ME.addr} maxLength={32} />
+          <div className="field">
+            <label>{t('handleLabel')}</label>
+            <div className="handle-input-wrap">
+              <input
+                type="text" value={handle}
+                onChange={e => setHandle(e.target.value)}
+                placeholder={ME.addr} maxLength={32}
+                className={handleStatus === 'taken' ? 'input-error' : handleStatus === 'available' ? 'input-ok' : ''}
+              />
+              {handleStatus === 'checking' && <span className="handle-status checking">…</span>}
+              {handleStatus === 'available' && <span className="handle-status ok">✓ Disponible</span>}
+              {handleStatus === 'taken' && <span className="handle-status taken">✗ Ya está en uso</span>}
+            </div>
             <p className="field-hint">{t('handleHintShort')}</p>
           </div>
           <div className="field"><label>{t('walletLabel')}</label>
@@ -239,7 +275,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
 
       <div className="settings-foot">
         <span className="note">{I.shield()} {t('settingsSignedNote')} {ME.name}</span>
-        <button className="pill pill-blue" onClick={save} style={{ padding: '11px 26px' }}>{t('saveChanges')}</button>
+        <button className="pill pill-blue" onClick={save} disabled={handleStatus === 'taken'} style={{ padding: '11px 26px', opacity: handleStatus === 'taken' ? .45 : 1, cursor: handleStatus === 'taken' ? 'not-allowed' : 'pointer' }}>{t('saveChanges')}</button>
       </div>
     </div>
   )

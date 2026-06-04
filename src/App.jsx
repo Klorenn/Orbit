@@ -367,7 +367,7 @@ export default function App() {
     case 'profile-sub':
       if (route.sub === 'posts') view = <MyPostsView posts={posts} onVote={vote} identity={identity} />
       else if (route.sub === 'notifications') view = <NotificationsView notifications={notifications} markRead={markRead} markAllRead={markAllRead} />
-      else if (route.sub === 'settings') view = <SettingsView profile={myProfile} myAvatar={myAvatar} setMyAvatar={setMyAvatar} onSave={setMyProfile} />
+      else if (route.sub === 'settings') view = <SettingsView profile={myProfile} myAvatar={myAvatar} setMyAvatar={setMyAvatar} onSave={setMyProfile} identity={identity} />
       else view = <Error404View />
       break
     case 'admin':

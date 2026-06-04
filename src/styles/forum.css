@@ -504,6 +504,17 @@ a.prop { text-decoration: none; }
   box-shadow: 0 8px 24px rgba(0,0,0,.35); z-index: 50; white-space: normal; }
 .rank-badge-tip strong { font-size: 13px; font-weight: 600; }
 .rank-badge-wrap:hover .rank-badge-tip { opacity: 1; }
+.handle-input-wrap { position: relative; display: flex; align-items: center; gap: 10px; }
+.handle-input-wrap input { flex: 1; }
+.handle-status { font-size: 12.5px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+.handle-status.checking { color: rgba(var(--ink-rgb),.4); }
+.handle-status.ok { color: #10B981; }
+.handle-status.taken { color: #FF3B30; }
+input.input-error { border-color: #FF3B30 !important; }
+input.input-error:focus { box-shadow: 0 0 0 3px rgba(255,59,48,.12) !important; }
+input.input-ok { border-color: #10B981 !important; }
+input.input-ok:focus { box-shadow: 0 0 0 3px rgba(16,185,129,.12) !important; }
+
 .ph-fullname { font-size: 15px; color: rgba(255,255,255,.65); font-weight: 500; margin-top: 2px; letter-spacing: .01em; }
 .ph-addr-copy { all: unset; cursor: pointer; font-size: 12.5px; color: rgba(255,255,255,.45); font-variant-numeric: tabular-nums;
   letter-spacing: .04em; margin-top: 3px; transition: color .15s; display: block; }
