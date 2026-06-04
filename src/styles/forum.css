@@ -1134,26 +1134,31 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
   padding: 10px 14px; font-size: 14px; outline: none; transition: border-color .18s, box-shadow .18s; min-width: 0; }
 .repo-inputs input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,144,255,.1); }
 .repo-inputs input::placeholder { color: rgba(var(--ink-rgb),.4); }
-/* Inside profile-hero: white-glass overrides */
-.profile-hero .repo-card { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); color: #fff; }
-.profile-hero .repo-card:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.35); transform: translateY(-1px); }
-.profile-hero .repo-card--gitlab:hover { background: rgba(252,109,38,.15); border-color: rgba(252,109,38,.5); }
-.profile-hero .repo-card-owner { color: rgba(255,255,255,.45); }
-.profile-hero .repo-card-arrow { color: rgba(255,255,255,.35); }
-.profile-hero .repo-card:hover .repo-card-arrow { color: rgba(255,255,255,.9); transform: translate(2px,-2px); }
-.profile-hero .skill-chip { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); color: #fff; }
-.profile-hero .skill-chip i { color: rgba(255,255,255,.75); }
-.profile-hero .spec-tag { border-color: rgba(255,255,255,.2) !important; }
-.profile-hero .repo-card-icon { color: rgba(255,255,255,.8); }
+/* Inside profile-hero: seamless overrides — no boxes */
+.profile-hero .socials-row { background: none; border: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }
+.profile-hero .social-chip { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); color: #fff; }
+.profile-hero .social-chip:hover { background: rgba(255,255,255,.18); transform: translateY(-1px); }
+.profile-hero .sl-val { color: #fff; }
+.profile-hero .skill-chip { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.88); }
+.profile-hero .skill-chip i { opacity: .8; }
+.profile-hero .repo-card { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); color: #fff; }
+.profile-hero .repo-card:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.28); transform: translateY(-1px); }
+.profile-hero .repo-card--gitlab:hover { background: rgba(252,109,38,.12); border-color: rgba(252,109,38,.4); }
+.profile-hero .repo-card-owner { color: rgba(255,255,255,.4); }
+.profile-hero .repo-card-icon { color: rgba(255,255,255,.75); }
 .profile-hero .repo-card--gitlab .repo-card-icon { color: #FC6D26; }
+.profile-hero .repo-card-arrow { color: rgba(255,255,255,.25); }
+.profile-hero .repo-card:hover .repo-card-arrow { color: rgba(255,255,255,.8); transform: translate(2px,-2px); }
 
 /* banner-light overrides */
-.profile-hero.banner-light .repo-card { background: rgba(15,17,23,.05); border-color: rgba(15,17,23,.14); color: #0f1117; }
+.profile-hero.banner-light .socials-row { background: none; border: none; box-shadow: none; }
+.profile-hero.banner-light .social-chip { background: rgba(15,17,23,.07); border-color: rgba(15,17,23,.14); color: #0f1117; }
+.profile-hero.banner-light .sl-val { color: #0f1117; }
+.profile-hero.banner-light .skill-chip { background: rgba(15,17,23,.07); border-color: rgba(15,17,23,.12); color: #0f1117; }
+.profile-hero.banner-light .repo-card { background: rgba(15,17,23,.05); border-color: rgba(15,17,23,.1); color: #0f1117; }
 .profile-hero.banner-light .repo-card:hover { background: rgba(0,144,255,.07); border-color: var(--blue); }
-.profile-hero.banner-light .repo-card-owner { color: rgba(15,17,23,.45); }
-.profile-hero.banner-light .repo-card-arrow { color: rgba(15,17,23,.3); }
-.profile-hero.banner-light .skill-chip { background: rgba(15,17,23,.07); border-color: rgba(15,17,23,.14); color: #0f1117; }
-.profile-hero.banner-light .repo-card-icon { color: rgba(15,17,23,.7); }
+.profile-hero.banner-light .repo-card-owner { color: rgba(15,17,23,.4); }
+.profile-hero.banner-light .repo-card-icon { color: rgba(15,17,23,.65); }
 
 .ph-tech { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 .repo-links { display: flex; flex-wrap: wrap; gap: 7px; }
