@@ -113,6 +113,44 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
     u.role === 'Admin'
   )
   const banner = BANNERS.find(b => b.id === u.banner) || null
+
+  // Dynamic OG meta tags
+  useEffect(() => {
+    if (!u.name) return
+    const profileSkills = fetchedProfile?.skills || []
+    const skillLabels = [
+      ...SPECIALTIES.filter(s => profileSkills.includes(s.id)).map(s => s.label),
+      ...SKILLS.filter(s => profileSkills.includes(s.id)).map(s => s.label),
+    ].slice(0, 4)
+
+    const params = new URLSearchParams({
+      name: u.name,
+      role: u.role || 'Ambassador',
+      ...(u.city && { city: u.city }),
+      banner: u.banner || 'galaxy2',
+      avatar: u.color || 'blue',
+      ...(skillLabels.length && { skills: skillLabels.join(',') }),
+    })
+    const ogUrl = `/api/og-profile?${params}`
+
+    const setMeta = (prop, content) => {
+      let el = document.querySelector(`meta[property="${prop}"]`) || document.querySelector(`meta[name="${prop}"]`)
+      if (!el) { el = document.createElement('meta'); el.setAttribute(prop.startsWith('og:') || prop.startsWith('twitter:') ? 'property' : 'name', prop); document.head.appendChild(el) }
+      el.setAttribute('content', content)
+    }
+    setMeta('og:title', `${u.name} · Orbit`)
+    setMeta('og:description', u.bio || `${u.role || 'Filecoin Ambassador'} on Orbit`)
+    setMeta('og:image', ogUrl)
+    setMeta('twitter:card', 'summary_large_image')
+    setMeta('twitter:title', `${u.name} · Orbit`)
+    setMeta('twitter:image', ogUrl)
+
+    return () => {
+      setMeta('og:title', 'Orbit — Filecoin Ambassador Forum')
+      setMeta('og:image', '/og.png')
+      setMeta('twitter:image', '/og.png')
+    }
+  }, [u.name, u.banner, u.color, u.role, u.city, u.bio, fetchedProfile?.skills])
   const isFollowing = !isMe && following.includes(whoId)
 
   return (
