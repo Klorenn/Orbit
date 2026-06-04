@@ -110,7 +110,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
                 const tip = (t('badgeTip') || {})[r.label] || {}
                 return (
                   <span className="rank-badge-wrap">
-                    <span className="rank-badge" style={{ background: r.color + '18', color: r.color }}>{r.label}</span>
+                    <span className="rank-badge" style={{ background: r.color + '22', color: r.color, border: '1px solid ' + r.color + '55' }}>{r.label}</span>
                     {tip.title && (
                       <span className="rank-badge-tip">
                         <strong>{tip.title}</strong>
