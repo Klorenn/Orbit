@@ -1,9 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Children } from 'react'
 import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS, SPECIALTIES } from '../../data/constants'
 import { I } from '../../components/Icons'
 import { socialIcon } from '../../components/SocialLinks'
 import { ProfileTabs } from './MyPostsView'
 import { useT } from '../../hooks/useT'
+
+function PickerCarousel({ children, perPage = 5, selectedIndex = 0 }) {
+  const items = Children.toArray(children)
+  const pages = Math.ceil(items.length / perPage)
+  const [page, setPage] = useState(() => Math.floor(Math.max(0, selectedIndex) / perPage))
+  const slice = items.slice(page * perPage, (page + 1) * perPage)
+  return (
+    <div className="picker-carousel">
+      <button className="pc-nav" disabled={page === 0} onClick={() => setPage(p => p - 1)} aria-label="Anterior">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div className="pc-items">{slice}</div>
+      <button className="pc-nav" disabled={page >= pages - 1} onClick={() => setPage(p => p + 1)} aria-label="Siguiente">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  )
+}
 
 function parseRepos(raw) {
   if (!raw) return []
@@ -56,7 +74,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
       <section className="set-card" style={{ marginTop: 18 }}>
         <h3>{t('settingsBannerTitle')}</h3>
         <p className="set-sub">{t('settingsBannerSub')}</p>
-        <div className="banner-grid">
+        <PickerCarousel perPage={3} selectedIndex={BANNERS.findIndex(b => b.id === banner)}>
           {BANNERS.map(b => (
             <button key={b.id} className={'banner-opt' + (banner === b.id ? ' on' : '')} onClick={() => pickBanner(b.id)} aria-label={b.label}>
               <img src={b.src} alt={b.label} />
@@ -64,14 +82,14 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
               {banner === b.id && <span className="bn-check">{I.check()}</span>}
             </button>
           ))}
-        </div>
+        </PickerCarousel>
       </section>
 
       <div className="settings-grid" style={{ marginTop: 16 }}>
         <section className="set-card">
           <h3>{t('settingsAvatarTitle')}</h3>
           <p className="set-sub">{t('settingsAvatarSub')}</p>
-          <div className="ap-grid">
+          <PickerCarousel perPage={5} selectedIndex={AVATAR_OPTIONS.indexOf(myAvatar)}>
             {AVATAR_OPTIONS.map(col => (
               <button key={col} className={'ap-opt' + (myAvatar === col ? ' on' : '')} onClick={() => setMyAvatar(col)} aria-label={col}>
                 <img src={AV[col]} alt={col} />{myAvatar === col && <span className="ap-check">{I.check()}</span>}
@@ -90,7 +108,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
               }
               {myAvatar?.startsWith('#') && <span className="ap-check">{I.check()}</span>}
             </label>
-          </div>
+          </PickerCarousel>
         </section>
 
         <section className="set-card">

@@ -551,6 +551,17 @@ a.prop { text-decoration: none; }
 .ap-custom:hover .ap-custom-plus { color: var(--ink); }
 
 /* banner picker */
+/* picker carousel */
+.picker-carousel { display: flex; align-items: center; gap: 10px; }
+.pc-nav { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--line);
+  background: var(--bg); color: rgba(var(--ink-rgb),.6); display: grid; place-items: center;
+  transition: border-color .15s, color .15s, opacity .15s; cursor: pointer; }
+.pc-nav:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+.pc-nav:disabled { opacity: .25; cursor: default; }
+.pc-items { flex: 1; display: flex; gap: 12px; min-width: 0; }
+.pc-items .banner-opt { flex: 1; min-width: 0; }
+.pc-items .ap-opt { flex-shrink: 0; }
+
 .banner-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .banner-opt { position: relative; border-radius: 14px; overflow: hidden; border: 2px solid var(--line);
   aspect-ratio: 16/9; background: var(--space); transition: border-color .15s, transform .15s; padding: 0; }
