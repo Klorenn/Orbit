@@ -105,7 +105,21 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
               {u.name}
               {isAdmin && <span className="role" data-role="Admin">Admin</span>}
               {!isAdmin && u.role && u.role !== 'Member' && <span className="role" data-role={u.role}>{u.role}</span>}
-              {(() => { const r = rankOf(u.karma); return <span className="rank-badge" style={{ background: r.color + '18', color: r.color }}>{r.label}</span> })()}
+              {(() => {
+                const r = rankOf(u.karma)
+                const tip = (t('badgeTip') || {})[r.label] || {}
+                return (
+                  <span className="rank-badge-wrap">
+                    <span className="rank-badge" style={{ background: r.color + '18', color: r.color }}>{r.label}</span>
+                    {tip.title && (
+                      <span className="rank-badge-tip">
+                        <strong>{tip.title}</strong>
+                        <span>{tip.body}</span>
+                      </span>
+                    )}
+                  </span>
+                )
+              })()}
             </div>
             {resolvedIdentity?.startsWith('0x') && (
               <button className="ph-addr-copy" onClick={copyAddr}>

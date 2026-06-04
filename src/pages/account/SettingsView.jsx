@@ -163,14 +163,14 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
             value={repoName}
             onChange={e => setRepoName(e.target.value)}
             placeholder={t('repoNamePlaceholder')}
-            style={{ flex: 1 }}
+            style={{ flex: '1 1 120px' }}
           />
           <input
             type="url"
             value={repoUrl}
             onChange={e => setRepoUrl(e.target.value)}
             placeholder={t('repoUrlPlaceholder')}
-            style={{ flex: 2 }}
+            style={{ flex: '2 1 200px' }}
             onKeyDown={e => e.key === 'Enter' && addRepo()}
           />
           <button className="pill pill-blue" onClick={addRepo} type="button" style={{ padding: '9px 16px', flexShrink: 0 }}>
