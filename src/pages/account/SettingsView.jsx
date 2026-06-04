@@ -71,7 +71,21 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
       <h1 className="page-title">{t('settingsTitle')}</h1>
       <ProfileTabs active="settings" />
 
-      <section className="set-card" style={{ marginTop: 18 }}>
+      {/* Preview */}
+      <section className="set-card set-preview-card" style={{ marginTop: 18 }}>
+        <div
+          className="set-banner-preview"
+          style={{ backgroundImage: `url(${(BANNERS.find(b => b.id === banner) || BANNERS[0]).src})` }}
+        >
+          <img
+            className="set-av-preview"
+            src={AV[myAvatar] || AV.blue}
+            alt=""
+          />
+        </div>
+      </section>
+
+      <section className="set-card" style={{ marginTop: 16 }}>
         <h3>{t('settingsBannerTitle')}</h3>
         <p className="set-sub">{t('settingsBannerSub')}</p>
         <PickerCarousel perPage={3} selectedIndex={BANNERS.findIndex(b => b.id === banner)}>
@@ -89,7 +103,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
         <section className="set-card">
           <h3>{t('settingsAvatarTitle')}</h3>
           <p className="set-sub">{t('settingsAvatarSub')}</p>
-          <PickerCarousel perPage={5} selectedIndex={AVATAR_OPTIONS.indexOf(myAvatar)}>
+          <div className="ap-grid">
             {AVATAR_OPTIONS.map(col => (
               <button key={col} className={'ap-opt' + (myAvatar === col ? ' on' : '')} onClick={() => setMyAvatar(col)} aria-label={col}>
                 <img src={AV[col]} alt={col} />{myAvatar === col && <span className="ap-check">{I.check()}</span>}
@@ -108,7 +122,7 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
               }
               {myAvatar?.startsWith('#') && <span className="ap-check">{I.check()}</span>}
             </label>
-          </PickerCarousel>
+          </div>
         </section>
 
         <section className="set-card">

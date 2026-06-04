@@ -24,6 +24,11 @@ export const AV = {
   teal: '/assets/avatar-teal.png',
   lime: '/assets/avatar-lime.png',
   magenta: '/assets/avatar-magenta.png',
+  amber: '/assets/avatar-amber.png',
+  rose: '/assets/avatar-rose.png',
+  slate: '/assets/avatar-slate.png',
+  cream: '/assets/avatar-cream.png',
+  black: '/assets/avatar-black.png',
 };
 export const AVATAR_OPTIONS = ['blue','teal','navy','indigo','lavender','purple','magenta','green','mint','lime','yellow','gold','amber','orange','coral','rose','red','olive','brown','slate','gray','cream','pink','black'];
 export const COLORHEX = { blue:'#0090FF', red:'#FF3B30', yellow:'#FFD60A', purple:'#A855F7', green:'#10B981', orange:'#FF9500', brown:'#8B5E3C', gray:'#8A8F98', pink:'#FF2D9B', teal:'#00BCD4', coral:'#FF6B6B', indigo:'#5C6BC0', navy:'#1A237E', lime:'#AEEA00', mint:'#A8E6CF', magenta:'#E91E8C', lavender:'#CE93D8', rose:'#EC407A', amber:'#FFB300', olive:'#9E9D24', slate:'#546E7A', cream:'#FFF9C4', black:'#37474F', gold:'#FFD700' };

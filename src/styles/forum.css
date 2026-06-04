@@ -551,6 +551,13 @@ a.prop { text-decoration: none; }
 .ap-custom:hover .ap-custom-plus { color: var(--ink); }
 
 /* banner picker */
+/* settings preview */
+.set-preview-card { padding: 0 !important; overflow: hidden; }
+.set-banner-preview { position: relative; width: 100%; aspect-ratio: 16/5; background-size: cover; background-position: center;
+  border-radius: 14px; display: flex; align-items: flex-end; padding: 16px 20px; }
+.set-av-preview { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #fff;
+  object-fit: cover; box-shadow: 0 2px 12px rgba(0,0,0,.35); }
+
 /* picker carousel */
 .picker-carousel { display: flex; align-items: center; gap: 10px; }
 .pc-nav { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--line);
