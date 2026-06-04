@@ -237,12 +237,15 @@ export const SOCIALS = [
 
 /* profile banners — users choose one (cannot upload) */
 export const BANNERS = [
-  { id:'green',    label:'Ringed World',  src:'/assets/bn-green.png' },
-  { id:'purple',   label:'Violet Moon',   src:'/assets/bn-purple.png' },
-  { id:'magenta',  label:'Magma Planet',  src:'/assets/bn-magenta.png' },
-  { id:'asteroid', label:'Asteroid Belt', src:'/assets/bn-asteroid.png' },
-  { id:'moon',     label:'Lunar Drift',   src:'/assets/bn-moon.png' },
-  { id:'gold',     label:'Golden Orbit',  src:'/assets/bn-gold.png' },
+  { id:'green',     label:'Ringed World',  src:'/assets/bn-green.png' },
+  { id:'purple',    label:'Violet Moon',   src:'/assets/bn-purple.png' },
+  { id:'magenta',   label:'Magma Planet',  src:'/assets/bn-magenta.png' },
+  { id:'asteroid',  label:'Asteroid Belt', src:'/assets/bn-asteroid.png' },
+  { id:'moon',      label:'Lunar Drift',   src:'/assets/bn-moon.png' },
+  { id:'gold',      label:'Golden Orbit',  src:'/assets/bn-gold.png' },
+  { id:'neptune',   label:'Ice Giant',     src:'/assets/bn-neptune.png' },
+  { id:'blackhole', label:'Event Horizon', src:'/assets/bn-blackhole.png' },
+  { id:'sun',       label:'Solar Flare',   src:'/assets/bn-sun.png' },
 ];
 
 export const NOTIFICATIONS = [
