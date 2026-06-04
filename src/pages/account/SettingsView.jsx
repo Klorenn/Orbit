@@ -195,14 +195,17 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
         <h3>{t('settingsReposTitle')}</h3>
         <p className="set-sub">{t('settingsReposSub')}</p>
         <div className="repo-list">
-          {repos.map((r, i) => (
-            <div className="repo-row" key={i}>
-              <a className="repo-link" href={r.url} target="_blank" rel="noopener noreferrer">
-                <i className="devicon-github-plain" /> {r.name}
-              </a>
-              <button className="repo-remove" onClick={() => removeRepo(i)} title="Remove">×</button>
-            </div>
-          ))}
+          {repos.map((r, i) => {
+            const isGitLab = r.url?.includes('gitlab.com')
+            return (
+              <div className="repo-row" key={i}>
+                <a className="repo-link" href={r.url} target="_blank" rel="noopener noreferrer">
+                  <i className={isGitLab ? 'devicon-gitlab-plain' : 'devicon-github-plain'} /> {r.name}
+                </a>
+                <button className="repo-remove" onClick={() => removeRepo(i)} title="Remove">×</button>
+              </div>
+            )
+          })}
           {repos.length === 0 && <p className="set-sub" style={{ margin: 0 }}>{t('noReposYet')}</p>}
         </div>
         <div className="repo-inputs">

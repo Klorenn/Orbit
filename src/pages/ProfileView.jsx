@@ -9,6 +9,28 @@ import { SocialLinks } from '../components/SocialLinks'
 import { useT } from '../hooks/useT'
 import { ProfileTabs } from './account/MyPostsView'
 
+function repoMeta(url = '') {
+  const isGitLab = url.includes('gitlab.com')
+  const match = url.match(/(?:github|gitlab)\.com\/([^/]+)\/([^/?#]+)/)
+  const owner = match?.[1] || ''
+  const name = match?.[2]?.replace(/\.git$/, '') || url.split('/').filter(Boolean).pop() || url
+  return { isGitLab, icon: isGitLab ? 'devicon-gitlab-plain' : 'devicon-github-plain', owner, name }
+}
+
+function RepoCard({ repo }) {
+  const { icon, owner, name, isGitLab } = repoMeta(repo.url)
+  return (
+    <a className={'repo-card' + (isGitLab ? ' repo-card--gitlab' : '')} href={repo.url} target="_blank" rel="noopener noreferrer">
+      <i className={icon + ' repo-card-icon'} />
+      <div className="repo-card-info">
+        {owner && <span className="repo-card-owner">{owner}</span>}
+        <span className="repo-card-name">{repo.name || name}</span>
+      </div>
+      <svg className="repo-card-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    </a>
+  )
+}
+
 export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], onToggleFollow, myAvatar, onSetMyAvatar }) {
   const isMe = whoId === 'me' || whoId === 'you.fil'
   const [fetchedProfile, setFetchedProfile] = useState(null)
@@ -157,12 +179,8 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
                     </div>
                   )}
                   {profileRepos.length > 0 && (
-                    <div className="repo-links">
-                      {profileRepos.map((r, i) => (
-                        <a key={i} className="repo-link" href={r.url} target="_blank" rel="noopener noreferrer">
-                          <i className="devicon-github-plain" /> {r.name}
-                        </a>
-                      ))}
+                    <div className="repo-cards">
+                      {profileRepos.map((r, i) => <RepoCard key={i} repo={r} />)}
                     </div>
                   )}
                 </div>
