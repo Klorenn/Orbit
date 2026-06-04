@@ -14,8 +14,16 @@ export const AV = {
   brown: '/assets/avatar-brown.png',
   gray: '/assets/avatar-gray.png',
   pink: '/assets/avatar-pink.png',
+  navy: '/assets/avatar-navy.png',
+  indigo: '/assets/avatar-indigo.png',
+  lavender: '/assets/avatar-lavender.png',
+  coral: '/assets/avatar-coral.png',
+  gold: '/assets/avatar-gold.png',
+  olive: '/assets/avatar-olive.png',
+  mint: '/assets/avatar-mint.png',
+  electric: '/assets/avatar-electric.png',
 };
-export const AVATAR_OPTIONS = ['blue','purple','green','yellow','red','orange','brown','gray','pink'];
+export const AVATAR_OPTIONS = ['blue','navy','indigo','lavender','purple','green','mint','yellow','gold','orange','coral','red','olive','brown','gray','pink','electric'];
 export const COLORHEX = { blue:'#0090FF', red:'#FF3B30', yellow:'#FFD60A', purple:'#A855F7', green:'#10B981', orange:'#FF9500', brown:'#8B5E3C', gray:'#8A8F98', pink:'#FF2D9B' };
 
 export const CATEGORIES = [
