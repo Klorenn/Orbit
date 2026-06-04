@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { AMBASSADORS, BANNERS, SUPER_ADMIN, SKILLS, who, rankOf } from '../data/constants'
+import { AMBASSADORS, BANNERS, SUPER_ADMIN, SKILLS, SPECIALTIES, who, rankOf } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -132,10 +132,20 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
             {(() => {
               const profileSkills = fetchedProfile?.skills || []
               const profileRepos = Array.isArray(fetchedProfile?.repos) ? fetchedProfile.repos : []
+              const specDefs = SPECIALTIES.filter(s => profileSkills.includes(s.id))
               const skillDefs = SKILLS.filter(s => profileSkills.includes(s.id))
-              if (!skillDefs.length && !profileRepos.length) return null
+              if (!specDefs.length && !skillDefs.length && !profileRepos.length) return null
               return (
                 <div className="ph-tech">
+                  {specDefs.length > 0 && (
+                    <div className="spec-list">
+                      {specDefs.map(s => (
+                        <span key={s.id} className="spec-tag" style={{ background: s.color + '18', color: s.color, borderColor: s.color + '40' }}>
+                          {s.label}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   {skillDefs.length > 0 && (
                     <div className="skill-list">
                       {skillDefs.map(s => (

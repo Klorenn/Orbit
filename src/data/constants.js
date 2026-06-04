@@ -25,6 +25,21 @@ export const AV = {
 export const AVATAR_OPTIONS = ['blue','navy','indigo','lavender','purple','green','mint','yellow','gold','orange','coral','red','olive','brown','gray','pink'];
 export const COLORHEX = { blue:'#0090FF', red:'#FF3B30', yellow:'#FFD60A', purple:'#A855F7', green:'#10B981', orange:'#FF9500', brown:'#8B5E3C', gray:'#8A8F98', pink:'#FF2D9B' };
 
+export const SPECIALTIES = [
+  { id: 'sp_fullstack',  label: 'Full Stack',        color: '#0090FF' },
+  { id: 'sp_frontend',   label: 'Frontend',          color: '#A855F7' },
+  { id: 'sp_backend',    label: 'Backend',           color: '#10B981' },
+  { id: 'sp_web3',       label: 'Web3 / Blockchain', color: '#FF9500' },
+  { id: 'sp_contracts',  label: 'Smart Contracts',   color: '#FF3B30' },
+  { id: 'sp_devops',     label: 'DevOps',            color: '#FFD60A' },
+  { id: 'sp_mobile',     label: 'Mobile Dev',        color: '#00C7BE' },
+  { id: 'sp_uxui',       label: 'UI/UX Design',      color: '#FF2D9B' },
+  { id: 'sp_data',       label: 'Data Science',      color: '#5E5CE6' },
+  { id: 'sp_learning',   label: 'Learning',          color: '#8A8F98' },
+  { id: 'sp_community',  label: 'Community Builder', color: '#FF9500' },
+  { id: 'sp_opensource', label: 'Open Source',       color: '#10B981' },
+]
+
 export const SKILLS = [
   { id: 'html5',        label: 'HTML',        icon: 'devicon-html5-plain colored' },
   { id: 'css3',         label: 'CSS',         icon: 'devicon-css3-plain colored' },

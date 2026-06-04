@@ -1058,13 +1058,19 @@ a.prop-row:hover { border-color: rgba(var(--ink-rgb),.2); transform: translateY(
 .settings-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line); }
 .settings-foot .note { font-size: 12.5px; color: rgba(var(--ink-rgb),.5); display: inline-flex; align-items: center; gap: 7px; }
 
+/* ── SPECIALTIES ── */
+.spec-toggle { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 999px; background: rgba(var(--ink-rgb),.05); font-size: 13px; font-weight: 600; border: 1.5px solid var(--line); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.spec-toggle:hover { background: rgba(var(--ink-rgb),.1); }
+.spec-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.spec-tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; border: 1px solid; letter-spacing: .01em; }
+
 /* ── SKILLS ── */
 .skill-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .skill-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9px; background: rgba(var(--ink-rgb),.05); font-size: 13px; font-weight: 500; border: 1.5px solid var(--line); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
 .skill-toggle:hover { background: rgba(var(--ink-rgb),.1); }
 .skill-toggle.on { background: rgba(0,144,255,.1); border-color: var(--blue); color: var(--blue); }
 .skill-toggle i { font-size: 17px; }
-.skill-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.skill-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
 .skill-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 8px; background: rgba(var(--ink-rgb),.06); font-size: 12.5px; font-weight: 500; border: 1px solid var(--line); }
 .skill-chip i { font-size: 15px; }
 

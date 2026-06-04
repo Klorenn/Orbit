@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS } from '../../data/constants'
+import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS, SPECIALTIES } from '../../data/constants'
 import { I } from '../../components/Icons'
 import { socialIcon } from '../../components/SocialLinks'
 import { ProfileTabs } from './MyPostsView'
@@ -124,6 +124,24 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave }) {
           </div>
         </section>
       </div>
+
+      <section className="set-card" style={{ marginTop: 16 }}>
+        <h3>{t('settingsSpecialtiesTitle')}</h3>
+        <p className="set-sub">{t('settingsSpecialtiesSub')}</p>
+        <div className="skill-picker">
+          {SPECIALTIES.map(s => (
+            <button
+              key={s.id}
+              className={'spec-toggle' + (skills.includes(s.id) ? ' on' : '')}
+              style={skills.includes(s.id) ? { background: s.color + '18', borderColor: s.color, color: s.color } : {}}
+              onClick={() => toggleSkill(s.id)}
+              type="button"
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="set-card" style={{ marginTop: 16 }}>
         <h3>{t('settingsSkillsTitle')}</h3>
