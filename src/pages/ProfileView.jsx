@@ -128,14 +128,32 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
 
   useEffect(() => { window.scrollTo(0, 0) }, [whoId])
 
+  const [resolvedTarget, setResolvedTarget] = useState(null)
+
   useEffect(() => {
     setProfileLoading(true)
     setFetchedProfile(null)
     setTheirPosts([])
     setRealKarma(null)
+    setResolvedTarget(null)
     async function load() {
-      const target = isMe ? myIdentity : whoId
+      let target = isMe ? myIdentity : whoId
       if (!target) { setProfileLoading(false); return }
+
+      // If whoId is a handle (not 0x wallet, not .fil), resolve to identity first
+      const isWallet = target.startsWith('0x')
+      const isFil = target.endsWith('.fil')
+      if (!isMe && !isWallet && !isFil) {
+        const { data: handleRow } = await supabase
+          .from('public_profiles')
+          .select('identity')
+          .ilike('handle', target)
+          .maybeSingle()
+        if (handleRow?.identity) target = handleRow.identity
+        else { setProfileLoading(false); return }
+      }
+
+      setResolvedTarget(target)
 
       const [profileRes, postsRes, rsvpRes, frsRes, fngRes] = await Promise.all([
         supabase.from('public_profiles').select('*').eq('identity', target).maybeSingle(),
@@ -166,7 +184,7 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
 
   const truncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 6) + '...' + addr.slice(-4) : addr
   const longTruncAddr = (addr) => addr && addr.startsWith('0x') ? addr.slice(0, 9) + '…' + addr.slice(-4) : addr
-  const resolvedIdentity = isMe ? myIdentity : whoId
+  const resolvedIdentity = isMe ? myIdentity : (resolvedTarget || whoId)
   const [copied, setCopied] = useState(false)
   const copyAddr = () => {
     if (!resolvedIdentity) return
