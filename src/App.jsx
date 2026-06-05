@@ -350,10 +350,10 @@ export default function App() {
   let view
   switch (route.view) {
     case 'forum-home':
-      view = <HomeView posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} />
+      view = <HomeView posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} myKarma={myProfile?.karma || 0} />
       break
     case 'forum-category':
-      view = <CategoryView cat={route.cat} posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} />
+      view = <CategoryView cat={route.cat} posts={posts} onVote={vote} counts={counts} proposals={proposals} connected={connected} identity={identity} following={following} onLoadMore={loadMore} hasMore={hasMore} loadingMore={loadingMore} myRole={myProfile?.role || 'Member'} tagColors={tagColors} myKarma={myProfile?.karma || 0} />
       break
     case 'forum-thread':
       view = <ThreadView cat={route.cat} id={route.id} posts={posts} connected={connected} identity={identity} onConnect={connect} onVote={vote} onAddComment={addComment} onReact={reactComment} onReply={replyComment} onReactPost={reactPost} onUpdate={updatePost} onDelete={deletePost} onDeleteComment={deleteComment} onReport={reportPost} />

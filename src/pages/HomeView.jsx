@@ -80,8 +80,8 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
             )
           })()}
           <div className="pc-grid">
-            <div><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></div>
-            <div><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></div>
+            <a href="/profile/me/posts" style={{ textDecoration: 'none', color: 'inherit' }}><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></a>
+            <a href="/profile/me" style={{ textDecoration: 'none', color: 'inherit' }}><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></a>
           </div>
           <a href="/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
         </div>
@@ -140,12 +140,12 @@ function sortPosts(list, sort, following = []) {
 /* ============================================================
    VIEW: FORUM HOME
    ============================================================ */
-export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member', tagColors = {} }) {
+export function HomeView({ posts, onVote, counts, proposals, connected, identity, following = [], onLoadMore, hasMore, loadingMore, myRole = 'Member', tagColors = {}, myKarma: myKarmaProp = 0 }) {
   const [sort, setSort] = useState('latest');
   const { t } = useT()
   const list = sortPosts(posts, sort, following);
   const myPosts = posts.filter(p => p.author === identity).length
-  const myKarma = posts.filter(p => p.author === identity).reduce((s, p) => s + (p.upvotes || 0), 0)
+  const myKarma = myKarmaProp || posts.filter(p => p.author === identity).reduce((s, p) => s + (p.upvotes || 0), 0)
   return (
     <div className="shell">
       <Sidebar activeCat={null} counts={counts} />
