@@ -1,6 +1,25 @@
 import { useState, useEffect, Children, useRef } from 'react'
 import { ME, BANNERS, AVATAR_OPTIONS, AV, SOCIALS, SKILLS, SPECIALTIES } from '../../data/constants'
 import { supabase } from '../../lib/supabase'
+
+function useProfileStats(identity) {
+  const [stats, setStats] = useState({ karma: 0, posts: 0, followers: 0 })
+  useEffect(() => {
+    if (!identity) return
+    Promise.all([
+      supabase.from('public_profiles').select('karma').eq('identity', identity).maybeSingle(),
+      supabase.from('posts').select('*', { count: 'exact', head: true }).eq('author', identity),
+      supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following', identity),
+    ]).then(([profileRes, postsRes, followersRes]) => {
+      setStats({
+        karma: profileRes.data?.karma ?? 0,
+        posts: postsRes.count ?? 0,
+        followers: followersRes.count ?? 0,
+      })
+    })
+  }, [identity])
+  return stats
+}
 import { I } from '../../components/Icons'
 import { socialIcon } from '../../components/SocialLinks'
 import { ProfileTabs } from './MyPostsView'
@@ -33,6 +52,7 @@ function parseRepos(raw) {
 export function SettingsView({ profile, myAvatar, setMyAvatar, onSave, identity }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const { t } = useT()
+  const stats = useProfileStats(identity)
   const [fullName, setFullName] = useState(profile.fullName || '')
   const [handle, setHandle] = useState(profile.handle || '')
   const [bio, setBio] = useState(profile.bio || '')
@@ -114,9 +134,9 @@ export function SettingsView({ profile, myAvatar, setMyAvatar, onSave, identity 
                 </div>
               </div>
               <div className="set-preview-stats">
-                <div><span className="spv">0</span><span className="spl">{t('karma') || 'Karma'}</span></div>
-                <div><span className="spv">0</span><span className="spl">{t('posts') || 'Entradas'}</span></div>
-                <div><span className="spv">0</span><span className="spl">{t('followers') || 'Seguidores'}</span></div>
+                <div><span className="spv">{stats.karma}</span><span className="spl">{t('karma') || 'Karma'}</span></div>
+                <div><span className="spv">{stats.posts}</span><span className="spl">{t('posts') || 'Entradas'}</span></div>
+                <div><span className="spv">{stats.followers}</span><span className="spl">{t('followers') || 'Seguidores'}</span></div>
               </div>
             </div>
           </section>

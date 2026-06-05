@@ -31,7 +31,7 @@ export function useProfile(identity) {
         .eq('identity', identity)
         .maybeSingle()
       if (!data) return
-      const { avatar: remoteAvatar, karma: _k, identity: _i, created_at: _c, updated_at: _d, ...rest } = data
+      const { avatar: remoteAvatar, identity: _i, created_at: _c, updated_at: _d, ...rest } = data
       const merged = { ...rest }
       setProfileRaw(merged)
       localStorage.setItem(LS_PROFILE, JSON.stringify(merged))
