@@ -126,7 +126,7 @@ function KarmaModal({ karma, onClose }) {
                   <span style={{ color: s.tone, fontWeight: 600 }}>{s.value}</span>
                 </div>
                 <div style={{ height: 5, borderRadius: 99, background: 'rgba(var(--ink-rgb),.08)' }}>
-                  <div style={{ height: '100%', borderRadius: 99, background: s.tone, width: s.pct + '%', transition: 'width .4s ease' }} />
+                  <div style={{ height: '100%', borderRadius: 99, background: s.tone, width: karma > 0 ? s.pct + '%' : '0%', transition: 'width .4s ease' }} />
                 </div>
               </div>
             ))}
