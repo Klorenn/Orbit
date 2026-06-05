@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { KarmaModal } from '../components/KarmaModal'
 import { CATEGORIES, ME, AMBASSADORS, BANNERS, TRENDING, PROP_STATUS, who, rankOf, navTo } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
@@ -37,6 +38,7 @@ function Sidebar({ activeCat, counts }) {
 /* ---------- right rail ---------- */
 function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myRole = 'Member', tagColors = {} }) {
   const { t } = useT()
+  const [karmaOpen, setKarmaOpen] = useState(false)
   const [tipOpen, setTipOpen] = useState(false)
   const tipRef = useRef(null)
   const tipTimer = useRef(null)
@@ -81,8 +83,9 @@ function Rail({ proposals = [], connected = false, myPosts = 0, myKarma = 0, myR
           })()}
           <div className="pc-grid">
             <a href="/profile/me/posts" style={{ textDecoration: 'none', color: 'inherit' }}><div className="v">{myPosts}</div><div className="l">{t('posts_stat')}</div></a>
-            <a href="/profile/me" style={{ textDecoration: 'none', color: 'inherit' }}><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></a>
+            <button className="ph-stat-btn" style={{ textAlign: 'left' }} onClick={() => setKarmaOpen(true)}><div className="v">{myKarma}</div><div className="l">{t('karma_stat')}</div></button>
           </div>
+          {karmaOpen && <KarmaModal karma={myKarma} onClose={() => setKarmaOpen(false)} />}
           <a href="/profile/me" className="pill pill-line" style={{marginTop:16, width:'100%', justifyContent:'center'}}>{t('viewMyProfile')}</a>
         </div>
       ) : (
