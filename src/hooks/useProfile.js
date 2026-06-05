@@ -10,10 +10,11 @@ function loadLocal() {
 
 async function upsertPublicProfile(identity, fields) {
   if (!identity) return
-  await supabase.from('public_profiles').upsert(
+  const { error } = await supabase.from('public_profiles').upsert(
     { identity, ...fields, updated_at: new Date().toISOString() },
     { onConflict: 'identity' }
   )
+  if (error) console.error('[useProfile] upsert failed:', error.message)
 }
 
 export function useProfile(identity) {
@@ -30,7 +31,7 @@ export function useProfile(identity) {
         .eq('identity', identity)
         .maybeSingle()
       if (!data) return
-      const { avatar: remoteAvatar, karma: _k, identity: _i, created_at: _c, updated_at: _d, ...rest } = data
+      const { avatar: remoteAvatar, identity: _i, created_at: _c, updated_at: _d, ...rest } = data
       const merged = { ...rest }
       setProfileRaw(merged)
       localStorage.setItem(LS_PROFILE, JSON.stringify(merged))

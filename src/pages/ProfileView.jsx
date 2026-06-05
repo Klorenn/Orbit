@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { AMBASSADORS, BANNERS, SUPER_ADMIN, SKILLS, SPECIALTIES, who, rankOf } from '../data/constants'
+import { AMBASSADORS, BANNERS, SUPER_ADMIN, SKILLS, SPECIALTIES, RANKS, who, rankOf, karmaBreakdown } from '../data/constants'
 import { I } from '../components/Icons'
 import { Stars } from '../components/Stars'
 import { AmbassadorAvatar } from '../components/AmbassadorAvatar'
@@ -8,6 +8,154 @@ import { PostCard } from '../components/PostCard'
 import { SocialLinks } from '../components/SocialLinks'
 import { useT } from '../hooks/useT'
 import { ProfileTabs } from './account/MyPostsView'
+
+function FollowListModal({ type, profileIdentity, isMe, onToggleFollow, onClose, onCountChange }) {
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { t } = useT()
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    // followers of profileIdentity OR people profileIdentity follows
+    const filter = type === 'followers' ? { following: profileIdentity } : { follower: profileIdentity }
+    const identityCol = type === 'followers' ? 'follower' : 'following'
+
+    const { data: rows } = await supabase.from('follows').select(identityCol).match(filter)
+    if (!rows || rows.length === 0) { setItems([]); setLoading(false); return }
+
+    const ids = rows.map(r => r[identityCol])
+    const { data: profiles } = await supabase.from('public_profiles').select('identity,handle,avatar').in('identity', ids)
+    const profileMap = Object.fromEntries((profiles || []).map(p => [p.identity, p]))
+
+    setItems(ids.map(id => ({ identity: id, profile: profileMap[id] || null })))
+    setLoading(false)
+  }, [type, profileIdentity])
+
+  useEffect(() => { load() }, [load])
+
+  const truncAddr = id => id?.startsWith('0x') ? id.slice(0, 6) + '…' + id.slice(-4) : id
+  const displayName = item => item.profile?.handle || truncAddr(item.identity) || item.identity
+
+  const removeFollower = async (followerIdentity) => {
+    await supabase.from('follows').delete().eq('follower', followerIdentity).eq('following', profileIdentity)
+    setItems(prev => prev.filter(i => i.identity !== followerIdentity))
+    onCountChange?.('followers', -1)
+  }
+
+  const handleUnfollow = (targetIdentity) => {
+    onToggleFollow?.(targetIdentity)
+    setItems(prev => prev.filter(i => i.identity !== targetIdentity))
+    onCountChange?.('following', -1)
+  }
+
+  const title = type === 'followers'
+    ? (t('followers_stat') || 'Followers')
+    : (t('following_stat') || 'Following')
+
+  return (
+    <div className="modal-scrim open" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal" style={{ width: 'min(480px, 100%)', maxHeight: '70vh' }}>
+        <div className="modal-head">
+          <h2>{title}</h2>
+          <button className="close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body" style={{ paddingTop: 12 }}>
+          {loading && <p className="empty" style={{ opacity: .5 }}>Cargando…</p>}
+          {!loading && items.length === 0 && (
+            <p className="empty" style={{ opacity: .6 }}>
+              {type === 'followers' ? 'Nadie te sigue todavía.' : 'No seguís a nadie todavía.'}
+            </p>
+          )}
+          {!loading && items.map(item => (
+            <div key={item.identity} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '9px 0', borderBottom: '1px solid var(--line)' }}>
+              <AmbassadorAvatar user={item.identity} size={38} color={item.profile?.avatar} link />
+              <a href={'/profile/' + item.identity} style={{ flex: 1, fontWeight: 600, fontSize: 14, color: 'inherit', textDecoration: 'none' }} onClick={onClose}>
+                {displayName(item)}
+              </a>
+              {isMe && type === 'followers' && (
+                <button className="pill pill-line" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => removeFollower(item.identity)}>
+                  Eliminar
+                </button>
+              )}
+              {isMe && type === 'following' && (
+                <button className="pill pill-line" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => handleUnfollow(item.identity)}>
+                  {t('unfollow') || 'Unfollow'}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function KarmaModal({ karma, onClose }) {
+  const breakdown = karmaBreakdown({ karma })
+  const rank = rankOf(karma)
+  const nextRank = RANKS.find(r => r.min > karma)
+
+  return (
+    <div className="modal-scrim open" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal" style={{ width: 'min(440px, 100%)' }}>
+        <div className="modal-head">
+          <h2>Karma</h2>
+          <button className="close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body" style={{ paddingTop: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+            <div style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-.04em' }}>{karma}</div>
+            <div>
+              <div style={{ fontWeight: 600, color: rank.color, fontSize: 14 }}>{rank.label}</div>
+              {nextRank && (
+                <div style={{ fontSize: 12, color: 'rgba(var(--ink-rgb),.5)', marginTop: 2 }}>
+                  {nextRank.min - karma} karma para {nextRank.label}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(var(--ink-rgb),.5)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 10 }}>
+              Cómo se distribuye
+            </div>
+            {breakdown.map(s => (
+              <div key={s.label} style={{ marginBottom: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+                  <span>{s.label}</span>
+                  <span style={{ color: s.tone, fontWeight: 600 }}>{s.value}</span>
+                </div>
+                <div style={{ height: 5, borderRadius: 99, background: 'rgba(var(--ink-rgb),.08)' }}>
+                  <div style={{ height: '100%', borderRadius: 99, background: s.tone, width: karma > 0 ? s.pct + '%' : '0%', transition: 'width .4s ease' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: 'rgba(var(--ink-rgb),.04)', borderRadius: 12, padding: '12px 14px' }}>
+            <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Cómo ganar karma</div>
+            <div style={{ fontSize: 12.5, color: 'rgba(var(--ink-rgb),.65)', lineHeight: 1.55 }}>
+              Cada upvote que recibe uno de tus posts suma 1 karma. Publicá reportes de eventos, propuestas de gobernanza y contribuciones técnicas — el contenido útil atrae más votos.
+            </div>
+          </div>
+
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(var(--ink-rgb),.5)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 8 }}>
+              Rangos
+            </div>
+            {RANKS.map(r => (
+              <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '5px 0', opacity: karma >= r.min ? 1 : 0.35 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: r.color, flexShrink: 0 }} />
+                <div style={{ fontSize: 13, fontWeight: karma >= r.min ? 600 : 400 }}>{r.label}</div>
+                <div style={{ marginLeft: 'auto', fontSize: 12, color: 'rgba(var(--ink-rgb),.45)' }}>{r.min}+</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function repoMeta(url = '') {
   const isGitLab = url.includes('gitlab.com')
@@ -32,7 +180,7 @@ function RepoCard({ repo }) {
 }
 
 export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], onToggleFollow, myAvatar, onSetMyAvatar }) {
-  const isMe = whoId === 'me' || whoId === 'you.fil'
+  const isMe = whoId === 'me' || whoId === 'you.fil' || (!!myIdentity && whoId === myIdentity)
   const [fetchedProfile, setFetchedProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
   const [theirPosts, setTheirPosts] = useState([])
@@ -40,6 +188,8 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
   const [eventsCount, setEventsCount] = useState(0)
   const [followersCount, setFollowersCount] = useState(0)
   const [followingCount, setFollowingCount] = useState(0)
+  const [followModal, setFollowModal] = useState(null) // 'followers' | 'following' | null
+  const [karmaOpen, setKarmaOpen] = useState(false)
   const { t } = useT()
 
   useEffect(() => { window.scrollTo(0, 0) }, [whoId])
@@ -239,17 +389,23 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         </div>
         <div className="ph-stats">
           {[
-            [u.karma || 0, t('karma_stat'), t('tip_karma')],
-            [theirPosts.length, t('posts_stat'), t('tip_posts')],
-            [eventsCount, t('events_stat'), t('tip_events')],
-            [followersCount, t('followers_stat'), t('tip_followers')],
-            [followingCount, t('following_stat'), t('tip_following')],
-          ].map(([val, label, tip]) => (
-            <div key={label} className="ph-stat" title={tip}>
-              <div className="v">{val}</div>
-              <div className="l">{label}</div>
-              <div className="ph-stat-tip">{tip}</div>
-            </div>
+            [u.karma || 0, t('karma_stat'), t('tip_karma'), 'karma'],
+            [theirPosts.length, t('posts_stat'), t('tip_posts'), null],
+            [eventsCount, t('events_stat'), t('tip_events'), null],
+            [followersCount, t('followers_stat'), t('tip_followers'), 'followers'],
+            [followingCount, t('following_stat'), t('tip_following'), 'following'],
+          ].map(([val, label, tip, modalKey]) => (
+            modalKey
+              ? <button key={label} className="ph-stat ph-stat-btn" title={tip} onClick={() => modalKey === 'karma' ? setKarmaOpen(true) : setFollowModal(modalKey)}>
+                  <div className="v">{val}</div>
+                  <div className="l">{label}</div>
+                  <div className="ph-stat-tip">{tip}</div>
+                </button>
+              : <div key={label} className="ph-stat" title={tip}>
+                  <div className="v">{val}</div>
+                  <div className="l">{label}</div>
+                  <div className="ph-stat-tip">{tip}</div>
+                </div>
           ))}
         </div>
       </div>
@@ -267,6 +423,22 @@ export function ProfileView({ whoId, myIdentity, posts, onVote, following = [], 
         {!profileLoading && theirPosts.map(p => <PostCard key={p.id} post={p} onVote={onVote} />)}
         {!profileLoading && theirPosts.length === 0 && <p className="empty">{t('noPostsYet')}{isMe && <> <a href="/forum/new">{t('writeFirst')}</a></>}</p>}
       </div>
+
+      {karmaOpen && <KarmaModal karma={u.karma || 0} onClose={() => setKarmaOpen(false)} />}
+
+      {followModal && (
+        <FollowListModal
+          type={followModal}
+          profileIdentity={resolvedIdentity}
+          isMe={isMe}
+          onToggleFollow={onToggleFollow}
+          onClose={() => setFollowModal(null)}
+          onCountChange={(type, delta) => {
+            if (type === 'followers') setFollowersCount(c => c + delta)
+            if (type === 'following') setFollowingCount(c => c + delta)
+          }}
+        />
+      )}
     </div>
   )
 }
